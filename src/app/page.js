@@ -30,12 +30,15 @@ const Home = () => {
   useEffect(()=> {
     const getGoodsDetails = async () => {
       if (typeof window !== 'undefined') {
+        alert('in window');
         if('getDigitalGoodsService' in window){
+        alert('in goods service');
           const service  = await window.getDigitalGoodsService('https://play.google.com/billing');
           if(service){
-            const detials = await service.getDetails(['coins_10']);
-            setGoodsDetails(details); 
-            alert(JSON.stringify(details));
+        alert('service');
+            const goodsDetails = await service.getDetails(['coins_10']);
+            setGoodsDetails(goodsDetails); 
+            alert(JSON.stringify(goodsDetails));
         }else {
           // alert('no');
         }
