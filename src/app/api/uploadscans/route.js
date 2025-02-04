@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import path from "path";
 import fs from "fs";
-import formidable from 'formidable';
 import Tesseract from "tesseract.js";
 import { getPageSummary, getSimplifiedLanguage } from "@/openAI";
 
