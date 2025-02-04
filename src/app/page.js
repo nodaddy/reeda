@@ -36,42 +36,48 @@ const Home = () => {
           const service  = await window.getDigitalGoodsService('https://play.google.com/billing');
           if(service){
         alert('service');
-          const goodsDetails = service.getDetails(['monthly_subscription']).then(async (response) => {
-            alert(JSON.stringify(response));
-            setGoodsDetails(goodsDetails); 
+        const existingPurchases = await service.listPurchases();
+for (const purchase of existingPurchases) {
+// Update UI with user's existing entitlements
+alert(purchase.itemId, purchase. purchaseState);
+}
+          // const goodsDetails = service.getDetails(['monthly_subscription']).then(async (response) => {
+          //   alert(JSON.stringify(response));
+          //   setGoodsDetails(goodsDetails); 
 
-            const itemId = response[0].itemId;
+          //   const itemId = response[0].itemId;
 
-            const paymentMethods = [ {
-              supportedMethods: 'https://play.google.com/billing',
-              data: {
-              sku: itemId,
-              }
-              }];
-              const request = new PaymentRequest (paymentMethods);
-              const paymentResponse = await request.show();
-              alert(JSON.stringify(paymentResponse));
-              const {purchaseToken} = paymentResponse.details;
-              alert(JSON.stringify(purchaseToken));
+          //   const paymentMethods = [ {
+          //     supportedMethods: 'https://play.google.com/billing',
+          //     data: {
+          //     sku: itemId,
+          //     }
+          //     }];
+          //     const request = new PaymentRequest (paymentMethods);
+          //     const paymentResponse = await request.show();
+          //     alert(JSON.stringify(paymentResponse));
+          //     const {purchaseToken} = paymentResponse.details;
+          //     alert(JSON.stringify(purchaseToken));
            
-              // Here, you should grant appropriate entitlements for the purchase
-              try {
-                const paymentComplete = await paymentResponse.complete();
-                alert(JSON.stringify(paymentComplete));
-                await service.acknowledge(purchaseToken, getPurchaseType(item.itemId));
-              } catch (error) {
-                alert(JSON.stringify(error), "errorrrr");
-              }
-            }).catch(error => {
-              alert("Kindly restart the application", JSON.stringify(error));
-            });
+          //     // Here, you should grant appropriate entitlements for the purchase
+          //     try {
+          //       const paymentComplete = await paymentResponse.complete();
+          //       alert(JSON.stringify(paymentComplete));
+          //       await service.acknowledge(purchaseToken, getPurchaseType(itemId));
+          //     } catch (error) {
+          //       alert(JSON.stringify(error), "errorrrr");
+          //     }
+          //   }).catch(error => {
+          //     alert("Kindly restart the application", JSON.stringify(error));
+          //   });
         }else {
           // alert('no');
         }
       }
     }
   }
-  getGoodsDetails();
+
+getGoodsDetails();
   }, []);
 
   useEffect(() => {
