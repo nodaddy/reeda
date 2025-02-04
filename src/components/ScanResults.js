@@ -184,11 +184,13 @@ export default function ScanResults({ setBook, scans }) {
             </div>
             &nbsp;
             &nbsp;
-              <div>
+             <div>
                 {/* Hidden file input */}
                 <input
                   id="file-upload"
                   type="file"
+                  accept="image/*"
+                  capture="camera"  // This ensures the camera is opened directly
                   onChange={handleFileChange}
                   style={{ display: "none" }}
                 />

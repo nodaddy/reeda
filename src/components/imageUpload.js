@@ -172,6 +172,7 @@ export default function ImageUpload({ setBook, bookTitle, setData, setModalOpen,
             id="file-upload"
             type="file"
             accept="image/*"
+            capture="camera"  // This ensures the camera is opened directly
             onChange={handleFileChange}
             className={styles.fileInput}
           />
