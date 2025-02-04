@@ -22,9 +22,27 @@ const Home = () => {
   const [error, setError] = useState(null);
   const [profile, setProfile] = useState(null);
   const router = useRouter();
+  const [goodsDetails, setGoodsDetails] = useState(null);
 
   // differnece in seconds
   const [lastPageScanDifference, setLastPageScanDifference] = useState(0);
+
+  useEffect(()=> {
+    const getGoodsDetails = async () => {
+      if (typeof window !== 'undefined') {
+        if('getDigitalGoodsService' in window){
+          const service  = await window.getDigitalGoodsService('https://play.google.com/billing');
+          if(service){
+            const detials = await service.getDetails(['coins_10']);
+            setGoodsDetails(details); 
+            alert(JSON.stringify(details));
+        }else {
+          // alert('no');
+        }
+      }
+    }
+  }
+  }, []);
 
   useEffect(() => {
     if (profile?.streak?.lastPageScanTimestamp) {
