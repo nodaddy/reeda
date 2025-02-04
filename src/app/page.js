@@ -36,7 +36,7 @@ const Home = () => {
           const service  = await window.getDigitalGoodsService('https://play.google.com/billing');
           if(service){
         alert('service');
-          const goodsDetails = service.getDetails(['coin_20', 'coin_50']).then(async (response) => {
+          const goodsDetails = service.getDetails(['base-plan']).then(async (response) => {
             alert(JSON.stringify(response));
             setGoodsDetails(goodsDetails); 
 
