@@ -4,7 +4,7 @@
       "target": {
         "namespace": "android_app",
         "package_name": "app.vercel.reedaa.twa",
-        "sha256_cert_fingerprints": ["AF:1A:8D:66:9F:20:09:7C:99:9E:18:20:0E:6E:42:55:DD:4C:6B:CD:85:E9:54:3F:62:0F:87:30:09:1E:31:75"]
+        "sha256_cert_fingerprints": ["32:97:38:92:FD:D4:3F:44:E4:F4:CB:91:0E:89:98:3B:16:B4:87:D5:45:4E:68:CC:36:97:5E:5F:0F:C2:8A:75"]
       }
     }
   ]
