@@ -53,12 +53,17 @@ const Home = () => {
               alert(JSON.stringify(paymentResponse));
               const {purchaseToken} = paymentResponse.details;
               alert(JSON.stringify(purchaseToken));
-              const paymentComplete = await paymentResponse.complete();
-              alert(JSON.stringify(paymentComplete));
+           
               // Here, you should grant appropriate entitlements for the purchase
-              await service.acknowledge(purchaseToken, getPurchaseType(item.itemId));
+              try {
+                const paymentComplete = await paymentResponse.complete();
+                alert(JSON.stringify(paymentComplete));
+                await service.acknowledge(purchaseToken, getPurchaseType(item.itemId));
+              } catch (error) {
+                alert(JSON.stringify(error), "errorrrr");
+              }
             }).catch(error => {
-              alert("Kindly restart the application");
+              alert("Kindly restart the application", JSON.stringify(error));
             });
         }else {
           // alert('no');

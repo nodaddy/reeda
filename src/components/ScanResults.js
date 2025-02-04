@@ -3,7 +3,6 @@
 import { useState, useCallback } from "react";
 import { Button, Tooltip, Modal } from "antd";
 import OriginalTextWithTooltips from "./OriginalTextWithTooltips";
-import imageUploadStyles from "./ImageUpload.module.css";
 import { Hourglass, Loader, Plane, Plus, Pointer, WholeWord } from "lucide-react";
 import { getProfile, updateProfile } from "@/firebase/services/profileService";
 import { createScan, getLatestScanByBookTitleAndUserId } from "@/firebase/services/scanService";
@@ -12,6 +11,7 @@ import Cropper from 'react-easy-crop';
 import { scanPageRatio, scanPageRation } from "@/configs/variables";
 import { priColor } from "@/configs/cssValues";
 import { storage } from "@/app/utility";
+import { getPageSummaryFromImage, getSimplifiedLanguage } from "@/openAI";
 
 export default function ScanResults({ setBook, scans }) {
   const bookTitle = scans?.bookTitle;
@@ -69,59 +69,42 @@ export default function ScanResults({ setBook, scans }) {
       };
     });
   };
-
+ 
   const handleUpload = async () => {
     setUploadingImage(true);
     const croppedFile = await getCroppedImage(imageSrc, croppedAreaPixels);
-    const formData = new FormData();
-    formData.append("file", croppedFile);
 
-    const res = await fetch(`/api/uploadscans`, {
-      method: "POST",
-      body: formData,
-    });
+    getPageSummaryFromImage(croppedFile, 5).then((summary) => {
+      getSimplifiedLanguage(croppedFile).then(async (simpleLang) => {
+        const book = await getBookByTitleAndUserId(bookTitle);
+        const updatedBook = await updateBookByUserIdAndTitle(
+          { ...book, pagesRead: book.pagesRead ? book.pagesRead + 1 : 1 },
+          bookTitle
+        );
+        const data = [{
+          summary,
+          simpleLang
+        }]
+        setBook(updatedBook);
+        await createScan({ bookTitle, data });
 
-    if (res.ok) {
-      const data = await res.json();
-      const userid = JSON.parse(storage.getItem('user')).email;
-
-      if (data) {
-        createScan({ bookTitle: bookTitle, data: data })
-          .then(async (result) => {
-            // update streak, also do this in ImageUpload.js
-            const profile = await getProfile(userid);
-            if (
-              (Math.ceil((Date.now() - profile?.lastPageScanTimestamp) / 1000) > 84600 &&
-                Math.ceil((Date.now() - profile?.lastPageScanTimestamp) / 1000) < 172800) ||
-              profile?.streak?.days == 0
-            ) {
-              await updateProfile(userid, {
-                ...profile,
-                streak: {
-                  ...profile.streak,
-                  days: profile.streak?.days ? profile.streak?.days + 1 : 1,
-                  lastPageScanTimestamp: Date.now(),
-                },
-              });
-            }
-
-            getLatestScanByBookTitleAndUserId(bookTitle).then(async (scan) => {
-              const book = await getBookByTitleAndUserId(bookTitle);
-              const updatedBook = await updateBookByUserIdAndTitle(
-                { ...book, pagesRead: book.pagesRead ? book.pagesRead + 1 : 1 },
-                bookTitle
-              );
-              setBook(updatedBook);
-              setData(scan.data);
-              setShowCropper(false);
-              setUploadingImage(false);
-            });
-          })
-          .catch((error) => {
-            console.error("Error creating scan", error);
+        const profile = await getProfile(JSON.parse(storage.getItem('user')).email);
+        if ((Date.now() - profile?.lastPageScanTimestamp) / 1000 > 84600) {
+          await updateProfile(profile.email, {
+            ...profile,
+            streak: {
+              ...profile.streak,
+              days: profile.streak?.days + 1 || 1,
+              lastPageScanTimestamp: Date.now(),
+            },
           });
-      }
-    }
+        }
+
+        setData({ ...data });
+        setUploadingImage(false);
+        setShowCropper(false);
+        });
+    })
   };
 
   return (
@@ -129,7 +112,7 @@ export default function ScanResults({ setBook, scans }) {
       {data && (
         <div
           style={{
-            padding: "0px 5px",
+            padding: "5px 5px",
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
@@ -138,7 +121,7 @@ export default function ScanResults({ setBook, scans }) {
           <div
             style={{
               maxWidth: "800px",
-              padding: "24px",
+              padding: "18px 24",
               transition: "all 0.5s ease-in-out",
               overflowY: "auto",
             }}

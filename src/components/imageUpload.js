@@ -7,9 +7,9 @@ import { getProfile, updateProfile } from "@/firebase/services/profileService";
 import { createScan } from "@/firebase/services/scanService";
 import { getBookByTitleAndUserId, updateBookByUserIdAndTitle } from "@/firebase/services/bookService";
 import { Button, Modal } from "antd";
-import { priColor } from "@/configs/cssValues";
 import { scanPageRatio } from "@/configs/variables";
 import { storage } from "@/app/utility";
+import { getPageSummaryFromImage, getSimplifiedLanguage } from "@/openAI";
 
 export default function ImageUpload({ setBook, bookTitle, setData, setModalOpen, inResults }) {
   const [crop, setCrop] = useState({ x: 0, y: 0 });
@@ -64,41 +64,39 @@ export default function ImageUpload({ setBook, bookTitle, setData, setModalOpen,
   const handleUpload = async () => {
     setUploadingImage(true);
     const croppedFile = await getCroppedImage(imageSrc, croppedAreaPixels);
-    const formData = new FormData();
-    formData.append("file", croppedFile);
 
-    const res = await fetch(`/api/uploadscans`, {
-      method: "POST",
-      body: formData,
-    });
+    getPageSummaryFromImage(croppedFile, 5).then((summary) => {
+      getSimplifiedLanguage(croppedFile).then(async (simpleLang) => {
+        const book = await getBookByTitleAndUserId(bookTitle);
+        const updatedBook = await updateBookByUserIdAndTitle(
+          { ...book, pagesRead: book.pagesRead ? book.pagesRead + 1 : 1 },
+          bookTitle
+        );
+        const data = [{
+          summary,
+          simpleLang
+        }]
+        setBook(updatedBook);
+        await createScan({ bookTitle, data });
 
-    if (res.ok) {
-      const data = await res.json();
-      const book = await getBookByTitleAndUserId(bookTitle);
-      const updatedBook = await updateBookByUserIdAndTitle(
-        { ...book, pagesRead: book.pagesRead ? book.pagesRead + 1 : 1 },
-        bookTitle
-      );
-      setBook(updatedBook);
-      await createScan({ bookTitle, data });
+        const profile = await getProfile(JSON.parse(storage.getItem('user')).email);
+        if ((Date.now() - profile?.lastPageScanTimestamp) / 1000 > 84600) {
+          await updateProfile(profile.email, {
+            ...profile,
+            streak: {
+              ...profile.streak,
+              days: profile.streak?.days + 1 || 1,
+              lastPageScanTimestamp: Date.now(),
+            },
+          });
+        }
 
-      const profile = await getProfile(JSON.parse(storage.getItem('user')).email);
-      if ((Date.now() - profile?.lastPageScanTimestamp) / 1000 > 84600) {
-        await updateProfile(profile.email, {
-          ...profile,
-          streak: {
-            ...profile.streak,
-            days: profile.streak?.days + 1 || 1,
-            lastPageScanTimestamp: Date.now(),
-          },
+        setData({ data });
+        setUploadingImage(false);
+        setModalOpen(true);
+        setShowCropper(false);
         });
-      }
-
-      setData({ data });
-    setUploadingImage(false);
-      setModalOpen(true);
-      setShowCropper(false);
-    }
+    })
   };
 
   return (
