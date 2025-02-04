@@ -51,6 +51,12 @@ const Home = () => {
               const request = new PaymentRequest (paymentMethods);
               const paymentResponse = await request.show();
               alert(JSON.stringify(paymentResponse));
+              const {purchaseToken} = paymentResponse.details;
+              alert(JSON.stringify(purchaseToken));
+              const paymentComplete = await paymentResponse.complete();
+              alert(JSON.stringify(paymentComplete));
+              // Here, you should grant appropriate entitlements for the purchase
+              await service.acknowledge(purchaseToken, getPurchaseType(item.itemId));
             }).catch(error => {
               alert(JSON.stringify("error"));
             });
