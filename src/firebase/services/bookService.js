@@ -1,13 +1,14 @@
+'use client'
+import { storage } from '@/app/utility';
 // services/bookservice.js
 import { db } from '../../firebase';
 import { collection, addDoc, doc, updateDoc, deleteDoc, query, where, getDocs } from "firebase/firestore";
-
 const bookCollection = collection(db, "books");
 
 
 // Create a new book
 export const createbook = async (bookData) => {
-const userId = JSON.parse(localStorage.getItem('user')).email;
+const userId = JSON.parse(storage.getItem('user')).email;
 
     try {
       // Ensure that bookData is not empty and contains valid fields
@@ -37,7 +38,7 @@ const userId = JSON.parse(localStorage.getItem('user')).email;
 
 // Read a book by userId and title
 export const getBookByTitleAndUserId = async (title) => {
-const userId = JSON.parse(localStorage.getItem('user')).email;
+const userId = JSON.parse(storage.getItem('user')).email;
     try {
       // Reference to the books collection
       const bookCollection = collection(db, "books");
@@ -68,7 +69,7 @@ const userId = JSON.parse(localStorage.getItem('user')).email;
 
 // Read all books by userId (stored inside the document)
 export const getBooks = async () => {
-const userId = JSON.parse(localStorage.getItem('user')).email;
+const userId = JSON.parse(storage.getItem('user')).email;
     try {
         console.log('getting books');
 
@@ -100,7 +101,7 @@ const userId = JSON.parse(localStorage.getItem('user')).email;
 
 // Update a book by userId (stored inside the document)
 export const updateBookByUserIdAndTitle = async (updatedData, title) => {
-    const userId = JSON.parse(localStorage.getItem('user')).email;
+    const userId = JSON.parse(storage.getItem('user')).email;
     try {
       // Reference to the books collection
       const bookCollection = collection(db, "books");

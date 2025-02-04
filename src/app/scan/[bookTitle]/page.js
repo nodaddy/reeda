@@ -2,11 +2,9 @@
 import ScanResults from "@/components/ScanResults";
 import ImageUpload from "../../../components/imageUpload";
 import { useEffect, useState } from "react";
-import { getProfile } from "@/firebase/services/profileService";
 import { useParams } from "next/navigation";
 import { createScan, getLatestScanByBookTitleAndUserId } from "@/firebase/services/scanService";
 import { getBookByTitleAndUserId } from "@/firebase/services/bookService";
-import { secColor } from "@/configs/cssValues";
 import { Book, BookOpen, Loader } from "lucide-react";
 
 export default function ScanWithBookTitle() {

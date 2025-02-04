@@ -8,7 +8,6 @@ import { useEffect, useState } from 'react';
 const { Title, Text } = Typography;
 
 const ReadingMetricsCard = ({ metrics }) => {
-  const [isActive, setIsActive] = useState(true); // To demonstrate the toggle between active/inactive states
   const [scanCount, setScanCount] = useState(0);
   const [books, setBooks] = useState(null);
 

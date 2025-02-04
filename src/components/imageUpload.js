@@ -81,7 +81,7 @@ export default function ImageUpload({ setBook, bookTitle, setData, setModalOpen,
       setBook(updatedBook);
       await createScan({ bookTitle, data });
 
-      const profile = await getProfile(JSON.parse(localStorage.getItem('user')).email);
+      const profile = await getProfile(JSON.parse(storage.getItem('user')).email);
       if ((Date.now() - profile?.lastPageScanTimestamp) / 1000 > 84600) {
         await updateProfile(profile.email, {
           ...profile,

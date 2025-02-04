@@ -11,3 +11,31 @@ export const getDiffernceInHoursBetweenDateStringAndNow = (dateString) => {
       console.error("Invalid date format for dateString");
     }
 }
+
+
+
+const isBrowser = typeof window !== "undefined";
+
+export const storage = {
+  getItem: (key) => {
+    if (isBrowser) {
+      return localStorage.getItem(key);
+    }
+    return null;
+  },
+  setItem: (key, value) => {
+    if (isBrowser) {
+      localStorage.setItem(key, value);
+    }
+  },
+  removeItem: (key) => {
+    if (isBrowser) {
+      localStorage.removeItem(key);
+    }
+  },
+  clearItem: () => {
+    if (isBrowser) {
+      localStorage.clear();
+    }
+  },
+};

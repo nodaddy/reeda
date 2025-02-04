@@ -1,4 +1,6 @@
  
+'use client'
+
 // src/app/signin/page.tsx
 import { useState } from 'react';
 import { Button, Typography } from 'antd';
@@ -7,6 +9,7 @@ import { auth, googleAuthProvider } from '../firebase/'; // adjust path as neede
 import { GoogleOutlined } from '@ant-design/icons';
 import { logGAEvent } from '@/firebase/googleAnalytics';
 import { createProfile, getProfile } from '@/firebase/services/profileService';
+import { storage } from '@/app/utility';
 
 const { Title } = Typography;
 
@@ -35,7 +38,7 @@ const SignInWithGoogle = ({router}) => {
       }
 
       // Save user data to localStorage
-      localStorage.setItem('user', JSON.stringify(user));
+      storage.setItem('user', JSON.stringify(user));
       router.push("/");
       window.location.reload();
     } catch (err) {

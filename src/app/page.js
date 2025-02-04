@@ -10,7 +10,7 @@ import { priColor } from '@/configs/cssValues';
 import BookList from '@/components/BookList';
 import { getProfile, updateProfile } from '@/firebase/services/profileService';
 import StreakCard from '@/components/StreakCard';
-import ReadingMetricsCard from '@/components/ReadingMetricsCard';
+import { storage } from './utility';
 import ContinueReading from '@/components/ContinueReading';
 
 
@@ -34,13 +34,13 @@ const Home = () => {
       console.log(lastPageScanDifference);
       if(lastPageScanDifference > 84600){
         if(profile.streak.days > profile.streak.longestStreak){
-          updateProfile(JSON.parse(localStorage.getItem('user')).email, {...profile, streak: {
+          updateProfile(JSON.parse(storage.getItem('user')).email, {...profile, streak: {
             ...profile.streak,
             longestStreak: profile.streak.days,
             days: 0
           }}) 
         } else {
-          updateProfile(JSON.parse(localStorage.getItem('user')).email, {...profile, streak: {
+          updateProfile(JSON.parse(storage.getItem('user')).email, {...profile, streak: {
             ...profile.streak,
             days: 0
           }})
@@ -58,7 +58,7 @@ const Home = () => {
       setLoading(true);
       try {
         // Replace 'userId' with the actual user ID (e.g., from authentication)
-        const userId = JSON.parse(localStorage.getItem('user')).email; // You can get this from Firebase Auth or context
+        const userId = JSON.parse(storage.getItem('user')).email; // You can get this from Firebase Auth or context
         console.log(userId);
         let profileData;
         if (userId) {
@@ -75,7 +75,7 @@ const Home = () => {
     fetchProfile();
   }, []);
 
-  return ( !localStorage.getItem('user') ?
+  return ( !storage.getItem('user') ?
     <div style={{ display: 'flex', justifyContent: 'center', minHeight: '70vh', alignItems: 'center'}}>
       <SignInWithGoogle router={router} />
     </div> : 

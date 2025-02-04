@@ -1,12 +1,13 @@
+'use client'
+import { storage } from '@/app/utility';
 // services/scanService.js
 import { db } from '../../firebase';
 import { collection, addDoc, doc, updateDoc, deleteDoc, query, where, getDocs, orderBy, getCountFromServer  } from "firebase/firestore";
-
 const scanCollection = collection(db, "scans");
 
 // Create a new scan
 export const createScan = async (scanData) => {
-  const userId = JSON.parse(localStorage.getItem('user')).email;
+  const userId = JSON.parse(storage.getItem('user')).email;
 
   try {
     // Ensure that scanData is not empty and contains valid fields
@@ -33,7 +34,7 @@ export const createScan = async (scanData) => {
 
 // Read the latest scan by userId and bookTitle
 export const getLatestScan = async () => {
-    const userId = JSON.parse(localStorage.getItem('user')).email;
+    const userId = JSON.parse(storage.getItem('user')).email;
   
     try {
       // Create a query to find scans by both userId and bookTitle, ordered by 'createdAt' in descending order
@@ -62,7 +63,7 @@ export const getLatestScan = async () => {
 
 // Read the latest scan by userId and bookTitle
 export const getLatestScanByBookTitleAndUserId = async (bookTitle) => {
-    const userId = JSON.parse(localStorage.getItem('user')).email;
+    const userId = JSON.parse(storage.getItem('user')).email;
   
     try {
       // Create a query to find scans by both userId and bookTitle, ordered by 'createdAt' in descending order
@@ -92,7 +93,7 @@ export const getLatestScanByBookTitleAndUserId = async (bookTitle) => {
 
 // Read scans by userId and bookTitle
 export const getScanByBookTitleAndUserId = async (bookTitle) => {
-  const userId = JSON.parse(localStorage.getItem('user')).email;
+  const userId = JSON.parse(storage.getItem('user')).email;
 
   try {
     // Create a query to find scans by both userId and bookTitle
@@ -119,7 +120,7 @@ export const getScanByBookTitleAndUserId = async (bookTitle) => {
 };
 
 export const getScanCount = async () => {
-    const userId = JSON.parse(localStorage.getItem('user')).email;
+    const userId = JSON.parse(storage.getItem('user')).email;
   
     try {
       console.log('Getting scan count');
@@ -140,7 +141,7 @@ export const getScanCount = async () => {
 
 // Read all scans by userId (stored inside the document)
 export const getScans = async () => {
-  const userId = JSON.parse(localStorage.getItem('user')).email;
+  const userId = JSON.parse(storage.getItem('user')).email;
 
   try {
     console.log('Getting scans');
@@ -168,7 +169,7 @@ export const getScans = async () => {
 
 // Update a scan by userId and bookTitle
 export const updateScanByUserIdAndBookTitle = async (updatedData, bookTitle) => {
-  const userId = JSON.parse(localStorage.getItem('user')).email;
+  const userId = JSON.parse(storage.getItem('user')).email;
 
   try {
     // Create a query to find the scan where both userId and bookTitle match

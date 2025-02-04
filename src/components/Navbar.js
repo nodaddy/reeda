@@ -1,11 +1,11 @@
 "use client"
 
-import { priColor, priTextColor, secColor } from "@/configs/cssValues";
 import { MoreVertical, BookMarked, Coins, MoreHorizontal, ArrowDown, TriangleDashed, List } from "lucide-react";
 import Link from "next/link";
 import { Badge, Tooltip } from "antd";
 import { getScanCount } from "@/firebase/services/scanService";
 import { useEffect, useState } from "react";
+import { storage } from "@/app/utility";
 
 const { default: SignInWithGoogle } = require("./SignInWithGoogle");
 
@@ -41,7 +41,7 @@ export const Navbar = () => {
       </span>
 
       <span style={{ display: "flex", alignItems: "center", gap: "15px" }}>
-        {localStorage.getItem("user") && (
+        {storage.getItem("user") && (
             <div style={{
                 border: '1px solid '+ 'goldenrod',
                 borderRadius: '999px',
@@ -70,7 +70,7 @@ export const Navbar = () => {
             </div>
         )}
 
-        {localStorage.getItem("user") && (
+        {storage.getItem("user") && (
           <Link style={{ marginRight: "20px" }} href="/profile">
             <List color={'#555555'} size={24} style={{
                 transform: "translateY(3px)"

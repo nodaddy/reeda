@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { Form, Input, Button, message } from 'antd';
 import { getProfile, updateProfile, createProfile } from '../../firebase/services/profileService';
 import CustomButton from '@/components/CustomButton';
+import { storage } from '../utility';
 
 const ProfilePage = () => {
   const [form] = Form.useForm();
@@ -13,8 +14,7 @@ const ProfilePage = () => {
   const fetchProfile = async () => {
     try {
       setLoading(true);
-      // Replace 'userId'k with the actual user ID (e.g., from authentication)
-      const userId = JSON.parse(localStorage.getItem('user')).email; // You can get this from Firebase Auth or context
+
       console.log(userId);
       let profileData;
       try {
@@ -52,9 +52,13 @@ const ProfilePage = () => {
       const filteredValues = Object.fromEntries(
         Object.entries(values).filter(([key, value]) => value != null)
       );
+
+      let userId;
       
-      const userId = JSON.parse(localStorage.getItem('user')).email; // Replace with the actual user ID
-      
+      if (typeof window !== 'undefined') {
+
+       userId = JSON.parse(storage.getItem('user')).email; // Replace with the actual user ID
+      }
       // Check if the profile exists
       const existingProfile = await getProfile(userId); // Assume you have a function to fetch the profile
       

@@ -82,7 +82,7 @@ export default function ScanResults({ setBook, scans }) {
 
     if (res.ok) {
       const data = await res.json();
-      const userid = JSON.parse(localStorage.getItem('user')).email;
+      const userid = JSON.parse(storage.getItem('user')).email;
 
       if (data) {
         createScan({ bookTitle: bookTitle, data: data })
