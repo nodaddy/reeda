@@ -42,6 +42,7 @@ const Home = () => {
       }
     }
   }
+  getGoodsDetails();
   }, []);
 
   useEffect(() => {
