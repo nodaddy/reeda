@@ -36,9 +36,21 @@ const Home = () => {
           const service  = await window.getDigitalGoodsService('https://play.google.com/billing');
           if(service){
         alert('service');
-            const goodsDetails = service.getDetails(['coin_20', 'coin_50']).then(response => {
-              alert(JSON.stringify(response));
-              setGoodsDetails(goodsDetails); 
+          const goodsDetails = service.getDetails(['coin_20', 'coin_50']).then(async (response) => {
+            alert(JSON.stringify(response));
+            setGoodsDetails(goodsDetails); 
+
+            const itemId = response[0].itemId;
+
+            const paymentMethods = [ {
+              supportedMethods: 'https://play.google.com/billing',
+              data: {
+              sku: itemId,
+              }
+              }];
+              const request = new PaymentRequest (paymentMethods);
+              const paymentResponse = await request.show();
+              alert(JSON.stringify(paymentResponse));
             }).catch(error => {
               alert(JSON.stringify("error"));
             });
