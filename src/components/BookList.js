@@ -64,7 +64,7 @@ const BookList = () => {
   };
 
   return (
-    <div style={{ padding: '35px 16px', maringBottom: '10px', position: 'relative', 
+    <div style={{ padding: '35px 16px', maringBottom: '20px', position: 'relative', 
     backgroundColor: '#fafafa',
     }}>
         <div style={{display: 'flex', alignItems: 'center', gap: '15px' }}>
