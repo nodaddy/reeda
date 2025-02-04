@@ -3,8 +3,8 @@
       "relation": ["delegate_permission/common.handle_all_urls"],
       "target": {
         "namespace": "android_app",
-        "package_name": "app.vercel.reeda.twa",
-        "sha256_cert_fingerprints": ["26:47:B7:26:9D:9A:E3:93:5F:52:EC:E4:FA:89:65:D5:97:CC:67:D8:7C:F5:F7:C7:C2:6C:66:F6:A6:BD:18:69"]
+        "package_name": "app.vercel.reedaa.twa",
+        "sha256_cert_fingerprints": ["AF:1A:8D:66:9F:20:09:7C:99:9E:18:20:0E:6E:42:55:DD:4C:6B:CD:85:E9:54:3F:62:0F:87:30:09:1E:31:75"]
       }
     }
   ]
