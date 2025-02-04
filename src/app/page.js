@@ -39,7 +39,7 @@ const Home = () => {
         const existingPurchases = await service.listPurchases();
 for (const purchase of existingPurchases) {
 // Update UI with user's existing entitlements
-alert(purchase.itemId, purchase. purchaseState);
+alert(purchase.itemId, purchase.purchaseState);
 }
           // const goodsDetails = service.getDetails(['monthly_subscription']).then(async (response) => {
           //   alert(JSON.stringify(response));
