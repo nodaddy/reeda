@@ -1,0 +1,1 @@
+export const scanPageRatio = 0.75;

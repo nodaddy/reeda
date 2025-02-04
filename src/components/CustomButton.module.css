@@ -1,0 +1,24 @@
+.customButton {
+  border: none;
+  border-radius: 4px;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  box-shadow: 0 4px 6px rgba(0, 118, 255, 0.2);
+  transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
+}
+
+.customButton:hover {
+  background-color: #005bb5; /* Darker shade of primary color */
+  transform: translateY(-2px); /* Slightly lift the button on hover */
+  box-shadow: 0 6px 12px rgba(0, 118, 255, 0.3);
+}
+
+.customButton:focus {
+  outline: none;
+}
+
+.customButton:active {
+  background-color: #004a8e; /* Even darker shade when button is clicked */
+  box-shadow: none;
+}
