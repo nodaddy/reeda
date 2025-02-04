@@ -26,8 +26,7 @@ const ContinueReading = () => {
   return ( latestScan &&
     <Link href={"/scan/" + latestScan?.bookTitle} style={{ textDecoration: 'none' }}>
       <div 
-        style={{
-          width: '100%',
+        style={{ 
           border: '0px',
         //   background: 'linear-gradient(135deg, #f9f9f9, #ffffff)',
         //   boxShadow: '8px 8px 24px rgba(0, 0, 0, 0.07)',

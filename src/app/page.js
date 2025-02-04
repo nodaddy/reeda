@@ -140,11 +140,8 @@ getGoodsDetails();
       <StreakCard streak={profile?.streak} isActive={lastPageScanDifference < 86400*2} /> 
       <br/>
       <BookList />
-
       <br/>
       <ContinueReading />
-    <br/>
-    <br/>
     <br/>
     </div>
   );

@@ -11,6 +11,9 @@ const bookCollection = collection(db, "books");
 export const createbook = async (bookData) => {
 const userId = JSON.parse(storage.getItem('user')).email;
 
+// trim book title for any leading and trailing spaces
+bookData.title = bookData.title.trim();
+
     try {
       // Ensure that bookData is not empty and contains valid fields
       if (!bookData || Object.keys(bookData).length === 0) {

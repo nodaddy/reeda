@@ -64,7 +64,7 @@ const BookList = () => {
   };
 
   return (
-    <div style={{ padding: '35px 16px', maringBottom: '20px', position: 'relative', 
+    <div style={{ padding: '35px 16px', maringBottom: '10px', position: 'relative', 
     backgroundColor: '#fafafa',
     }}>
         <div style={{display: 'flex', alignItems: 'center', gap: '15px' }}>
@@ -101,7 +101,7 @@ const BookList = () => {
             overflowX: 'scroll',
             scrollbarWidth: '0px',
             marginTop: '15px',
-            gap: '15px'
+            gap: '11px'
         }}>
           {filteredBooks?.sort((a,b) => a.title.localeCompare(b.title)).map(item => (
             <div style={{
