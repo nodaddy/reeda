@@ -253,6 +253,8 @@ export const ContentBox = ({ text }) => (
       maxHeight: "60vh",
       textAlign: "left",
       paddingBottom: "30px",
+      paddingTop: '10px',
+      paddingLeft: '24px',
       fontSize: "16px",
       maxWidth: "90vw",
       whiteSpace: "pre-wrap",
