@@ -1,0 +1,11 @@
+[
+    {
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "app.vercel.reeda.twa",
+        "sha256_cert_fingerprints": ["SHA256 Fingerprint=26:47:B7:26:9D:9A:E3:93:5F:52:EC:E4:FA:89:65:D5:97:CC:67:D8:7C:F5:F7:C7:C2:6C:66:F6:A6:BD:18:69"]
+      }
+    }
+  ]
+  
