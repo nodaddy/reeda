@@ -11,6 +11,7 @@ import { getBookByTitleAndUserId, updateBookByUserIdAndTitle } from "@/firebase/
 import Cropper from 'react-easy-crop';
 import { scanPageRatio, scanPageRation } from "@/configs/variables";
 import { priColor } from "@/configs/cssValues";
+import { storage } from "@/app/utility";
 
 export default function ScanResults({ setBook, scans }) {
   const bookTitle = scans?.bookTitle;

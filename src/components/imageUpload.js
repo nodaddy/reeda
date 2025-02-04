@@ -9,6 +9,7 @@ import { getBookByTitleAndUserId, updateBookByUserIdAndTitle } from "@/firebase/
 import { Button, Modal } from "antd";
 import { priColor } from "@/configs/cssValues";
 import { scanPageRatio } from "@/configs/variables";
+import { storage } from "@/app/utility";
 
 export default function ImageUpload({ setBook, bookTitle, setData, setModalOpen, inResults }) {
   const [crop, setCrop] = useState({ x: 0, y: 0 });

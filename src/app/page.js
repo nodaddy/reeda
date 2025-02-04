@@ -10,8 +10,8 @@ import { priColor } from '@/configs/cssValues';
 import BookList from '@/components/BookList';
 import { getProfile, updateProfile } from '@/firebase/services/profileService';
 import StreakCard from '@/components/StreakCard';
-import { storage } from './utility';
 import ContinueReading from '@/components/ContinueReading';
+import { storage } from './utility';
 
 
 const { Title } = Typography;
