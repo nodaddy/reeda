@@ -40,7 +40,7 @@ const Home = () => {
               alert(JSON.stringify(response));
               setGoodsDetails(goodsDetails); 
             }).catch(error => {
-              alert(JSON.stringify(error));
+              alert(JSON.stringify("error"));
             });
         }else {
           // alert('no');
