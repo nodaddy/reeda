@@ -48,6 +48,8 @@ export default function ScanWithBookTitle() {
       // background: `linear-gradient(145deg,  ${'#a1c7f7'}, #f0f4ff, #f0f4ff, ${'#a1c7f7'}, #f0f4ff, #f0f4ff)`, 
       background: `#555555`, 
       borderRadius: '999px',
+      position: 'relative',
+      zIndex: '99999',
       boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
       margin: '0px 10px',
       padding: '5px',

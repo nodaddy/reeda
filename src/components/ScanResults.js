@@ -119,19 +119,33 @@ export default function ScanResults({ setBook, scans }) {
       {data && (
         <div
           style={{
-            padding: "25px",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            maxHeight: '70vh',
+            padding: '0px 20px',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            maxHeight: 'calc(100vh - 270px)',
             overflow: 'scroll',
+            width: '82%',
+            margin: 'auto',
+            marginTop: '20px',
+            borderTop: '0px',
+            borderRadius: '10px',
+            border: '1px solid silver',
+            backgroundColor: 'whitesmoke',
+            height: 'calc(100vh - 299px)', // This can be used if you want to explicitly set height too
+            // padding: "25px",
+            // display: "flex",
+            // flexDirection: "column",
+            // alignItems: "center",
+            // maxHeight: 'calc(100vh - 270px)',
+            // overflow: 'scroll',
 
           }}
         >
           <div
             style={{
               maxWidth: "800px",
-              padding: "18px 24",
+              padding: "10px 0px",
               transition: "all 0.5s ease-in-out",
               overflowY: "auto",
             }}
@@ -142,9 +156,6 @@ export default function ScanResults({ setBook, scans }) {
               <TextWithIntegratedDictionary fontSize={fontSize} setFontSize={setFontSize} text={data[0].simpleLang} />
             )}
           </div>
-
-          <br />
-          <br />
 
           <div
             style={{
