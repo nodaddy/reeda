@@ -85,9 +85,9 @@ const StreakCard = ({ streak, isActive, isPremium }) => {
   </Card> : (
      <Card
      bodyStyle={{padding: '15px 20px',
-     borderRadius: '9px',
+     borderRadius: '7px',
 
-     background: isPremium ? 'linear-gradient(135deg, #B08D10, goldenrod, gold,  whitesmoke)' : "linear-gradient(135deg, grey, silver,  whitesmoke)", // Gold, platinum, and light metallic gradient
+     background: isPremium ? 'linear-gradient(135deg, #B08D10, goldenrod, gold,  whitesmoke)' : "linear-gradient(155deg, grey, silver,  whitesmoke)", // Gold, platinum, and light metallic gradient
     }}
      style={{
        width: '100%',
@@ -110,7 +110,7 @@ const StreakCard = ({ streak, isActive, isPremium }) => {
           <div style={{
             // fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif', 
              fontSize: '18px', 
-             color: 'whitesmoke',
+             color: isPremium ? 'whitesmoke' : 'white',
              fontWeight: '300', 
             // color: '#555555', 
             // borderRadius: '999px', 
