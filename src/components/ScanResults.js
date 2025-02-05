@@ -132,7 +132,7 @@ export default function ScanResults({ setBook, scans }) {
             borderRadius: '10px',
             border: '1px solid silver',
             backgroundColor: 'whitesmoke',
-            height: 'calc(100vh - 299px)', // This can be used if you want to explicitly set height too
+            height: 'calc(100vh - 303px)', // This can be used if you want to explicitly set height too
             // padding: "25px",
             // display: "flex",
             // flexDirection: "column",

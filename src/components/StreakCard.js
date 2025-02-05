@@ -127,7 +127,7 @@ if (currentHour >= 5 && currentHour < 12) {
   <div style={{ 
              fontSize: '18px', 
              color: isPremium ? 'whitesmoke' : '#555555',
-             fontWeight: '300', 
+             fontWeight: '400', 
              display: 'flex', 
              alignItems: 'flex-start' 
           }}>
