@@ -2,44 +2,52 @@
 
 import { Input, Card, Typography, Layout, Space, Button } from 'antd';
 import { SearchOutlined, BookOutlined } from '@ant-design/icons';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { getMeaning } from '@/openAI';
 import { Loader, Search } from 'lucide-react';
 
 const { Header, Content } = Layout;
 const { Title, Text } = Typography;
 
-const App = () => {
-  const [meaning, setMeaning] = useState('');
-  const [word, setWord] = useState('');
-  const [inputValue, setInputValue] = useState('');
+const Dictionary = ({incomingWords}) => {
+    const [meaning, setMeaning] = useState('');
+    const [word, setWord] = useState(incomingWords);
+    const [inputValue, setInputValue] = useState('');
+    const [loading, setLoading] = useState(false);
+  
+    const prevWordRef = useRef();
 
-  const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    if (word) {
-    setLoading(true);
-        
-      getMeaning(word).then((meaning) => {
-        setMeaning(meaning);
-        setLoading(false);
-      });
-    }
-  }, [word]);
-
-  const handleSubmit = () => {
-    setWord(inputValue);
-  };
+    useEffect(() => {
+        // Update the word if incomingWords changes
+        setWord(incomingWords);
+      }, [incomingWords]);
+  
+    useEffect(() => {
+      if (word !== prevWordRef.current) {
+        setLoading(true);
+        getMeaning(word).then((meaning) => {
+          setMeaning(meaning);
+          setLoading(false);
+        });
+      }
+      prevWordRef.current = word;
+    }, [word]); // Only depend on 'word'
+  
+    const handleSubmit = () => {
+      setWord(inputValue);
+    };
 
   return (
-    <Layout style={{ minHeight: '40vh', marginTop: '0px', backgroundColor: 'white' }}> 
-    <br/>
-    <br/> 
-      <Title level={4} style={{ color: '#555555', margin: 0, fontWeight: '300' }}>
+    <Layout style={{  marginTop: '0px', backgroundColor: 'white', minHeight: '23vh' }}> 
+    {!incomingWords && <>
+      <br/>
+      <br/>
+      </>}
+     {!incomingWords && <Title level={4} style={{ color: '#555555', margin: 0, fontWeight: '300' }}>
         <br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<BookOutlined style={{ marginRight: 10 }} />Dictionary
-      </Title> 
+      </Title> }
 
-      <Content style={{ padding: '0px', margin: 'auto' }}>
+     {!incomingWords && <Content style={{ padding: '0px', margin: 'auto' }}>
         <br/>
         <div direction="vertical" size="large">
           <div style={{ width: '90vw', display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
@@ -58,23 +66,27 @@ const App = () => {
             </Button>
           </div>
         </div>
-      </Content>
+      </Content>}
+      {!incomingWords && <>
       <br/>
       <br/>
+      </>}
       {
         loading ? (
-          <div style={{ width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <div style={{ width: '100%', height: '23vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
             <Loader className='loader' />
           </div>
         ) : meaning && (
             <Card
-              bodyStyle={{padding: '10px 24px'}}
-              style={{ borderRadius: '10px', boxShadow: '0 4px 12px rgba(0,0,0,0.1)', width: '90%', margin: 'auto'}} 
+              bodyStyle={{padding: `0px ${incomingWords ? '10px': '24px'}`}}
+              style={{ borderRadius: '10px', boxShadow: !incomingWords && '0 4px 12px rgba(0,0,0,0.1)', width: !incomingWords ? '90%' : '100%', margin: 'auto', border: '0px'}} 
             >
-              <Title level={4} style={{ color: '#1890ff' }}>{word}</Title>
-              <Text style={{ fontSize: '16px', lineHeight: '1.6' }}>{meaning}</Text>
-              <br/>
-              <br/> 
+              {!incomingWords && <Title level={4} style={{ color: '#1890ff', marginTop: '0px' }}>{word}</Title>}
+              <div style={{padding: incomingWords && '40px 0px'}}><Text style={{ fontSize: '16px', lineHeight: '1.6' }}>{meaning}</Text></div>
+              {!incomingWords && <>
+      <br/>
+      <br/>
+      </>}
             </Card>
           )
       }
@@ -82,4 +94,5 @@ const App = () => {
   );
 };
 
-export default App;
+export default Dictionary;
+ 

@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import SignInWithGoogle from '@/components/SignInWithGoogle';
 import { useRouter } from 'next/navigation';
 import { Typography } from 'antd';
-import SimpleLang from '@/components/OriginalTextWithTooltips';
+import SimpleLang from '@/components/TextWithIntegratedDictionary';
 import { priColor } from '@/configs/cssValues';
 import BookList from '@/components/BookList';
 import { getProfile, updateProfile } from '@/firebase/services/profileService';

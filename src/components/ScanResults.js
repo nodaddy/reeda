@@ -2,7 +2,7 @@
 
 import { useState, useCallback } from "react";
 import { Button, Tooltip, Modal } from "antd";
-import OriginalTextWithTooltips from "./OriginalTextWithTooltips";
+import OriginalTextWithTooltips, { FontSizeControl } from "./TextWithIntegratedDictionary";
 import { Hourglass, Loader, Plane, Plus, Pointer, WholeWord } from "lucide-react";
 import { getProfile, updateProfile } from "@/firebase/services/profileService";
 import { createScan, getLatestScanByBookTitleAndUserId } from "@/firebase/services/scanService";
@@ -12,11 +12,15 @@ import { scanPageRatio, scanPageRation } from "@/configs/variables";
 import { priColor } from "@/configs/cssValues";
 import { storage } from "@/app/utility";
 import { getPageSummaryFromImage, getSimplifiedLanguage } from "@/openAI";
+import TextWithIntegratedDictionary from "./TextWithIntegratedDictionary";
 
 export default function ScanResults({ setBook, scans }) {
   const bookTitle = scans?.bookTitle;
   const [activeView, setActiveView] = useState("vocab");
   const [data, setData] = useState(scans?.data ? [scans.data[0]] : null);
+
+  const [fontSize, setFontSize] = useState(17); // Default font size
+
   
   // States for cropper
   const [crop, setCrop] = useState({ x: 0, y: 0 });
@@ -115,10 +119,13 @@ export default function ScanResults({ setBook, scans }) {
       {data && (
         <div
           style={{
-            padding: "5px 5px",
+            padding: "25px",
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
+            maxHeight: '70vh',
+            overflow: 'scroll',
+
           }}
         >
           <div
@@ -130,9 +137,9 @@ export default function ScanResults({ setBook, scans }) {
             }}
           >
             {activeView === "summary" ? (
-              <ContentBox text={data[0].summary} />
+              <TextWithIntegratedDictionary fontSize={fontSize} setFontSize={setFontSize} text={data[0].summary} />
             ) : (
-              <OriginalTextWithTooltips paragraph={data[0].simpleLang} />
+              <TextWithIntegratedDictionary fontSize={fontSize} setFontSize={setFontSize} text={data[0].simpleLang} />
             )}
           </div>
 
@@ -147,17 +154,16 @@ export default function ScanResults({ setBook, scans }) {
               justifyContent: "space-around",
               position: "absolute",
               width: "100vw",
-              bottom: "80px",
+              bottom: "75px",
               padding: "0px 0px",
             }}
           >
-            &nbsp;
             <div>
             <Button
                 type={activeView === "summary" ? "primary" : "default"}
                 style={{
                   padding: "16px 20px",
-                  fontSize: "16px",
+                  fontSize: "13px",
                   borderRadius: "999px 0px 0px 999px",
                   background: activeView === "summary" ? "#555555" : "#FFFFFF",
                   color: activeView === "summary" ? "#FFFFFF" : "#555555",
@@ -165,14 +171,13 @@ export default function ScanResults({ setBook, scans }) {
                 }}
                 onClick={() => setActiveView("summary")}
               >
-                <Plane size={18} />
-                Takeaways
+                Key Takeaways
               </Button>
               <Button
                 type={activeView === "vocab" ? "primary" : "default"}
                 style={{
                   padding: "16px 20px",
-                  fontSize: "16px",
+                  fontSize: "13px",
                   borderRadius: "0px 999px 999px 0px",
                   background: activeView === "vocab" ? "#555555" : "#FFFFFF",
                   color: activeView === "vocab" ? "#FFFFFF" : "#555555",
@@ -180,13 +185,14 @@ export default function ScanResults({ setBook, scans }) {
                 }}
                 onClick={() => setActiveView("vocab")}
               >
-                <Pointer size={18} />
-                Vocab
+                Tap-n-roll
               </Button>
+
               
             </div>
-            &nbsp;
-            &nbsp;
+
+            <FontSizeControl fontSize={fontSize} setFontSize={setFontSize} />
+ 
              <div>
                 {/* Hidden file input */}
                 <input
@@ -211,11 +217,9 @@ export default function ScanResults({ setBook, scans }) {
                     cursor: "pointer",
                   }}
                 >
-                  <Plus size={32} color="white" />
+                  <Plus size={30} color="white" />
                 </label>
-              </div>
-            &nbsp;
-
+              </div> 
           </div>
         </div>
       )}
