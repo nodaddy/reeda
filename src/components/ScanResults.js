@@ -74,37 +74,40 @@ export default function ScanResults({ setBook, scans }) {
     setUploadingImage(true);
     const croppedFile = await getCroppedImage(imageSrc, croppedAreaPixels);
 
-    // getPageSummaryFromImage(croppedFile, 5).then((summary) => {
-      getSimplifiedLanguage(croppedFile).then(async (simpleLang) => {
-        const book = await getBookByTitleAndUserId(bookTitle);
-        const updatedBook = await updateBookByUserIdAndTitle(
-          { ...book, pagesRead: book?.pagesRead ? book?.pagesRead + 1 : 1 },
-          bookTitle
-        );
-        const data = [{
-            summary: simpleLang.para1,
-          simpleLang: simpleLang.para2
-        }]
-        setBook(updatedBook);
-        await createScan({ bookTitle, data });
+    const [summary, simpleLang] = await Promise.all([
+      getPageSummaryFromImage(croppedFile, 5),
+      getSimplifiedLanguage(croppedFile),
+    ])
 
-        const profile = await getProfile(JSON.parse(storage.getItem('user')).email);
-        if ((Date.now() - profile?.lastPageScanTimestamp) / 1000 > 84600) {
-          await updateProfile(profile.email, {
-            ...profile,
-            streak: {
-              ...profile.streak,
-              days: profile.streak?.days + 1 || 1,
-              lastPageScanTimestamp: Date.now(),
-            },
-          });
-        }
+    const book = await getBookByTitleAndUserId(bookTitle);
+    const updatedBook = await updateBookByUserIdAndTitle(
+        { ...book, pagesRead: book?.pagesRead ? book?.pagesRead + 1 : 1 },
+        bookTitle
+    );
 
-        setData({ ...data });
-        setUploadingImage(false);
-        setShowCropper(false);
-        // });
-    })
+    const data = [{
+        summary,
+        simpleLang
+    }]
+    setBook(updatedBook);
+    await createScan({ bookTitle, data });
+
+    const profile = await getProfile(JSON.parse(storage.getItem('user')).email);
+    if ((Date.now() - profile?.lastPageScanTimestamp) / 1000 > 84600) {
+        await updateProfile(profile.email, {
+        ...profile,
+        streak: {
+            ...profile.streak,
+            days: profile.streak?.days + 1 || 1,
+            lastPageScanTimestamp: Date.now(),
+        },
+        });
+    }
+
+    setData({ ...data });
+    setUploadingImage(false);
+    setShowCropper(false);
+       
   };
 
   return (

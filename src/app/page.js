@@ -30,19 +30,14 @@ const Home = () => {
   useEffect(()=> {
     const getGoodsDetails = async () => {
       if (typeof window !== 'undefined') {
-        alert('in window');
         if('getDigitalGoodsService' in window){
-        alert('in goods service');
           const service  = await window.getDigitalGoodsService('https://play.google.com/billing');
           if(service){
-        alert('service');
         const existingPurchases = await service.listPurchases();
 for (const purchase of existingPurchases) {
 // Update UI with user's existing entitlements
-alert(JSON.stringify(purchase));
 }
           // const goodsDetails = service.getDetails(['monthly_subscription']).then(async (response) => {
-          //   alert(JSON.stringify(response));
           //   setGoodsDetails(goodsDetails); 
 
           //   const itemId = response[0].itemId;
@@ -55,23 +50,17 @@ alert(JSON.stringify(purchase));
           //     }];
           //     const request = new PaymentRequest (paymentMethods);
           //     const paymentResponse = await request.show();
-          //     alert(JSON.stringify(paymentResponse));
           //     const {purchaseToken} = paymentResponse.details;
-          //     alert(JSON.stringify(purchaseToken));
            
           //     // Here, you should grant appropriate entitlements for the purchase
           //     try {
           //       const paymentComplete = await paymentResponse.complete();
-          //       alert(JSON.stringify(paymentComplete));
           //       await service.acknowledge(purchaseToken, getPurchaseType(itemId));
           //     } catch (error) {
-          //       alert(JSON.stringify(error), "errorrrr");
           //     }
           //   }).catch(error => {
-          //     alert("Kindly restart the application", JSON.stringify(error));
           //   });
         }else {
-          // alert('no');
         }
       }
     }

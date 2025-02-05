@@ -21,34 +21,27 @@ export default function ImageUpload({ setBook, bookTitle, setData, setModalOpen,
   const [uploadingImage, setUploadingImage] = useState(false);
 
   const onCropComplete = useCallback((_, croppedAreaPixels) => {
-    alert("Crop complete");
     setCroppedAreaPixels(croppedAreaPixels);
   }, []);
 
   const handleFileChange = async (e) => {
-    alert("File change triggered");
     const file = e.target.files[0];
     if (file) {
-      alert(`File selected: ${file.name}`);
       const reader = new FileReader();
       reader.onload = () => {
-        alert("File loaded");
         setImageSrc(reader.result);
         setShowCropper(true);
       };
       reader.readAsDataURL(file);
     } else {
-      alert("No file selected");
     }
   };
 
   const getCroppedImage = (imageSrc, crop) => {
-    alert("Getting cropped image");
     return new Promise((resolve) => {
       const image = new Image();
       image.src = imageSrc;
       image.onload = () => {
-        alert("Image loaded on canvas");
         const canvas = document.createElement('canvas');
         canvas.width = crop.width;
         canvas.height = crop.height;
@@ -64,68 +57,53 @@ export default function ImageUpload({ setBook, bookTitle, setData, setModalOpen,
           crop.width,
           crop.height
         );
-        alert("Drawing image on canvas");
         canvas.toBlob((blob) => {
-          alert("Blob created");
           resolve(blob);
         }, 'image/jpeg');
       };
       image.onerror = () => {
-        alert("Error loading image");
       };
     });
   };
 
   const handleUpload = async () => {
-    alert("Upload triggered");
     setUploadingImage(true);
     const croppedFile = await getCroppedImage(imageSrc, croppedAreaPixels);
 
-    getPageSummaryFromImage(croppedFile, 5).then((summary) => {
-      alert("Summary generated");
-      getSimplifiedLanguage(croppedFile).then(async (simpleLang) => {
-        alert("Simplified language generated");
+    const [summary, simpleLang] = await Promise.all([
+      getPageSummaryFromImage(croppedFile, 5),
+      getSimplifiedLanguage(croppedFile),
+    ])
 
-        const book = await getBookByTitleAndUserId(bookTitle);
-        alert(`Book fetched: ${book.title}`);
+    const book = await getBookByTitleAndUserId(bookTitle);
+    const updatedBook = await updateBookByUserIdAndTitle(
+        { ...book, pagesRead: book?.pagesRead ? book?.pagesRead + 1 : 1 },
+        bookTitle
+    );
 
-        const updatedBook = await updateBookByUserIdAndTitle(
-          { ...book, pagesRead: book.pagesRead ? book.pagesRead + 1 : 1 },
-          bookTitle
-        );
-        alert("Book updated");
+    const data = [{
+        summary,
+        simpleLang
+    }]
+    setBook(updatedBook);
+    await createScan({ bookTitle, data });
 
-        const data = [{
-          summary,
-          simpleLang
-        }];
-        setBook(updatedBook);
+    const profile = await getProfile(JSON.parse(storage.getItem('user')).email);
+    if ((Date.now() - profile?.lastPageScanTimestamp) / 1000 > 84600) {
+        await updateProfile(profile.email, {
+        ...profile,
+        streak: {
+            ...profile.streak,
+            days: profile.streak?.days + 1 || 1,
+            lastPageScanTimestamp: Date.now(),
+        },
+        });
+    }
 
-        await createScan({ bookTitle, data });
-        alert("Scan created");
-
-        const profile = await getProfile(JSON.parse(storage.getItem('user')).email);
-        alert("Profile fetched");
-
-        if ((Date.now() - profile?.lastPageScanTimestamp) / 1000 > 84600) {
-          await updateProfile(profile.email, {
-            ...profile,
-            streak: {
-              ...profile.streak,
-              days: profile.streak?.days + 1 || 1,
-              lastPageScanTimestamp: Date.now(),
-            },
-          });
-          alert("Profile streak updated");
-        }
-
-        setData({ data });
-        setUploadingImage(false);
-        setModalOpen(true);
-        setShowCropper(false);
-        alert("Process complete, modal open");
-      });
-    });
+    setData({ ...data });
+    setUploadingImage(false);
+    setShowCropper(false);
+    setModalOpen(false);
   };
 
   return (
@@ -136,15 +114,12 @@ export default function ImageUpload({ setBook, bookTitle, setData, setModalOpen,
         okText={uploadingImage ? <Loader size={10} className="loader" /> : "Upload"}
         open={showCropper}
         onOk={() => { 
-          alert("OK clicked");
           if (!uploadingImage) { handleUpload(); }
         }}
         onCancel={() => {
-          alert("Cancel clicked");
           setShowCropper(false);
         }}
         onClose={() => {
-          alert("Close clicked");
           setShowCropper(false);
         }}
       >

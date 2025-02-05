@@ -188,11 +188,7 @@ export const getSimplifiedLanguage = async (file) => {
         messages: [
           {
             role: "system",
-            content: `You are an AI that extracts text from images and returns only valid JSON. 
-            - Do not add any markdown formatting (e.g., \`\`\`json).
-            - Ensure the response is a valid JSON object with keys 'para1' and 'para2'.
-            - 'para1' should be a 6-line summary.
-            - 'para2' should replace difficult words with simple alternatives using the format (difficult word)[simpler word].`
+            content: `You are an AI that extracts text from images of book page and replace some difficult or tough or phrases words with simple words using the format (difficult word)[simpler word], Provide only the transformed text without any additional commentary or phrases like "Certainly!" or "Here is the text.`
           },
           {
             role: "user",
@@ -216,12 +212,7 @@ export const getSimplifiedLanguage = async (file) => {
 
     let responseText = response.data.choices[0].message.content.trim();
 
-    // Remove triple backticks if they exist
-    if (responseText.startsWith("```json")) {
-      responseText = responseText.replace(/^```json/, "").replace(/```$/, "").trim();
-    }
-
-    return JSON.parse(responseText); // Ensure the output is valid JSON
+    return responseText; 
   } catch (error) {
     console.error('Error processing image:', error);
     throw error;
