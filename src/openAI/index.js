@@ -56,15 +56,81 @@ export const getPageSummaryFromImage = async (file, sentenceLimit) => {
   }
 };
 
-// Helper function to convert file to base64
-const toBase64 = (file) => {
+// Helper function to convert and compress the image to base64 (grayscale) and alert the size
+const toBase64 = (file, maxWidth = 1024, maxHeight = 1024, quality = 0.3) => {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
+    
+    // Read the image file as a data URL
     reader.readAsDataURL(file);
-    reader.onload = () => resolve(reader.result.split(',')[1]); // Remove `data:image/...;base64,`
+    
+    reader.onload = () => {
+      const img = new Image();
+      img.src = reader.result;
+      
+      img.onload = () => {
+        // Calculate the new dimensions based on maxWidth and maxHeight while maintaining the aspect ratio
+        let width = img.width;
+        let height = img.height;
+
+        const aspectRatio = width / height;
+        
+        // Resize to fit within the maxWidth and maxHeight without cropping (maintaining aspect ratio)
+        if (width > maxWidth || height > maxHeight) {
+          if (aspectRatio > 1) {
+            width = maxWidth;
+            height = maxWidth / aspectRatio;
+          } else {
+            height = maxHeight;
+            width = maxHeight * aspectRatio;
+          }
+        }
+        
+        // Create a canvas to draw the image
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = width;
+        canvas.height = height;
+        
+        // Draw the image onto the canvas
+        ctx.drawImage(img, 0, 0, width, height);
+
+        // Convert to grayscale (black and white)
+        const imageData = ctx.getImageData(0, 0, width, height);
+        const data = imageData.data;
+        
+        for (let i = 0; i < data.length; i += 4) {
+          // Convert RGB to grayscale using the luminance formula
+          const gray = 0.2126 * data[i] + 0.7152 * data[i + 1] + 0.0722 * data[i + 2];
+          data[i] = data[i + 1] = data[i + 2] = gray; // Set RGB values to the grayscale value
+        }
+        
+        // Put the grayscale image data back to the canvas
+        ctx.putImageData(imageData, 0, 0);
+
+        // Convert the original image to base64
+        const originalBase64 = reader.result.split(',')[1];
+        const originalSizeInBytes = originalBase64.length * (3 / 4) - (originalBase64.indexOf('=') > -1 ? originalBase64.split('=').length - 1 : 0);
+        const originalSizeInKB = (originalSizeInBytes / 1024).toFixed(2); // Size in KB
+
+        // Convert the canvas to a compressed base64 image with 50% quality
+        const compressedBase64 = canvas.toDataURL('image/jpeg', quality);
+        const compressedSizeInBytes = compressedBase64.length * (3 / 4) - (compressedBase64.indexOf('=') > -1 ? compressedBase64.split('=').length - 1 : 0);
+        const compressedSizeInKB = (compressedSizeInBytes / 1024).toFixed(2); // Size in KB
+        
+        // Alert both original and compressed sizes
+        alert(`Original image size: ${originalSizeInKB} KB\nCompressed image size (grayscale): ${compressedSizeInKB} KB`);
+        
+        resolve(compressedBase64.split(',')[1]); // Return the compressed base64 string without the header
+      };
+      
+      img.onerror = (error) => reject(error);
+    };
+
     reader.onerror = (error) => reject(error);
   });
 };
+
 
 
 // Method to call the OpenAI API
@@ -121,14 +187,18 @@ export const getSimplifiedLanguage = async (file) => {
         messages: [
           {
             role: "system",
-            content: `scan the text in the image, it is an image from a book page. your job is to extract the text from the image and replace the some tough words in the text with simple words, keep the tough original words in small braces () and the new simple words in square brackets []. eg. replace 'i am feeling ravenous and thirsty' with 'i am feeling (ravenous)[very hungry] and thirsty'`
+            content: `You are an AI that extracts text from images and returns only valid JSON. 
+            - Do not add any markdown formatting (e.g., \`\`\`json).
+            - Ensure the response is a valid JSON object with keys 'para1' and 'para2'.
+            - 'para1' should be a 6-line summary.
+            - 'para2' should replace difficult words with simple alternatives using the format (difficult word)[simpler word].`
           },
           {
             role: "user",
             content: [
               {
                 type: "image_url",
-                image_url: {url: `data:${file.type};base64,${imageBase64}`}
+                image_url: { url: `data:${file.type};base64,${imageBase64}` }
               }
             ]
           }
@@ -143,8 +213,14 @@ export const getSimplifiedLanguage = async (file) => {
       }
     );
 
-    console.log(response);
-    return response.data.choices[0].message.content;
+    let responseText = response.data.choices[0].message.content.trim();
+
+    // Remove triple backticks if they exist
+    if (responseText.startsWith("```json")) {
+      responseText = responseText.replace(/^```json/, "").replace(/```$/, "").trim();
+    }
+
+    return JSON.parse(responseText); // Ensure the output is valid JSON
   } catch (error) {
     console.error('Error processing image:', error);
     throw error;

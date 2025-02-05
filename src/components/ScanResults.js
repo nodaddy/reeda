@@ -74,16 +74,16 @@ export default function ScanResults({ setBook, scans }) {
     setUploadingImage(true);
     const croppedFile = await getCroppedImage(imageSrc, croppedAreaPixels);
 
-    getPageSummaryFromImage(croppedFile, 5).then((summary) => {
+    // getPageSummaryFromImage(croppedFile, 5).then((summary) => {
       getSimplifiedLanguage(croppedFile).then(async (simpleLang) => {
         const book = await getBookByTitleAndUserId(bookTitle);
         const updatedBook = await updateBookByUserIdAndTitle(
-          { ...book, pagesRead: book.pagesRead ? book.pagesRead + 1 : 1 },
+          { ...book, pagesRead: book?.pagesRead ? book?.pagesRead + 1 : 1 },
           bookTitle
         );
         const data = [{
-          summary,
-          simpleLang
+            summary: simpleLang.para1,
+          simpleLang: simpleLang.para2
         }]
         setBook(updatedBook);
         await createScan({ bookTitle, data });
@@ -103,7 +103,7 @@ export default function ScanResults({ setBook, scans }) {
         setData({ ...data });
         setUploadingImage(false);
         setShowCropper(false);
-        });
+        // });
     })
   };
 
