@@ -119,7 +119,7 @@ const toBase64 = (file, maxWidth = 1024, maxHeight = 1024, quality = 0.3) => {
         const webpSizeInKB = (webpSizeInBytes / 1024).toFixed(2); // Size in KB
         
         // Alert both original and WebP compressed sizes
-        alert(`Original image size: ${originalSizeInKB} KB\nCompressed image size (WebP): ${webpSizeInKB} KB`);
+        // alert(`Original image size: ${originalSizeInKB} KB\nCompressed image size (WebP): ${webpSizeInKB} KB`);
         
         // Resolve with the WebP base64 string (without the header)
         resolve(webpBase64.split(',')[1]); 
