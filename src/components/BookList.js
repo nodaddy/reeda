@@ -65,6 +65,10 @@ const BookList = () => {
 
   return (
     <div style={{ padding: '35px 16px', maringBottom: '20px', position: 'relative', 
+    width: '87%',
+    margin: 'auto',
+    border: '2px solid whitesmoke',
+    borderRadius: '9px',
     backgroundColor: '#fafafa',
     }}>
         <div style={{display: 'flex', alignItems: 'center', gap: '15px' }}>
@@ -155,8 +159,7 @@ const BookList = () => {
                     backfaceVisibility: 'hidden',
                     transform: 'rotateY(180deg)',
                     border: '0px',
-                    backgroundColor: '#555555',
-                    color: '#555555',
+                    backgroundColor: 'grey',
                     height: '90px',
                     width: '100%'
                   }}
@@ -185,7 +188,7 @@ const BookList = () => {
           )}
         </div>
         <div align="right">
-       {filteredBooks?.length > 2 && <ArrowRightLeft size={16} color="silver" />} 
+       {filteredBooks?.length > 1 && <ArrowRightLeft size={16} color="silver" />} 
         </div>
         </div>
       )}
