@@ -56,7 +56,7 @@ export const getPageSummaryFromImage = async (file, sentenceLimit) => {
   }
 };
 
-// Helper function to convert and compress the image to base64 (grayscale) and alert the size
+// Helper function to convert and compress the image to base64 (grayscale, WebP) and alert the size
 const toBase64 = (file, maxWidth = 1024, maxHeight = 1024, quality = 0.3) => {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -113,15 +113,16 @@ const toBase64 = (file, maxWidth = 1024, maxHeight = 1024, quality = 0.3) => {
         const originalSizeInBytes = originalBase64.length * (3 / 4) - (originalBase64.indexOf('=') > -1 ? originalBase64.split('=').length - 1 : 0);
         const originalSizeInKB = (originalSizeInBytes / 1024).toFixed(2); // Size in KB
 
-        // Convert the canvas to a compressed base64 image with 50% quality
-        const compressedBase64 = canvas.toDataURL('image/jpeg', quality);
-        const compressedSizeInBytes = compressedBase64.length * (3 / 4) - (compressedBase64.indexOf('=') > -1 ? compressedBase64.split('=').length - 1 : 0);
-        const compressedSizeInKB = (compressedSizeInBytes / 1024).toFixed(2); // Size in KB
+        // Convert the canvas to WebP format with the desired quality
+        const webpBase64 = canvas.toDataURL('image/webp', quality);
+        const webpSizeInBytes = webpBase64.length * (3 / 4) - (webpBase64.indexOf('=') > -1 ? webpBase64.split('=').length - 1 : 0);
+        const webpSizeInKB = (webpSizeInBytes / 1024).toFixed(2); // Size in KB
         
-        // Alert both original and compressed sizes
-        alert(`Original image size: ${originalSizeInKB} KB\nCompressed image size (grayscale): ${compressedSizeInKB} KB`);
+        // Alert both original and WebP compressed sizes
+        alert(`Original image size: ${originalSizeInKB} KB\nCompressed image size (WebP): ${webpSizeInKB} KB`);
         
-        resolve(compressedBase64.split(',')[1]); // Return the compressed base64 string without the header
+        // Resolve with the WebP base64 string (without the header)
+        resolve(webpBase64.split(',')[1]); 
       };
       
       img.onerror = (error) => reject(error);
