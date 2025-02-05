@@ -9,7 +9,7 @@ import { storage } from "@/app/utility";
 
 const { default: SignInWithGoogle } = require("./SignInWithGoogle");
 
-export const Navbar = () => {
+export const Navbar = ({isPremium = true}) => {
   const [bookmarks, setBookmarks] = useState(null);
 
   useEffect(() => {
@@ -36,8 +36,24 @@ export const Navbar = () => {
         boxShadow: "0 2px 8px rgba(0, 0, 0, 0.1)",
       }}
     >
+     
       <span>
-        <h3 style={{ marginLeft: "20px", fontWeight: "bold" }}>Reeda</h3>
+        <h3 style={{ marginLeft: "20px", fontWeight: "bold" }}>Reeda 
+        
+        <br/>   {
+      isPremium ? <span style={{
+        padding: '3px 15px',
+        fontSize: 'x-small',
+        backgroundColor: 'transparent',
+        color: '#fa541c',
+        position: 'absolute',
+        bottom: '12px',
+        left: '5px'
+      }}>
+        Premium
+      </span> :
+      ''
+    }</h3>
       </span>
 
       <span style={{ display: "flex", alignItems: "center", gap: "15px" }}>

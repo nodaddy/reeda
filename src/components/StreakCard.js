@@ -4,11 +4,27 @@ import { Card, Button, Modal, Tooltip, Spin } from 'antd';
 import { time } from 'framer-motion';
 import { Flame, Clock, Loader, GraduationCap } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { Sun, Moon } from 'lucide-react';
 
-const StreakCard = ({ streak, isActive, isPremium }) => {
+const StreakCard = ({ streak, isActive, isPremium = false }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [loading, setLoading] = useState(true);
   const [timeLeft, setTimeLeft] = useState({ hours: 0, minutes: 0 });
+
+  const currentHour = new Date().getHours();
+let greeting = '';
+let Icon = Sun;
+
+if (currentHour >= 5 && currentHour < 12) {
+  greeting = 'Good Morning!';
+  Icon = Sun;  // Display sun icon for morning
+} else if (currentHour >= 12 && currentHour < 18) {
+  greeting = 'Good Afternoon!';
+  Icon = Sun;  // Display sun icon for afternoon
+} else {
+  greeting = 'Good Evening!';
+  Icon = Moon;  // Display moon icon for evening/night
+}
 
   const handleRevive = () => {
     setIsModalVisible(false);
@@ -84,20 +100,21 @@ const StreakCard = ({ streak, isActive, isPremium }) => {
     </Modal>
   </Card> : (
      <Card
-     bodyStyle={{padding: '15px 20px',
+     bodyStyle={{padding: '20px 25px 20px 20px',
      borderRadius: '7px',
 
-     background: isPremium ? 'linear-gradient(135deg, #B08D10, goldenrod, gold,  whitesmoke)' : "linear-gradient(155deg, grey, silver,  whitesmoke)", // Gold, platinum, and light metallic gradient
+     background: isPremium ? 'linear-gradient(135deg, #B08D01, goldenrod, gold,  whitesmoke)' : "linear-gradient(155deg,  silver,  whitesmoke)", // Gold, platinum, and light metallic gradient
     }}
      style={{
-       width: '100%',
+       width: '96%',
        margin: 'auto',
        border: '0px',
        backgroundColor: 'transparent',
        backgroundSize: '200% 200%',
-       animation: 'shine 3s ease-in-out infinite', // Shine animation for glaring effect
-       marginTop: '30px',
-       boxShadow: '0 4px 15px rgba(0, 0, 0, 0.2)', // Stronger shadow for depth
+      //  animation: 'shine 3s ease-in-out infinite', // Shine animation for glaring effect
+       marginTop: '33px',
+       marginBottom: '30px',
+      //  boxShadow: '0 4px 15px rgba(0, 0, 0, 0.2)', // Stronger shadow for depth
      }}
    >
         <div style={{
@@ -106,27 +123,27 @@ const StreakCard = ({ streak, isActive, isPremium }) => {
           justifyContent: 'space-between',
         }}>
         {timeLeft.hours < 24 ? <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }}>
-          <div style={{ textAlign: 'left'}}>
-          <div style={{
-            // fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif', 
+          <div style={{ textAlign: 'left'}}> 
+  <div style={{ 
              fontSize: '18px', 
-             color: isPremium ? 'whitesmoke' : 'white',
+             color: isPremium ? 'whitesmoke' : '#555555',
              fontWeight: '300', 
-            // color: '#555555', 
-            // borderRadius: '999px', 
-            // padding: '5px 20px', 
-            // boxShadow: '0 6px 12px rgba(0, 0, 0, 0.1)', 
-            // textAlign: 'center',
-            // maxWidth: '600px',
-            // margin: 'auto',
-            // letterSpacing: '0.5px',
-            // // border: '1px solid silver',
-            // background: 'linear-gradient(145deg, #D3D3D3 0%, #ECF0F1 100%, whitesmoke)',
-            // backgroundSize: '200% 200%',
-            // animation: 'shine 2s linear infinite'
+             display: 'flex', 
+             alignItems: 'flex-start' 
           }}>
-  Hi, {JSON.parse(storage.getItem('user')).displayName.split(" ").slice(0, 2).join(" ")}
-</div>
+    
+    <span><sub style={{
+      display: 'flex',
+      alignItems: 'center'
+    }}> <Icon size={25} style={{ marginRight: '10px' }} /> {greeting}</sub>
+    <div style={{
+      marginTop: '-10px'
+    }}>
+      <Icon size={25} style={{ marginRight: '10px', opacity: '0' }} />{JSON.parse(storage.getItem('user')).displayName.split(" ").slice(0, 2).join(" ")}
+      </div>
+      </span>
+  </div> 
+
 
 
 

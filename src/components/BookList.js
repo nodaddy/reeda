@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { List, Card, Button, Title, Modal, Form, Input, Progress, Badge as BadgeAnt, message, Typography, Empty } from 'antd';
-import { ArrowRightLeft, Badge, Book, BookMarked, BookPlus, Delete, Loader, PlusCircle, Trash2 } from 'lucide-react';
+import { ArrowRightLeft, Badge, Book, BookMarked, BookPlus, Delete, Loader, PlusCircle, Search, Trash2 } from 'lucide-react';
 import { priColor, secColor } from '@/configs/cssValues';
 import { motion } from 'framer-motion';
 import { createbook, getBooks, deleteBook} from '@/firebase/services/bookService';
@@ -77,18 +77,19 @@ const BookList = () => {
         }}>&nbsp;&nbsp;My Books</Typography.Title>
         {/* </BadgeAnt> */}
 
-        <PlusCircle size={28} color={priColor} style={{ cursor: 'pointer' }} onClick={showModal} />
+        <PlusCircle size={28} color={secColor} style={{ cursor: 'pointer' }} onClick={showModal} />
 </div>
       {/* <h5 style={{ fontSize: '20px', display: 'flex', alignItems: 'center', fontWeight: '400', color: '#555555', marginBottom: '15px', paddingBottom: '10px' }}>
         My Bookshelf &nbsp;
       </h5> */}
  <br/>
  <Input.Search
-          placeholder="Search books by title or author..."
+          placeholder=" Search a book in your collection"
           value={searchQuery}
           onChange={handleSearch}
+          prefix={<Search size={18} />}
           allowClear
-          style={{ borderRadius: '20px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)', outline: 'none' }}
+          style={{ borderRadius: '20px', outline: 'none' }}
         />
 <br/>
 <br/>
