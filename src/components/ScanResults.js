@@ -166,7 +166,7 @@ export default function ScanResults({ setBook, scans }) {
                 onClick={() => setActiveView("summary")}
               >
                 <Plane size={18} />
-                Quick read
+                Takeaways
               </Button>
               <Button
                 type={activeView === "vocab" ? "primary" : "default"}

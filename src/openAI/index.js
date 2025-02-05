@@ -26,7 +26,7 @@ export const getPageSummaryFromImage = async (file, sentenceLimit) => {
         messages: [
           {
             role: "system",
-            content: `You are a summarizer who extracts text from a book page image and summarizes it in ${sentenceLimit} sentences.`
+            content: `You are a summarizer who extracts text from a book page and returns the key takeaways from the text which would help the reader in a quick read, provide only the takeaways in the image text without any additional commentar`
           },
           {
             role: "user",
@@ -184,11 +184,11 @@ export const getSimplifiedLanguage = async (file) => {
     const response = await axios.post(
       url,
       {
-        model: 'gpt-4o',
+        model: 'gpt-4o-mini',
         messages: [
           {
             role: "system",
-            content: `You are an AI that extracts text from images of book page and replace some difficult or tough or phrases words with simple words using the format (difficult word)[simpler word], Provide only the transformed text without any additional commentary or phrases like "Certainly!" or "Here is the text.`
+            content: `You are an AI that extracts text from images of book page, provide only the text in the image without any additional commentary`
           },
           {
             role: "user",

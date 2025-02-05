@@ -1,46 +1,67 @@
-import React from "react";
-import { Tooltip, Typography } from "antd";
-import { priColor, secColor } from "@/configs/cssValues";
-import { Content } from "next/font/google";
-import { ContentBox } from "./ScanResults";
+import React, { useState, useEffect, useRef } from "react";
+import { Typography } from "antd";
 
 const { Text } = Typography;
 
-const OriginalTextWithTooltips = ({paragraph}) => {
-  // Regex to match (word) [meaning]
-  const regex = /\((.*?)\) \[(.*?)\]/g;
+const OriginalTextWithTooltips = ({ paragraph }) => {
+  const [selectedText, setSelectedText] = useState("");
+  const textContainerRef = useRef(null);
 
-  const parts = [];
-  let lastIndex = 0;
-  let match;
+  // Function to handle single word click
+  const handleWordClick = (word) => {
+    alert(word);
+  };
 
-  while ((match = regex.exec(paragraph)) !== null) {
-    const [fullMatch, word, meaning] = match;
+  // Function to handle text selection
+  useEffect(() => {
+    const handleSelection = () => {
+      const selection = window.getSelection();
+      if (selection && textContainerRef.current?.contains(selection.anchorNode)) {
+        const selected = selection.toString().trim();
+        if (selected) {
+          setSelectedText(selected);
+        }
+      }
+    };
 
-    // Add the text before the matched word
-    if (match.index > lastIndex) {
-      parts.push(paragraph.substring(lastIndex, match.index));
+    const textContainer = textContainerRef.current;
+    if (textContainer) {
+      textContainer.addEventListener("mouseup", handleSelection);
+      textContainer.addEventListener("touchend", handleSelection); // Mobile support
     }
 
-    // Add the highlighted word inside ()
-    parts.push(
-      <Tooltip key={match.index} title={meaning}>
-        <Text style={{ color: "green", cursor: "pointer", fontSize: '16px' }}>
-          {word}
-        </Text>
-      </Tooltip>
-    );
+    return () => {
+      if (textContainer) {
+        textContainer.removeEventListener("mouseup", handleSelection);
+        textContainer.removeEventListener("touchend", handleSelection);
+      }
+    };
+  }, []);
 
-    lastIndex = match.index + fullMatch.length;
-  }
-
-  // Add remaining text
-  if (lastIndex < paragraph?.length) {
-    parts.push(paragraph.substring(lastIndex));
-  }
+  // Show alert when selection changes
+  useEffect(() => {
+    if (selectedText) {
+      alert(selectedText);
+      setSelectedText(""); // Reset selection
+    }
+  }, [selectedText]);
 
   return (
-    <ContentBox text={parts} />
+    <div ref={textContainerRef} style={{ display: "inline" }}>
+      {paragraph.split(/(\s+)/).map((part, index) =>
+        part.trim() ? (
+          <Text
+            key={index}
+            onClick={() => handleWordClick(part)}
+            style={{ cursor: "pointer" }}
+          >
+            {part}
+          </Text>
+        ) : (
+          <span key={index}>{part}</span> // Preserve spaces
+        )
+      )}
+    </div>
   );
 };
 
