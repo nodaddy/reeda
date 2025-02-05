@@ -137,7 +137,8 @@ if (currentHour >= 5 && currentHour < 12) {
       alignItems: 'center'
     }}> <Icon size={25} style={{ marginRight: '10px' }} /> {greeting}</sub>
     <div style={{
-      marginTop: '-10px'
+      marginTop: '-10px',
+      fontSize: '17px',
     }}>
       <Icon size={25} style={{ marginRight: '10px', opacity: '0' }} />{JSON.parse(storage.getItem('user')).displayName.split(" ").slice(0, 2).join(" ")}
       </div>
