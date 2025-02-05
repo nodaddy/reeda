@@ -158,7 +158,7 @@ if (currentHour >= 5 && currentHour < 12) {
                 {`${isActive ? streak?.days : 0} ${streak?.days > 1 ? 'Days' : 'Day'}`}
               </span>
             </p>
-            <h4 style={{ margin: 0, color: isActive ? '#fa541c' : '#8c8c8c', fontWeight: '300' }}>
+            <h4 style={{ margin: 0, color: isActive ? '#fa541c' : '#8c8c8c', fontWeight: '400' }}>
               {isActive ? 'Streak Active' : 'Inactive Streak'}
             </h4>
           </div>
