@@ -130,18 +130,18 @@ if (currentHour >= 5 && currentHour < 12) {
   <div style={{ 
              fontSize: '18px', 
              color: isPremium ? 'whitesmoke' : priTextColor,
-             fontWeight: '400', 
              display: 'flex', 
              alignItems: 'flex-start' 
           }}>
     
-    <span><sub style={{
+    <span ><sub style={{
       display: 'flex',
       alignItems: 'center'
     }}> <Icon size={25} style={{ marginRight: '10px' }} /> {greeting}</sub>
     <div style={{
       marginTop: '-10px',
-      fontSize: '17px',
+      fontSize: '16px',
+      fontWeight: '300'
     }}>
       <Icon size={25} style={{ marginRight: '10px', opacity: '0' }} />{JSON.parse(storage.getItem('user')).displayName.split(" ").slice(0, 2).join(" ")}
       </div>
