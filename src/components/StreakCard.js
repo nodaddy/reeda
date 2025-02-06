@@ -136,7 +136,8 @@ if (currentHour >= 5 && currentHour < 12) {
     
     <span ><sub style={{
       display: 'flex',
-      alignItems: 'center'
+      alignItems: 'center',
+      fontWeight: '300px'
     }}> <Icon size={25} style={{ marginRight: '10px' }} /> {greeting}</sub>
     <div style={{
       marginTop: '-10px',
