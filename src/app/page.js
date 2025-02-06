@@ -124,11 +124,10 @@ getGoodsDetails();
     </div> : 
     <div style={{
       overflow: 'auto',
-      paddingBottom: '100px'
     }}>
       <StreakCard streak={profile?.streak} isActive={lastPageScanDifference < 86400*2} /> 
       <BookList />
-      <ContinueReading />
+      {/* <ContinueReading /> */}
     <br/>
     </div>
   );

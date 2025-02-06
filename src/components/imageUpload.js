@@ -99,8 +99,9 @@ export default function ImageUpload({ setBook, bookTitle, setData, setModalOpen,
         },
         });
     }
+// alert(JSON.stringify({ ...data }));
 
-    setData({ ...data });
+    setData({ data: data, bookTitle: bookTitle });
     setUploadingImage(false);
     setShowCropper(false);
     setModalOpen(false);

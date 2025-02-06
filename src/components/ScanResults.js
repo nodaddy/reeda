@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { Button, Tooltip, Modal } from "antd";
 import OriginalTextWithTooltips, { FontSizeControl } from "./TextWithIntegratedDictionary";
 import { Hourglass, Loader, Plane, Plus, Pointer, WholeWord } from "lucide-react";
@@ -15,12 +15,12 @@ import { getPageSummaryFromImage, getSimplifiedLanguage } from "@/openAI";
 import TextWithIntegratedDictionary from "./TextWithIntegratedDictionary";
 
 export default function ScanResults({ setBook, scans }) {
+  console.log(scans);
   const bookTitle = scans?.bookTitle;
   const [activeView, setActiveView] = useState("vocab");
   const [data, setData] = useState(scans?.data ? [scans.data[0]] : null);
 
   const [fontSize, setFontSize] = useState(17); // Default font size
-
   
   // States for cropper
   const [crop, setCrop] = useState({ x: 0, y: 0 });
@@ -108,6 +108,8 @@ export default function ScanResults({ setBook, scans }) {
         });
     }
 
+
+
     setData({ ...data });
     setUploadingImage(false);
     setShowCropper(false);
@@ -123,7 +125,6 @@ export default function ScanResults({ setBook, scans }) {
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            maxHeight: 'calc(100vh - 270px)',
             overflow: 'scroll',
             width: '82%',
             margin: 'auto',
@@ -132,7 +133,7 @@ export default function ScanResults({ setBook, scans }) {
             borderRadius: '10px',
             border: '1px solid silver',
             backgroundColor: 'whitesmoke',
-            height: 'calc(100vh - 303px)', // This can be used if you want to explicitly set height too
+            height: 'calc(100vh - 252px)', // This can be used if you want to explicitly set height too
             // padding: "25px",
             // display: "flex",
             // flexDirection: "column",
@@ -165,7 +166,7 @@ export default function ScanResults({ setBook, scans }) {
               justifyContent: "space-around",
               position: "absolute",
               width: "100vw",
-              bottom: "75px",
+              bottom: "15px",
               padding: "0px 0px",
             }}
           >
@@ -196,7 +197,7 @@ export default function ScanResults({ setBook, scans }) {
                 }}
                 onClick={() => setActiveView("vocab")}
               >
-                Tap-n-roll
+                As is
               </Button>
 
               

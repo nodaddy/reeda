@@ -24,7 +24,7 @@ export default function RootLayout({ children }) {
         <div style={{marginTop: '68px'}}>
         {children}
         </div>
-        <BottomNav />
+        {/* <BottomNav /> */}
       </body>
     </html>
   );

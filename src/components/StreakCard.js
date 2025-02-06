@@ -1,5 +1,5 @@
 import { storage } from '@/app/utility';
-import { priColor, secColor } from '@/configs/cssValues';
+import { priColor, priTextColor, secColor, secTextColor } from '@/configs/cssValues';
 import { Card, Button, Modal, Tooltip, Spin } from 'antd';
 import { time } from 'framer-motion';
 import { Flame, Clock, Loader, GraduationCap } from 'lucide-react';
@@ -100,14 +100,17 @@ if (currentHour >= 5 && currentHour < 12) {
     </Modal>
   </Card> : (
      <Card
-     bodyStyle={{padding: '20px 25px 20px 20px',
-     borderRadius: '7px',
+     bodyStyle={{
+    
 
-     background: isPremium ? 'linear-gradient(135deg, #B08D01, goldenrod, gold,  whitesmoke)' : "linear-gradient(155deg,  silver,  whitesmoke)", // Gold, platinum, and light metallic gradient
+    //  background: isPremium ? 'linear-gradient(135deg, #B08D01, goldenrod, gold,  whitesmoke)' : "linear-gradient(155deg,  silver,  whitesmoke)", // Gold, platinum, and light metallic gradient
     }}
      style={{
+      background: 'linear-gradient(11deg, silver, whitesmoke, whitesmoke) 0% 0% / 200% 200%',
        width: '96%',
        margin: 'auto',
+     borderRadius: '12px',
+
        border: '0px',
        backgroundColor: 'transparent',
        backgroundSize: '200% 200%',
@@ -122,11 +125,11 @@ if (currentHour >= 5 && currentHour < 12) {
           alignItems: 'flex-start',
           justifyContent: 'space-between',
         }}>
-        {timeLeft.hours < 24 ? <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }}>
+        { <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }}>
           <div style={{ textAlign: 'left'}}> 
   <div style={{ 
              fontSize: '18px', 
-             color: isPremium ? 'whitesmoke' : '#555555',
+             color: isPremium ? 'whitesmoke' : priTextColor,
              fontWeight: '400', 
              display: 'flex', 
              alignItems: 'flex-start' 
@@ -149,7 +152,7 @@ if (currentHour >= 5 && currentHour < 12) {
 
 
           </div>
-        </div> : <span></span>}
+        </div>}
 
         <div align="right">
           <Flame color={isActive ? '#fa541c' : '#bfbfbf'} size={30} />

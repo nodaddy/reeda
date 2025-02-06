@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import { List, Card, Button, Title, Modal, Form, Input, Progress, Badge as BadgeAnt, message, Typography, Empty } from 'antd';
-import { ArrowRightLeft, Badge, Book, BookMarked, BookPlus, Delete, Loader, PlusCircle, Search, Trash2 } from 'lucide-react';
-import { priColor, secColor } from '@/configs/cssValues';
+import React, { useEffect, useRef, useState } from 'react';
+import { List, Card, Button, Title, Modal, Form, Input, Progress, Badge as BadgeAnt, message, Typography, Empty, Divider } from 'antd';
+import { ArrowRightLeft, Badge, Book, BookMarked, BookOpen, BookPlus, Camera, Delete, Loader, MoveRight, Play, PlayCircle, PlusCircle, Search, Text, Trash2 } from 'lucide-react';
+import { defaultBorderColor, priColor, priTextColor, secColor, secTextColor } from '@/configs/cssValues';
 import { motion } from 'framer-motion';
 import { createbook, getBooks, deleteBook} from '@/firebase/services/bookService';
 import Link from 'next/link';
@@ -15,6 +15,24 @@ const BookList = () => {
   const [searchQuery, setSearchQuery] = useState('');
 
   const [loading, setLoading] = useState(false);
+  const [height, setHeight] = useState(0);
+  const ref = useRef(null);
+
+  useEffect(() => {
+    const updateHeight = () => {
+      if (ref.current) {
+        const offsetTop = ref.current.offsetTop;
+      // alert(offsetTop);
+
+        setHeight(`calc(100vh - ${offsetTop + 40}px)`);
+      }
+    };
+
+    updateHeight();
+    window.addEventListener('resize', updateHeight);
+    
+    return () => window.removeEventListener('resize', updateHeight);
+  }, []);
 
   const showModal = () => setIsModalVisible(true);
   const handleCancel = () => setIsModalVisible(false);
@@ -23,7 +41,7 @@ const BookList = () => {
     setLoading(true);
     getBooks().then(res => {
         setBooks(res); 
-        setFilteredBooks(res);
+      setFilteredBooks(res);
     setLoading(false);
     }).catch(console.log);
   }, []);
@@ -64,67 +82,116 @@ const BookList = () => {
   };
 
   return (
-    <div style={{ padding: '35px 16px', maringBottom: '20px', position: 'relative', 
+    <div 
+    ref={ref}
+    style={{ 
+    padding: '3px 19px 34px 19px',
     width: '87%',
+    maxHeight: height,
     margin: 'auto',
-    border: '2px solid whitesmoke',
-    borderRadius: '9px',
-    backgroundColor: '#fafafa',
+    position: 'relative',
+    borderRadius: '15px',
+    overflowY: 'scroll',
+    // background: 'linear-gradient(to bottom, #fafafa, #fafafa, #fafafa, #fafafa, #fafafa, white)'
+    backgroundColor: 'white'
     }}>
-        <div style={{display: 'flex', alignItems: 'center', gap: '15px' }}>
+      <div style={{
+        position: 'sticky',
+        width: '100%',
+        top: '0px',
+        zIndex: '2',
+        backgroundColor: 'white'
+        // backgroundColor: '#fafafa',
+      }}>
+        <div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '15px', 
+            paddingTop: '18px',
+      
+      }}>
        {/* <BadgeAnt count={books?.length} showZero={false} color={secColor} offset={[5, 3]} > */}
-        <Typography.Title level={4} style={{
-            display: 'flex',
-            alignItems: 'center',
+        <BadgeAnt count={books?.length} showZero={true} color={secColor}  offset={[4, -3]}>
+        <span style={{
+            
             fontWeight: '300',
-            margin: '0px'
-        }}>&nbsp;&nbsp;My Books</Typography.Title>
-        {/* </BadgeAnt> */}
+            margin: '0px',
+            fontSize: '18px', 
+            padding: '5px 3px',
+            color: priTextColor,
+            borderRadius: '6px'
 
-        <PlusCircle size={28} color={secColor} style={{ cursor: 'pointer' }} onClick={showModal} />
-</div>
-      {/* <h5 style={{ fontSize: '20px', display: 'flex', alignItems: 'center', fontWeight: '400', color: '#555555', marginBottom: '15px', paddingBottom: '10px' }}>
-        My Bookshelf &nbsp;
-      </h5> */}
- <br/>
- <Input.Search
-          placeholder=" Search a book in your collection"
-          value={searchQuery}
-          onChange={handleSearch}
-          prefix={<Search size={18} />}
-          allowClear
-          style={{ borderRadius: '20px', outline: 'none' }}
-        />
-<br/>
+        }}>My Books</span>
+        </BadgeAnt>
+        {/* </BadgeAnt> */}
+ 
+       
+        </div>
+              {/* <h5 style={{ fontSize: '20px', display: 'flex', alignItems: 'center', fontWeight: '400', color: '#555555', marginBottom: '15px', paddingBottom: '10px' }}>
+                My Bookshelf &nbsp;
+              </h5> */}
+        <br/>
+        <div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
+        <Input.Search
+                  placeholder=" Search your collection"
+                  value={searchQuery}
+                  onChange={handleSearch}
+                  prefix={<Search size={18} />}
+                  allowClear
+                  style={{ outline: 'none', width: '75%' }}
+                />
+         {filteredBooks?.length > 0 && <BookPlus size={29} color={secColor} style={{ cursor: 'pointer' }} onClick={showModal} />}
+
+        </div>
+        </div>
 <br/>
       {filteredBooks && (
         <div>
         <div
-        style={{
-            display: 'flex',
-            flexWrap: 'nowrap',
-            overflowX: 'scroll',
-            scrollbarWidth: '0px',
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(1, 1fr)', // Ensures exactly 2 items per row
             marginTop: '15px',
-            gap: '11px'
-        }}>
+            width: '100%', // Ensures the grid takes full width
+            zIndex: '1'
+          }}>
           {filteredBooks?.sort((a,b) => a.title.localeCompare(b.title)).map(item => (
             <div style={{
-                minWidth: '175px',
             }}>
-              <motion.div onClick={() => handleCardClick(item)} style={{ perspective: '1000px', width: '100%' }}>
-                <motion.div
-                  animate={{ rotateY: flippedBook === item ? 180 : 0 }}
-                  transition={{ duration: 0.6 }}
-                  style={{ transformStyle: 'preserve-3d', position: 'relative', width: '100%', height: '100px' }}
-                > 
+                
                   {/* Front Side */}
                   <Card
-                    style={{ backfaceVisibility: 'hidden', borderRadius: '5px 0px 5px 5px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.05)', position: 'absolute', width: '95%' }}
-                    bodyStyle={{ padding: '10px 16px' }}
+                    style={{ backfaceVisibility: 'hidden',
+                    marginBottom: '11px', 
+                    borderRadius: '8px', 
+                    
+                    borderColor: 'white',
+                    // boxShadow: '0 4px 8px rgba(0, 0, 0, 0.05)',
+                     
+                    width: '100%' }}
+                    bodyStyle={{ padding: '10px 0px' }}
                   >
+
+                    <div style={{
+                      display: 'flex',
+                      justifyContent: 'space-between', 
+                      width: '100%',
+                      alignItems: 'center'
+                    }}>
+
+
+                    <img src='' style={{
+                      width: '40px',
+                      backgroundColor: '#f5f5f5',
+                      height: '59px',
+                      borderRadius: '2px',  
+                      marginRight: '15px',
+                      objectFit: 'cover',
+                      // border: '1px solid silver'
+                    }} />
+                     <div style={{
+                      width: '155px'
+                    }}>
                     <div style={{ fontSize: '15px', color: '#333', overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis'}}>
-                    <BookMarked size={20} color={'gray'} />&nbsp;{item.title.toUpperCase()}
+                    {/* <BookMarked size={20} color={'gray'} />&nbsp; */}
+                    {item.title.toUpperCase()}
                     </div>
                     <span style={{ color: '#666', fontSize: '12px', display: 'block', overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}>
                       {item.author}
@@ -151,17 +218,69 @@ const BookList = () => {
                         onClick={(e) => e.stopPropagation()} 
                       />
                     </Popconfirm> */}
+                    </div>
+                    {/* a vertical divider */}
+                    <div style={{
+                      width: '1px',
+                      height: '100%',
+                      backgroundColor: '#ccc',
+                      margin: '0 10px',
+                      display: 'inline-block'
+                    }}></div>
+
+                    <div style={{
+                      color: secTextColor,
+                      fontSize :'14px',
+                      display: 'flex',
+                      alignItems: 'flex-end',
+                      flexDirection: 'column',
+                    }}>
+                    
+                      {item.lastReadDate || (Math.random() * (63)).toFixed(0)} reads
+
+                      <span style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'flex-end',
+                        marginTop: '9px',
+                        gap: '12px'
+                      }}>
+
+<Link href={'/scan/'+item.title}>
+
+                        <Text 
+                        size={19}
+                        style={{
+                          color: priTextColor,
+                          // border: '1px solid '+ defaultBorderColor,
+                          borderRadius: '50%',
+                        }} />
+</Link>
+<Link href={'/scan/'+item.title}>
+<BookOpen
+                        size={25}
+                        style={{
+                          padding: '2px',
+                          color: priTextColor,
+                        }} />
+                  </Link>
+                    
+                           
+                      </span>
+                   
+                    </div>
+                    </div>
                   </Card>
 
+
                   {/* Back Side */}
-                  <Card
+                  {/* <Card
                   style={{
                     backfaceVisibility: 'hidden',
                     transform: 'rotateY(180deg)',
                     border: '0px',
                     backgroundColor: 'grey',
                     height: '90px',
-                    width: '100%'
                   }}
                 >
                     <div style={{
@@ -171,31 +290,39 @@ const BookList = () => {
                         position: 'absolute',
                         top: '0px',
                         height: '100%',
-                        width :'100%',
                         left: '0px'
                     }}>
-                  <Link href={'/scan/'+item.title}> <Button type="ghost" style={{ color: 'white' }} onClick={() => alert('Recap clicked')}><span>Quick <br/>recap</span></Button>
+                  <Link href={'/scan/'+item.title}> <Button type="ghost" style={{ color: 'white' }} onClick={() => alert('Recap')}><span>Recap</span></Button>
                  </Link>
 
-                  <Link href={'/scan/'+item.title}> <Button type="ghost" style={{ color: 'white' }}><span>Continue <br/> reading</span></Button>
+                  <Link href={'/scan/'+item.title}> <Button type="ghost" style={{ color: 'white' }}><span>Read</span></Button>
                   </Link>
                 
                     </div>
-                </Card>
-                </motion.div>
-              </motion.div>
+                </Card>  */}
+                
+                <Divider style={{ margin: '10px 0px' }} />
             </div>)
           )}
-        </div>
-        <div align="right">
-       {filteredBooks?.length > 1 && <ArrowRightLeft size={16} color="silver" />} 
-        </div>
+        </div> 
         </div>
       )}
 
       {
         (!filteredBooks || filteredBooks.length === 0) && !loading && (
-            <Empty  />
+          <div style={{
+            height: '160px',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
+            color: secTextColor,
+            fontFamily: "'Inter', sans-serif",
+          }}>
+          <BookPlus size={50} color={secColor} style={{ cursor: 'pointer' }} onClick={showModal} />
+          <br/>
+          Add a book
+          </div>
         )
       }
 
