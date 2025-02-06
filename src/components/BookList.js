@@ -137,7 +137,7 @@ const BookList = () => {
                   allowClear
                   style={{ outline: 'none', width: '75%' }}
                 />
-         {filteredBooks?.length > 0 && <BookPlus size={29} color={secColor} style={{ cursor: 'pointer' }} onClick={showModal} />}
+         {filteredBooks?.length > 0 && <BookPlus size={40} color={secColor} style={{ cursor: 'pointer' }} onClick={showModal} />}
 
         </div>
         </div>
