@@ -34,8 +34,8 @@ const Page = () => {
 
                <span style={{
                 fontSize: '23px',
-                marginTop: '7px',
-                marginBottom: '8px',
+                marginTop: '10px',
+                marginBottom: '10px',
                }}> UPGRADE TO PREMIUM </span>
                 </div>
             </div>

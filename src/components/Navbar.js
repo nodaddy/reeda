@@ -1,6 +1,6 @@
 "use client"
 
-import { MoreVertical, BookMarked, Coins, MoreHorizontal, ArrowDown, TriangleDashed, List } from "lucide-react";
+import { MoreVertical, BookMarked, Coins, MoreHorizontal, ArrowDown, TriangleDashed, List, X } from "lucide-react";
 import Link from "next/link";
 import { Badge, Tooltip } from "antd";
 import { getScanCount } from "@/firebase/services/scanService";
@@ -11,6 +11,7 @@ const { default: SignInWithGoogle } = require("./SignInWithGoogle");
 
 export const Navbar = ({isPremium = true}) => {
   const [bookmarks, setBookmarks] = useState(null);
+  const [menuOpen, setMenuOpen] = useState(null);
 
   useEffect(() => {
     getScanCount().then((res) => {
@@ -19,6 +20,7 @@ export const Navbar = ({isPremium = true}) => {
   }, []);
 
   return (
+    <>
     <div
       style={{
         position: "fixed",
@@ -86,14 +88,76 @@ export const Navbar = ({isPremium = true}) => {
             </div>
         )}
 
-        {storage.getItem("user") && (
-          <Link style={{ marginRight: "20px" }} href="/profile">
-            <List color={'#555555'} size={24} style={{
-                transform: "translateY(3px)"
-            }} />
-          </Link>
-        )}
-      </span>
-    </div>
+{storage.getItem("user") && (
+            <List
+              color={"#555555"}
+              size={25}
+              style={{  cursor: "pointer", marginRight: "20px" }}
+              onClick={() => setMenuOpen(true)}
+            />
+          )}
+        </span>
+      </div>
+
+      {/* Sliding Menu */}
+      <div
+        style={{
+          position: "fixed",
+          top: "0",
+          right: menuOpen ? "0" : "-300px",
+          width: "280px",
+          height: "100vh",
+          backgroundColor: "white",
+          boxShadow: "2px 0 10px rgba(0,0,0,0.1)",
+          transition: "right 0.3s ease-in-out",
+          padding: "0px",
+          zIndex: "1000000",
+        }}
+      >
+        <X
+          size={24}
+          color="#555555"
+          style={{ cursor: "pointer", position: "absolute", right: "20px", top: "20px" }}
+          onClick={() => setMenuOpen(false)}
+        />
+
+        <h3 style={{ padding: "7px 20px", fontSize: "19px", color: "#333", fontWeight: "500" }}>Menu</h3>
+        <ul style={{ listStyle: "none", padding: "20px", margin: "20px 0" }}>
+          <li style={{ borderBottom: "1px solid #ddd", padding: '18px 0px' }}>
+            <Link onClick={() => setMenuOpen(false)} href="/profile" style={{ color: "#333", textDecoration: "none" }}>Profile</Link>
+          </li>
+          <li style={{ borderBottom: "1px solid #ddd", padding: '18px 0px' }}>
+            <Link onClick={() => setMenuOpen(false)} href="/premium" style={{ color: "#333", textDecoration: "none" }}>Upgrade to premium</Link>
+          </li>
+          <li style={{ borderBottom: "1px solid #ddd", padding: '18px 0px' }}>
+            <Link onClick={() => setMenuOpen(false)} href="/settings" style={{ color: "#333", textDecoration: "none" }}>Settings</Link>
+          </li>
+          <li style={{  padding: '18px 0px' }}>
+            <span onClick={() => {
+              storage.removeItem("user");
+              window.location.reload();
+            }} style={{ color: "#e63946", textDecoration: "none" }}>Logout</span>
+          </li>
+        </ul>
+      </div>
+    {/* Overlay when menu is open */}
+    {menuOpen && (
+        <div
+          style={{
+            position: "fixed",
+            top: "0",
+            right: "0",
+            width: "100vw",
+            height: "100vh",
+            backgroundColor: "rgba(0,0,0,0.5)",
+            zIndex: "999999",
+          }}
+          onClick={() => setMenuOpen(false)}
+        ></div>
+      )}
+    </>
   );
 };
+
+
+

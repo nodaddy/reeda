@@ -78,8 +78,9 @@ const Plans = () => {
                             alignItems: 'center',
                             // backgroundColor: priColor,
                             background: 'linear-gradient(135deg, #0070F3 0%, #4D9BFF 100%)',
-                            padding: '13px 25px',
+                            padding: '14px 25px',
                             width: '70%',
+                            fontSize: '18px',
                             borderRadius: '999px',
                             color: 'white',
                             boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)' // Light shadow
