@@ -20,10 +20,10 @@ export async function initiatePurchaseFlow(itemIdsArray) {
 
 export async function getExistingPurchasesArray() {
     getDigitalGoodsService().then(async (service) => {
-
         if(service){
             try {
             const existingPurchases = await service.listPurchases();
+            alert('existingPurchages', existingPurchages);
             return existingPurchases; // returns an array
         } catch (error) {
             console.error("Error fetching existing purchases:", error);
