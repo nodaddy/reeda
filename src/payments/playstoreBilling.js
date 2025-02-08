@@ -59,5 +59,13 @@ async function getDigitalGoodsService() {
     // });
 }
 
+export const isUserPremium = async () => {
+    const existingPurchagesArray = await getExistingPurchasesArray();
+    
+    // in the case of reeda app if the array is not empty then that means that the user has bought 
+    // either a subscription or a lifetime access
+    return existingPurchagesArray?.length > 0;
+}
+
 
 

@@ -6,17 +6,22 @@ import { Badge, Tooltip } from "antd";
 import { getScanCount } from "@/firebase/services/scanService";
 import { useEffect, useState } from "react";
 import { storage } from "@/app/utility";
+import { isUserPremium } from "@/payments/playstoreBilling";
 
 const { default: SignInWithGoogle } = require("./SignInWithGoogle");
 
-export const Navbar = ({isPremium = true}) => {
+export const Navbar = () => {
   const [bookmarks, setBookmarks] = useState(null);
   const [menuOpen, setMenuOpen] = useState(null);
+
+  const [isPremium, setIsPremium] = useState(false);
 
   useEffect(() => {
     getScanCount().then((res) => {
       setBookmarks(res);
     });
+
+    isUserPremium().then((result) => setIsPremium(result)).catch((err) => console.log(err));
   }, []);
 
   return (

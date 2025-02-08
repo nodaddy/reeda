@@ -13,6 +13,7 @@ import StreakCard from '@/components/StreakCard';
 import ContinueReading from '@/components/ContinueReading';
 import { storage } from './utility';
 import Plans from '@/components/Plans';
+import { isUserPremium } from '@/payments/playstoreBilling';
 
 
 const { Title } = Typography;
@@ -24,6 +25,8 @@ const Home = () => {
   const [profile, setProfile] = useState(null);
   const router = useRouter();
   const [goodsDetails, setGoodsDetails] = useState(null);
+
+  const [isPremium, setIsPremium] = useState(false);
 
   // differnece in seconds
   const [lastPageScanDifference, setLastPageScanDifference] = useState(0);
@@ -67,9 +70,10 @@ getGoodsDetails();
       setLastPageScanDifference(lastPageScanDifference);
     }
   }, [profile]);
-  
-  
 
+  useEffect(() => {
+    isUserPremium().then((result) => setIsPremium(result)).catch((err) => console.log(err));
+  }, []);
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -100,7 +104,7 @@ getGoodsDetails();
     <div style={{
       overflow: 'auto',
     }}>
-      <StreakCard streak={profile?.streak} isActive={lastPageScanDifference < 86400*2} /> 
+      <StreakCard isPremium={isPremium} streak={profile?.streak} isActive={lastPageScanDifference < 86400*2} /> 
       <BookList />
       {/* <ContinueReading /> */}
     <br/>
