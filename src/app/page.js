@@ -12,6 +12,7 @@ import { getProfile, updateProfile } from '@/firebase/services/profileService';
 import StreakCard from '@/components/StreakCard';
 import ContinueReading from '@/components/ContinueReading';
 import { storage } from './utility';
+import Plans from '@/components/Plans';
 
 
 const { Title } = Typography;
@@ -33,33 +34,7 @@ const Home = () => {
         if('getDigitalGoodsService' in window){
           const service  = await window.getDigitalGoodsService('https://play.google.com/billing');
           if(service){
-        const existingPurchases = await service.listPurchases();
-for (const purchase of existingPurchases) {
-// Update UI with user's existing entitlements
-}
-          // const goodsDetails = service.getDetails(['monthly_subscription']).then(async (response) => {
-          //   setGoodsDetails(goodsDetails); 
-
-          //   const itemId = response[0].itemId;
-
-          //   const paymentMethods = [ {
-          //     supportedMethods: 'https://play.google.com/billing',
-          //     data: {
-          //     sku: itemId,
-          //     }
-          //     }];
-          //     const request = new PaymentRequest (paymentMethods);
-          //     const paymentResponse = await request.show();
-          //     const {purchaseToken} = paymentResponse.details;
-           
-          //     // Here, you should grant appropriate entitlements for the purchase
-          //     try {
-          //       const paymentComplete = await paymentResponse.complete();
-          //       await service.acknowledge(purchaseToken, getPurchaseType(itemId));
-          //     } catch (error) {
-          //     }
-          //   }).catch(error => {
-          //   });
+       
         }else {
         }
       }

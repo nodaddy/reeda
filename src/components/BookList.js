@@ -246,7 +246,7 @@ const BookList = () => {
                         gap: '12px'
                       }}>
 
-<Link href={'/scan/'+item.title}>
+                    <Link href={'/scan/'+item.title}>
 
                         <Text 
                         size={19}
@@ -255,9 +255,9 @@ const BookList = () => {
                           // border: '1px solid '+ defaultBorderColor,
                           borderRadius: '50%',
                         }} />
-</Link>
-<Link href={'/scan/'+item.title}>
-<BookOpen
+                    </Link>
+                    <Link href={'/scan/'+item.title}>
+                    <BookOpen
                         size={25}
                         style={{
                           padding: '2px',
