@@ -85,7 +85,7 @@ const Home = () => {
     fetchProfile();
   }, []);
 
-  return (
+  return ( !storage.getItem('user') &&
     <div
     align="center"
     style={{
