@@ -19,19 +19,19 @@ export async function initiatePurchaseFlow(itemIdsArray) {
 }
 
 export async function getExistingPurchasesArray() {
-    getDigitalGoodsService().then(async (service) => {
-        if(service){
-            try {
+    try {
+        const service = await getDigitalGoodsService(); // Ensure we await the service
+        if (service) {
             const existingPurchases = await service.listPurchases();
-            alert(JSON.stringify(existingPurchases));
-            return existingPurchases; // returns an array
+            return existingPurchases; // Correctly return the array
+        }
         } catch (error) {
             console.error("Error fetching existing purchases:", error);
-            alert('error', JSON.stringify(error));
+            alert(`Error: ${JSON.stringify(error)}`);
             return []; // Return an empty array in case of an error
-        }}
-    });
+        }
 }
+
 
 async function getDigitalGoodsService() {
     if (typeof window === 'undefined') {
