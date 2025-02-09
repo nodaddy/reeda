@@ -3,7 +3,7 @@ import Plans from "@/components/Plans";
 import { priColor, priTextColor, secTextColor } from "@/configs/cssValues";
 import { isUserPremium } from "@/payments/playstoreBilling";
 import { Alert, Card, Tag } from "antd";
-import { Book, BookPlus, Camera, ShoppingBag, Sparkle } from "lucide-react";
+import { Book, BookPlus, Camera, ShoppingBag, Sparkle, Sparkles } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
@@ -31,7 +31,6 @@ const Page = () => {
         </div>
         :
         <div style={{marginTop: '0px'}}>
-            <br/>
             <br/>
             <div
             style={{
@@ -61,20 +60,21 @@ const Page = () => {
                 marginTop: '10px',
                 marginBottom: '10px',
                 color: 'goldenrod'
-               }}> <span style={{color: secTextColor, fontWeight:'400'}}>
-                    Reeda</span> Premium <Sparkle style={{color: 'goldenrod', strokeWidth: '1.5'}} size={40} />
+               }}>
+                    <span style={{color: secTextColor, fontWeight:'400'}}>
+                      Reeda</span> Premium <Sparkle style={{color: 'goldenrod', strokeWidth: '1.5'}} size={40} />
                     <Sparkle style={{color: 'goldenrod'}} />
                 </span>
                 </div>
             </div>
 
             <br/>
-            <br/>
             <Alert
             message={<>Upgrade to premium to add <Tag> <BookPlus size={11} /> More Books</Tag> unlock <Tag><Camera size={12} /> Unlimited Scans</Tag>and get access to the <Tag> <ShoppingBag size={11} /> Reeda Store</Tag></>}
             style={{
                 width: '80%',
                 margin: 'auto',
+                marginTop: '5px',
                 color: priTextColor,
                 paddingLeft: '20px',
                 lineHeight: '2',

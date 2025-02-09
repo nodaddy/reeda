@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Modal, Button, List, Divider } from "antd";
 import { defaultBorderColor, priColor, priTextColor } from "@/configs/cssValues";
-import { BookPlus, Camera, Check, CheckCircle, CheckSquare, Coins, ShoppingBag, Star} from "lucide-react";
+import { BookPlus, Camera, Check, CheckCircle, CheckSquare, Coins, ShoppingBag, Sparkle, Sparkles, Star} from "lucide-react";
 import { initiatePurchaseFlow } from "@/payments/playstoreBilling";
 
 const Plans = () => {
@@ -44,14 +44,14 @@ const Plans = () => {
         borderRadius: '10px',
         // backgroundColor: colors.background,
         // border: '1px solid ' + defaultBorderColor,
-        padding: '15px 20px'
+        padding: '15px 0px'
     }}>
         {/* // you get the following benefits */}
         <List
             style={{width: '80%', margin: 'auto'}}
             dataSource={features}
             renderItem={(item) => (
-                <List.Item style={{ border: "none", fontSize: "16px", fontWeight: "400", display: "flex", alignItems: "center", justifyContent: 'flex-start',
+                <List.Item key={item} style={{ border: "none", fontSize: "16px", fontWeight: "400", display: "flex", alignItems: "center", justifyContent: 'flex-start',
                 color: priTextColor
                 }}>
                 <CheckSquare size={27} color="#4CAF50" style={{ marginRight: 10 }} />
@@ -81,7 +81,7 @@ const Plans = () => {
                             background: 'linear-gradient(135deg, #0070F3 0%, #4D9BFF 100%)',
                             padding: '13px 25px',
                             width: '80%',
-                            fontSize: '17px',
+                            fontSize: '16px',
                             borderRadius: '999px',
                             color: 'white',
                             boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)' // Light shadow
