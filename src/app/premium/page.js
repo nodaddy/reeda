@@ -70,7 +70,8 @@ const Page = () => {
 
             <br/>
             <Alert
-            message={<>Upgrade to premium to add <Tag> <BookPlus size={11} /> More Books</Tag> unlock <Tag><Camera size={12} /> Unlimited Scans</Tag>and get access to the <Tag> <ShoppingBag size={11} /> Reeda Store</Tag></>}
+            message={<>Upgrade to premium to add <Tag> <BookPlus size={11} /> More Books</Tag>
+            <br/> unlock <Tag><Camera size={12} /> Unlimited Scans</Tag>and get access to the <Tag> <ShoppingBag size={11} /> Reeda Store</Tag></>}
             style={{
                 width: '80%',
                 margin: 'auto',
