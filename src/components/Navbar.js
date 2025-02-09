@@ -7,23 +7,31 @@ import { getScanCount } from "@/firebase/services/scanService";
 import { useEffect, useState } from "react";
 import { storage } from "@/app/utility";
 import { isUserPremium } from "@/payments/playstoreBilling";
+import { getProfile } from "@/firebase/services/profileService";
+import { useAppContext } from "@/context/AppContext";
 
 const { default: SignInWithGoogle } = require("./SignInWithGoogle");
 
 export const Navbar = () => {
-  const [bookmarks, setBookmarks] = useState(null);
   const [menuOpen, setMenuOpen] = useState(null);
-
-  const [isPremium, setIsPremium] = useState(false);
+  const { isPremium, profile, setProfile} = useAppContext();
 
   useEffect(() => {
-    getScanCount().then((res) => {
-      setBookmarks(res);
-    });
+    const fetchProfile = async () => {
+      try {
+        // Replace 'userId' with the actual user ID (e.g., from authentication)
+        const userId = JSON.parse(storage.getItem('user')).email; // You can get this from Firebase Auth or context
+        let profileData;
+        if (userId) {
+          profileData = await getProfile(userId);
+        }
+        setProfile(profileData);
+      } catch (error) {
+      } finally {
+      }
+    };
 
-    isUserPremium().then((result) => {
-      // alert(result);
-      setIsPremium(result)}).catch((err) => console.log(err));
+    fetchProfile();
   }, []);
 
   return (
@@ -71,7 +79,7 @@ export const Navbar = () => {
             <div style={{
                 border: '1px solid '+ 'goldenrod',
                 borderRadius: '999px',
-                padding: '4px 16px',
+                padding: '4px 20px',
                 // backgroundColor: 'whitesmoke',
                 color: '#555555',
                 display: 'flex',
@@ -81,7 +89,7 @@ export const Navbar = () => {
                 cursor: 'pointer'
             }}>
             <Badge
-              count={bookmarks}
+              count={profile?.coins || ' '}
               showZero
               offset={[-10, 10]}
               style={{
@@ -92,7 +100,7 @@ export const Navbar = () => {
             >
               <Coins size={18} color={'white'} style={{ cursor: "pointer" }} />
             </Badge> 
-            Coins
+            &nbsp;&nbsp;Coins
             </div>
         )}
 
@@ -137,6 +145,12 @@ export const Navbar = () => {
           {!isPremium && <li style={{ borderBottom: "1px solid #ddd", padding: '18px 0px' }}>
             <Link onClick={() => setMenuOpen(false)} href="/premium" style={{ color: "#333", textDecoration: "none" }}>Upgrade to premium</Link>
           </li>}
+          <li style={{ borderBottom: "1px solid #ddd", padding: '18px 0px' }}>
+            <Link onClick={() => setMenuOpen(false)} href="/store" style={{ color: "#333", textDecoration: "none" }}>
+              The Reeda Store
+              {/* for permium users */}
+            </Link>
+          </li>
           <li style={{ borderBottom: "1px solid #ddd", padding: '18px 0px' }}>
             <Link onClick={() => setMenuOpen(false)} href="/settings" style={{ color: "#333", textDecoration: "none" }}>Settings</Link>
           </li>

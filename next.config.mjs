@@ -2,8 +2,10 @@ import withPWA from 'next-pwa';
 
 const nextConfig = {
   reactStrictMode: false,
+  compiler: {
+    removeConsole: true, // Removes all console logs in production
+  },
   experimental: {
-    serverComponentsExternalPackages: ['tesseract.js'],
     outputFileTracingIncludes: {
       '/api/**/*': ['./node_modules/**/*.wasm', './node_modules/**/*.proto'],
     },

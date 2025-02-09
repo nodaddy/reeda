@@ -8,11 +8,12 @@ import { getProfile, updateProfile } from "@/firebase/services/profileService";
 import { createScan, getLatestScanByBookTitleAndUserId } from "@/firebase/services/scanService";
 import { getBookByTitleAndUserId, updateBookByUserIdAndTitle } from "@/firebase/services/bookService";
 import Cropper from 'react-easy-crop';
-import { scanPageRatio, scanPageRation } from "@/configs/variables";
+import { addCoinsPerScan, scanPageRatio, scanPageRation } from "@/configs/variables";
 import { priColor } from "@/configs/cssValues";
 import { storage } from "@/app/utility";
 import { getPageSummaryFromImage, getSimplifiedLanguage } from "@/openAI";
 import TextWithIntegratedDictionary from "./TextWithIntegratedDictionary";
+import { useAppContext } from "@/context/AppContext";
 
 export default function ScanResults({ setBook, scans }) {
   console.log(scans);
@@ -30,6 +31,8 @@ export default function ScanResults({ setBook, scans }) {
   const [showCropper, setShowCropper] = useState(false);
 
   const [uploadingImage, setUploadingImage] = useState(false);
+
+  const { profile, setProfile } = useAppContext();
 
 
   const onCropComplete = useCallback((_, croppedAreaPixels) => {
@@ -96,24 +99,27 @@ export default function ScanResults({ setBook, scans }) {
     setBook(updatedBook);
     await createScan({ bookTitle, data });
 
-    const profile = await getProfile(JSON.parse(storage.getItem('user')).email);
-    if ((Date.now() - profile?.lastPageScanTimestamp) / 1000 > 84600) {
-        await updateProfile(profile.email, {
+    // const profile = await getProfile(JSON.parse(storage.getItem('user')).email);
+    if ((Date.now() - profile?.lastPageScanTimestamp) / 1000 > 84600 && (Date.now() - profile?.lastPageScanTimestamp) / 1000 < 172800) { // < 48 hours & > 24 hours
+      setProfile(await updateProfile(profile.userId, {
         ...profile,
+        coins: (profile?.coins || 0) + addCoinsPerScan,
         streak: {
             ...profile.streak,
-            days: profile.streak?.days + 1 || 1,
+            days: (profile.streak?.days || 0) + 1, 
             lastPageScanTimestamp: Date.now(),
         },
-        });
+        }))
+    } else {
+      setProfile(await updateProfile(profile.userId, {
+        ...profile,
+        coins: (profile?.coins || 0) + addCoinsPerScan
+        }))
     }
-
-
 
     setData({ ...data });
     setUploadingImage(false);
     setShowCropper(false);
-       
   };
 
   return (

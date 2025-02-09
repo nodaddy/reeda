@@ -7,9 +7,10 @@ import { getProfile, updateProfile } from "@/firebase/services/profileService";
 import { createScan } from "@/firebase/services/scanService";
 import { getBookByTitleAndUserId, updateBookByUserIdAndTitle } from "@/firebase/services/bookService";
 import { Button, Modal } from "antd";
-import { scanPageRatio } from "@/configs/variables";
+import { addCoinsPerScan, scanPageRatio } from "@/configs/variables";
 import { storage } from "@/app/utility";
 import { getPageSummaryFromImage, getSimplifiedLanguage } from "@/openAI";
+import { useAppContext } from "@/context/AppContext";
 
 export default function ImageUpload({ setBook, bookTitle, setData, setModalOpen, inResults }) {
   const [crop, setCrop] = useState({ x: 0, y: 0 });
@@ -19,6 +20,8 @@ export default function ImageUpload({ setBook, bookTitle, setData, setModalOpen,
   const [showCropper, setShowCropper] = useState(false);
 
   const [uploadingImage, setUploadingImage] = useState(false);
+
+  const { profile, setProfile } = useAppContext();
 
   const onCropComplete = useCallback((_, croppedAreaPixels) => {
     setCroppedAreaPixels(croppedAreaPixels);
@@ -88,18 +91,23 @@ export default function ImageUpload({ setBook, bookTitle, setData, setModalOpen,
     setBook(updatedBook);
     await createScan({ bookTitle, data });
 
-    const profile = await getProfile(JSON.parse(storage.getItem('user')).email);
-    if ((Date.now() - profile?.lastPageScanTimestamp) / 1000 > 84600) {
-        await updateProfile(profile.email, {
+    // const profile = await getProfile(JSON.parse(storage.getItem('user')).email);
+    if ((Date.now() - profile?.lastPageScanTimestamp) / 1000 > 84600 && (Date.now() - profile?.lastPageScanTimestamp) / 1000 < 172800) { // < 48 hours & > 24 hours
+      setProfile(await updateProfile(profile.userId, {
         ...profile,
+        coins: (profile?.coins || 0) + addCoinsPerScan,
         streak: {
             ...profile.streak,
-            days: profile.streak?.days + 1 || 1,
+            days: (profile.streak?.days || 0) + 1, 
             lastPageScanTimestamp: Date.now(),
         },
-        });
+        }))
+    } else {
+      setProfile(await updateProfile(profile.userId, {
+        ...profile,
+        coins: (profile?.coins || 0) + addCoinsPerScan
+        }))
     }
-// alert(JSON.stringify({ ...data }));
 
     setData({ data: data, bookTitle: bookTitle });
     setUploadingImage(false);

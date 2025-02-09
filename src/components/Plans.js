@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Modal, Button, List, Divider } from "antd";
 import { defaultBorderColor, priColor, priTextColor } from "@/configs/cssValues";
-import { CheckCircle, Star} from "lucide-react";
+import { BookPlus, Camera, Check, CheckCircle, CheckSquare, Coins, ShoppingBag, Star} from "lucide-react";
 import { initiatePurchaseFlow } from "@/payments/playstoreBilling";
 
 const Plans = () => {
@@ -27,9 +27,10 @@ const Plans = () => {
   };
 
   const features = [
-    "Unlimited scans",
-    "Add unlimited books",
-    "1.5x coin earnings",
+    <><BookPlus size={20} /> &nbsp;Add multiple books</>,
+    <><Camera size={20} /> &nbsp;No limit on scans</>,
+    <><Coins size={20} /> &nbsp;1.5x coin earnings</>,
+    <><ShoppingBag size={20} /> &nbsp;Access to Reeda store</>
   ];
 
   return (
@@ -37,23 +38,23 @@ const Plans = () => {
         height: '70vh'
     }}>
     <div style={{
-        width: '80%',
+        width: '83%',
         fontFamily: 'inherit',
         margin: 'auto',
         borderRadius: '10px',
         // backgroundColor: colors.background,
         // border: '1px solid ' + defaultBorderColor,
-        padding: '15px 30px'
+        padding: '15px 20px'
     }}>
         {/* // you get the following benefits */}
         <List
             style={{width: '80%', margin: 'auto'}}
             dataSource={features}
             renderItem={(item) => (
-                <List.Item style={{ border: "none", fontSize: "16px", fontWeight: "500", display: "flex", alignItems: "center", justifyContent: 'flex-start',
+                <List.Item style={{ border: "none", fontSize: "16px", fontWeight: "400", display: "flex", alignItems: "center", justifyContent: 'flex-start',
                 color: priTextColor
                 }}>
-                <CheckCircle size={23} color="#4CAF50" style={{ marginRight: 10 }} />
+                <CheckSquare size={27} color="#4CAF50" style={{ marginRight: 10 }} />
                 {item}
                 </List.Item>
             )}
@@ -79,7 +80,7 @@ const Plans = () => {
                             // backgroundColor: priColor,
                             background: 'linear-gradient(135deg, #0070F3 0%, #4D9BFF 100%)',
                             padding: '13px 25px',
-                            width: '70%',
+                            width: '80%',
                             fontSize: '17px',
                             borderRadius: '999px',
                             color: 'white',

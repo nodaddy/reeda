@@ -1,21 +1,32 @@
+'use client'
+
 import React, { useEffect, useRef, useState } from 'react';
 import { List, Card, Button, Title, Modal, Form, Input, Progress, Badge as BadgeAnt, message, Typography, Empty, Divider } from 'antd';
-import { ArrowRightLeft, Badge, Book, BookMarked, BookOpen, BookPlus, Camera, Delete, Loader, MoveRight, Play, PlayCircle, PlusCircle, Search, Text, Trash2 } from 'lucide-react';
-import { defaultBorderColor, priColor, priTextColor, secColor, secTextColor } from '@/configs/cssValues';
+import { BookOpen, BookPlus, Camera, Delete, Loader, MoveRight, Play, PlayCircle, PlusCircle, Search, Text, Trash2 } from 'lucide-react';
+import { priTextColor, secColor, secTextColor } from '@/configs/cssValues';
 import { motion } from 'framer-motion';
 import { createbook, getBooks, deleteBook} from '@/firebase/services/bookService';
 import Link from 'next/link';
+import { getProfile, updateProfile } from '@/firebase/services/profileService';
+import { addCoinsPerNewBookAdded, freeBooks } from '@/configs/variables';
+import { storage } from '@/app/utility';
+import { useAppContext } from '@/context/AppContext';
+import { useRouter } from 'next/navigation';
 
 const BookList = () => {
   const [books, setBooks] = useState(null);
   const [filteredBooks, setFilteredBooks] = useState([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [flippedBook, setFlippedBook] = useState(null);
   const [form] = Form.useForm();
   const [searchQuery, setSearchQuery] = useState('');
 
   const [loading, setLoading] = useState(false);
   const [height, setHeight] = useState(0);
+  
+  const { isPremium } = useAppContext();
+
+  const router = useRouter();
+
   const ref = useRef(null);
 
   useEffect(() => {
@@ -63,16 +74,28 @@ const BookList = () => {
 
 
   const handleAddBook = (values) => {
-    const newBook = { title: values.title, author: values.author, totalPages: values.totalPages };
-    createbook(newBook).then(() => getBooks().then((res) => {
-      setBooks(res);
-      setFilteredBooks(res);
-    }));
-    setIsModalVisible(false);
-    form.resetFields();
-  };
+    if(books?.length == freeBooks && !isPremium) {
+      // route to premium page
+      router.push('/premium');
+    } else {
+      const newBook = { title: values.title, author: values.author, totalPages: values.totalPages };
+      createbook(newBook).then(() => getBooks().then(async (res) => {
 
-  const handleCardClick = (book) => setFlippedBook(flippedBook === book ? null : book);
+        const profile = await getProfile(JSON.parse(storage.getItem('user')).email);
+        
+        // add coins to the profile
+        await updateProfile(profile.userId, {
+        ...profile,
+        coins: (profile?.coins || 0) + addCoinsPerNewBookAdded
+        }); 
+
+        setBooks(res);
+        setFilteredBooks(res);
+      }));
+      setIsModalVisible(false);
+      form.resetFields();
+    }
+  };
 
   const handleDeleteBook = (bookId) => {
     deleteBook(bookId).then(() => {
@@ -137,7 +160,7 @@ const BookList = () => {
                   allowClear
                   style={{ outline: 'none', width: '75%' }}
                 />
-         {filteredBooks?.length > 0 && <BookPlus size={40} color={secColor} style={{ cursor: 'pointer' }} onClick={showModal} />}
+         {filteredBooks?.length > 0 && <BookPlus size={35} color={secColor} style={{ cursor: 'pointer' }} onClick={showModal} />}
 
         </div>
         </div>

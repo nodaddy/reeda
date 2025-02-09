@@ -32,9 +32,10 @@ const SignInWithGoogle = ({router}) => {
       
       if (!existingProfile) {
         // Create a new profile if one doesn't exist
-        await createProfile(userId, {streak: {days: 0,
-          lastPageScanTimestamp: Date.now()}}); // Assume createProfile is a function to create a new profile
-      
+        await createProfile(userId, {
+          streak: {days: 0, lastPageScanTimestamp: Date.now()},
+          coins: 0
+        });
       }
 
       // Save user data to localStorage

@@ -78,7 +78,7 @@ export const updateProfile = async (userId, updatedData) => {
   
         // Update the document with the new data
         await updateDoc(profileRef, updatedData);
-        console.log("Profile updated successfully");
+        return updatedData; // to do: can be changed to actutally get the updated profile from the database, 
       } else {
         throw new Error("Profile not found");
       }

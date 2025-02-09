@@ -5,28 +5,23 @@ import { useEffect, useState } from 'react';
 import SignInWithGoogle from '@/components/SignInWithGoogle';
 import { useRouter } from 'next/navigation';
 import { Typography } from 'antd';
-import SimpleLang from '@/components/TextWithIntegratedDictionary';
-import { priColor } from '@/configs/cssValues';
 import BookList from '@/components/BookList';
 import { getProfile, updateProfile } from '@/firebase/services/profileService';
 import StreakCard from '@/components/StreakCard';
-import ContinueReading from '@/components/ContinueReading';
 import { storage } from './utility';
-import Plans from '@/components/Plans';
 import { isUserPremium } from '@/payments/playstoreBilling';
+import { useAppContext } from '@/context/AppContext';
 
 
 const { Title } = Typography;
 
 const Home = () => {
   const [loading, setLoading] = useState(false);
-  const [modalVisible, setModalVisible] = useState(false);
   const [error, setError] = useState(null);
-  const [profile, setProfile] = useState(null);
   const router = useRouter();
   const [goodsDetails, setGoodsDetails] = useState(null);
 
-  const [isPremium, setIsPremium] = useState(false);
+  const { profile, setProfile, isPremium, setIsPremium } = useAppContext();
 
   // differnece in seconds
   const [lastPageScanDifference, setLastPageScanDifference] = useState(0);
