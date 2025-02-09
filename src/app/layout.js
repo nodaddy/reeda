@@ -1,6 +1,5 @@
 import { Merriweather} from "next/font/google";
 
-import "antd/dist/reset.css";
 import "./globals.css";
 
 import { Navbar } from "@/components/Navbar";
