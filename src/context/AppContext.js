@@ -12,10 +12,12 @@ export const AppProvider = ({ children }) => {
   const [profile, setProfile] = useState(null);
 
   useEffect(() => {
-    getProfile(JSON.parse(storage.getItem('user')).email).then(res => {
-        setProfile(res);
-    });
-  }, []);
+    if(!profile && storage.getItem('user')){
+        getProfile(JSON.parse(storage.getItem('user')).email).then(res => {
+            setProfile(res);
+        });
+    }
+  }, [profile]);
 
   const [isPremium, setIsPremium] = useState(false);
 

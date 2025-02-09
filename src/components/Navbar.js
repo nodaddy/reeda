@@ -1,20 +1,21 @@
 "use client"
 
-import { MoreVertical, BookMarked, Coins, MoreHorizontal, ArrowDown, TriangleDashed, List, X } from "lucide-react";
+import { Coins, List, X } from "lucide-react";
 import Link from "next/link";
 import { Badge, Tooltip } from "antd";
-import { getScanCount } from "@/firebase/services/scanService";
 import { useEffect, useState } from "react";
 import { storage } from "@/app/utility";
-import { isUserPremium } from "@/payments/playstoreBilling";
 import { getProfile } from "@/firebase/services/profileService";
 import { useAppContext } from "@/context/AppContext";
+import { useRouter } from "next/navigation";
 
 const { default: SignInWithGoogle } = require("./SignInWithGoogle");
 
 export const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(null);
   const { isPremium, profile, setProfile} = useAppContext();
+
+  const router = useRouter();
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -79,7 +80,7 @@ export const Navbar = () => {
             <div style={{
                 border: '1px solid '+ 'goldenrod',
                 borderRadius: '999px',
-                padding: '4px 20px',
+                padding: '4px 14px',
                 // backgroundColor: 'whitesmoke',
                 color: '#555555',
                 display: 'flex',
@@ -99,8 +100,7 @@ export const Navbar = () => {
               }}
             >
               <Coins size={18} color={'white'} style={{ cursor: "pointer" }} />
-            </Badge> 
-            &nbsp;&nbsp;Coins
+            </Badge>Coins
             </div>
         )}
 
@@ -157,7 +157,7 @@ export const Navbar = () => {
           <li style={{  padding: '18px 0px' }}>
             <span onClick={() => {
               storage.removeItem("user");
-              window.location.reload();
+              router.push('/');
             }} style={{ color: "#e63946", textDecoration: "none" }}>Logout</span>
           </li>
         </ul>

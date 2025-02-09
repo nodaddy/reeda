@@ -16,13 +16,13 @@ let greeting = '';
 let Icon = Sun;
 
 if (currentHour >= 5 && currentHour < 12) {
-  greeting = 'Good Morning!';
+  greeting = 'Morning!';
   Icon = Sun;  // Display sun icon for morning
 } else if (currentHour >= 12 && currentHour < 18) {
-  greeting = 'Good Afternoon!';
+  greeting = 'Afternoon!';
   Icon = Sun;  // Display sun icon for afternoon
 } else {
-  greeting = 'Good Evening!';
+  greeting = 'Evening!';
   Icon = Moon;  // Display moon icon for evening/night
 }
 
@@ -137,35 +137,39 @@ if (currentHour >= 5 && currentHour < 12) {
     <span ><sub style={{
       display: 'flex',
       alignItems: 'center',
-      fontWeight: '300px'
-    }}> <Icon size={25} style={{ marginRight: '10px' }} /> {greeting}</sub>
+      fontWeight: '200'
+    }}> <Icon size={23} style={{ marginRight: '10px' }} /> {greeting} </sub>
     <div style={{
       marginTop: '-10px',
       fontSize: '16px',
       fontWeight: '300'
     }}>
-      <Icon size={25} style={{ marginRight: '10px', opacity: '0' }} />{JSON.parse(storage.getItem('user')).displayName.split(" ").slice(0, 2).join(" ")}
+      <Icon size={23} style={{ marginRight: '10px', opacity: '0' }} />
+      {JSON.parse(storage.getItem('user')).displayName.split(" ").slice(0, 2).join(" ")}
       </div>
       </span>
   </div> 
-
-
-
-
           </div>
         </div>}
 
-        <div align="right">
+        <div align="right"
+        style={{
+          backgroundColor: 'white',
+    /* border: 1px solid silver; */
+    padding: '7px 20px',
+    borderRadius: '11px'
+        }}
+        >
           <Flame color={isActive ? '#fa541c' : '#bfbfbf'} size={30} />
+          <h4 style={{ margin: 0, color: isActive ? '#fa541c' : '#8c8c8c', fontWeight: '400' }}>
+              {isActive ? 'Streak active' : 'Streak inactive'}
+            </h4>
           <div align="center">
             <p style={{ margin: 0, fontSize: '15px', fontWeight: 'bold', color: 'grey' }}>
-              <span style={{ display: 'flex', fontWeight: '500', justifyContent: 'flex-end', alignItems: 'center' }}>
+              <span style={{ display: 'flex', fontWeight: '400', justifyContent: 'flex-end', alignItems: 'center', fontSize: '13px' }}>
                 {`${isActive ? streak?.days : 0} ${streak?.days > 1 ? 'Days' : 'Day'}`}
               </span>
             </p>
-            <h4 style={{ margin: 0, color: isActive ? '#fa541c' : '#8c8c8c', fontWeight: '400' }}>
-              {isActive ? 'Streak Active' : 'Inactive Streak'}
-            </h4>
           </div>
         </div>
         </div>
