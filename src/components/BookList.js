@@ -1,8 +1,8 @@
 'use client'
 
 import React, { useEffect, useRef, useState } from 'react';
-import { List, Card, Button, Title, Modal, Form, Input, Progress, Badge as BadgeAnt, message, Typography, Empty, Divider } from 'antd';
-import { BookOpen, BookPlus, Camera, Delete, Loader, MoveRight, Play, PlayCircle, PlusCircle, Search, Text, Trash2 } from 'lucide-react';
+import { List, Card, Button, Title, Modal, Form, Input, Progress, Badge as BadgeAnt, message, Typography, Empty, Divider, Upload } from 'antd';
+import { BookOpen, BookPlus, Camera, Delete, Loader, MoveRight, Play, PlayCircle, PlusCircle, Search, Text, Trash2, UploadIcon } from 'lucide-react';
 import { priTextColor, secColor, secTextColor } from '@/configs/cssValues';
 import { motion } from 'framer-motion';
 import { createbook, getBooks, deleteBook} from '@/firebase/services/bookService';
@@ -12,6 +12,8 @@ import { addCoinsPerNewBookAdded, freeBooks } from '@/configs/variables';
 import { storage } from '@/app/utility';
 import { useAppContext } from '@/context/AppContext';
 import { useRouter } from 'next/navigation';
+import Compressor from 'compressorjs';
+import CameraUpload from './CameraUpload';
 
 const BookList = () => {
   const [books, setBooks] = useState(null);
@@ -28,6 +30,24 @@ const BookList = () => {
   const router = useRouter();
 
   const ref = useRef(null);
+
+  const [imageBase64, setImageBase64] = useState(null);
+  
+  const handleImageUpload = (file) => {
+    new Compressor(file, {
+      quality: 0.2, // Compress image to 30%
+      success(result) {
+        const reader = new FileReader();
+        reader.readAsDataURL(result);
+        reader.onloadend = () => {
+          setImageBase64(reader.result);
+        };
+      },
+      error(err) {
+        console.error('Image compression error:', err);
+      },
+    });
+  };
 
   useEffect(() => {
     const updateHeight = () => {
@@ -78,7 +98,7 @@ const BookList = () => {
       // route to premium page
       router.push('/premium');
     } else {
-      const newBook = { title: values.title, author: values.author, totalPages: values.totalPages };
+      const newBook = { title: values.title, author: values.author, cover: imageBase64};
       createbook(newBook).then(() => getBooks().then(async (res) => {
 
         const profile = await getProfile(JSON.parse(storage.getItem('user')).email);
@@ -94,6 +114,7 @@ const BookList = () => {
       }));
       setIsModalVisible(false);
       form.resetFields();
+      setImageBase64(null);
     }
   };
 
@@ -108,8 +129,9 @@ const BookList = () => {
     <div 
     ref={ref}
     style={{ 
-    padding: '3px 19px 34px 19px',
+    padding: '0px 19px 34px 19px',
     width: '87%',
+    marginTop: '5px',
     maxHeight: height,
     margin: 'auto',
     position: 'relative',
@@ -182,13 +204,11 @@ const BookList = () => {
                   {/* Front Side */}
                   <Card
                     style={{ backfaceVisibility: 'hidden',
-                    marginBottom: '11px', 
-                    borderRadius: '8px', 
-                    
-                    borderColor: 'white',
-                    // boxShadow: '0 4px 8px rgba(0, 0, 0, 0.05)',
-                     
-                    width: '100%' }}
+                    borderRadius: '10px', 
+                    padding: '0px 20px',
+                   boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
+                    margin: '0px auto 23px auto',
+                    width: '98%' }}
                     bodyStyle={{ padding: '10px 0px' }}
                   >
 
@@ -200,11 +220,11 @@ const BookList = () => {
                     }}>
 
 
-                    <img src='' style={{
-                      width: '40px',
+                    <img src={item.cover} style={{
+                      width: '45px',
                       backgroundColor: '#f5f5f5',
                       height: '59px',
-                      borderRadius: '2px',  
+                      borderRadius: '5px',  
                       marginRight: '15px',
                       objectFit: 'cover',
                       // border: '1px solid silver'
@@ -324,7 +344,7 @@ const BookList = () => {
                     </div>
                 </Card>  */}
                 
-                <Divider style={{ margin: '10px 0px' }} />
+                {/* <Divider style={{ margin: '10px 0px' }} /> */}
             </div>)
           )}
         </div> 
@@ -357,7 +377,8 @@ const BookList = () => {
         )
 }
 
-      <Modal title="Add New Book" open={isModalVisible} onCancel={handleCancel} footer={null} width={'80vw'}>
+      <Modal title="Add New Book" centered open={isModalVisible} onCancel={handleCancel} footer={null} width={'80vw'}>
+       <br/>
         <Form form={form} layout="vertical" onFinish={handleAddBook}>
           <Form.Item name="title" label="Book Title" rules={[{ required: true, message: 'Please enter the book title' }]}>
             <Input placeholder="Enter book title" />
@@ -365,12 +386,16 @@ const BookList = () => {
           <Form.Item name="author" label="Author" rules={[{ required: true, message: 'Please enter the author' }]}>
             <Input placeholder="Enter author name" />
           </Form.Item>
-          <Form.Item name="totalPages" label="Total Pages" rules={[{ required: true, message: 'Please enter the total number of pages' }]}>
+          {/* <Form.Item name="totalPages" label="Total Pages" rules={[{ required: true, message: 'Please enter the total number of pages' }]}>
             <Input placeholder="Total number of pages" />
-          </Form.Item>
-          <Form.Item>
-            <Button type="primary" htmlType="submit" block>Add Book</Button>
-          </Form.Item>
+          </Form.Item> */}
+          <Form.Item label="Upload Book Cover Photo">
+          <CameraUpload handleImage={handleImageUpload} />
+          {/* {imageBase64 && <p>Image uploaded successfully!</p>} */}
+        </Form.Item>
+        <Form.Item>
+          <Button disabled={!imageBase64} type="primary" htmlType="submit" block>Add Book</Button>
+        </Form.Item>
         </Form>
       </Modal>
     </div>

@@ -71,7 +71,7 @@ const Page = () => {
             <br/>
             <Alert
             type="success"
-            message={<>Upgrade to premium to add multiple books and unlimited scans, get access to the Reeda store, and more.</>}
+            message={<><Sparkles style={{color: 'goldenrod'}} />&nbsp; Upgrade to premium to add multiple books and unlimited scans, get access to the Reeda store, and more.</>}
             style={{
                 width: '80%',
                 margin: 'auto',
