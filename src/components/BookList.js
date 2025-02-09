@@ -35,7 +35,7 @@ const BookList = () => {
   
   const handleImageUpload = (file) => {
     new Compressor(file, {
-      quality: 0.2, // Compress image to 30%
+      quality: 0.1, // Compress image to 10%
       success(result) {
         const reader = new FileReader();
         reader.readAsDataURL(result);
@@ -98,7 +98,7 @@ const BookList = () => {
       // route to premium page
       router.push('/premium');
     } else {
-      const newBook = { title: values.title, author: values.author, cover: imageBase64};
+      const newBook = { title: values.title, totalPages: values.totalPages,  author: values.author, cover: imageBase64};
       createbook(newBook).then(() => getBooks().then(async (res) => {
 
         const profile = await getProfile(JSON.parse(storage.getItem('user')).email);
@@ -145,6 +145,7 @@ const BookList = () => {
         width: '100%',
         top: '0px',
         zIndex: '2',
+        paddingLeft: '7px',
         backgroundColor: 'white'
         // backgroundColor: '#fafafa',
       }}>
@@ -182,7 +183,7 @@ const BookList = () => {
                   allowClear
                   style={{ outline: 'none', width: filteredBooks?.length > 0 ? '75%' : '100%' }}
                 />
-         {filteredBooks?.length > 0 && <BookPlus size={35} color={secColor} style={{ cursor: 'pointer' }} onClick={showModal} />}
+         {filteredBooks?.length > 0 && <><BookPlus size={35} color={secColor} style={{ cursor: 'pointer', marginRight: '8px' }} onClick={showModal} /></>}
 
         </div>
         </div>
@@ -204,9 +205,9 @@ const BookList = () => {
                   {/* Front Side */}
                   <Card
                     style={{ backfaceVisibility: 'hidden',
-                    borderRadius: '10px', 
+                    borderRadius: '13px', 
                     padding: '0px 20px',
-                   boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
+                   boxShadow: '0 0px 8px rgba(0, 0, 0, 0.08)',
                     margin: '0px auto 23px auto',
                     width: '98%' }}
                     bodyStyle={{ padding: '10px 0px' }}
@@ -386,9 +387,9 @@ const BookList = () => {
           <Form.Item name="author" label="Author" rules={[{ required: true, message: 'Please enter the author' }]}>
             <Input placeholder="Enter author name" />
           </Form.Item>
-          {/* <Form.Item name="totalPages" label="Total Pages" rules={[{ required: true, message: 'Please enter the total number of pages' }]}>
-            <Input placeholder="Total number of pages" />
-          </Form.Item> */}
+          <Form.Item name="totalPages" label="Total number of pages" rules={[{ required: true, message: 'Please enter the total number of pages' }]}>
+            <Input type='number' placeholder="Number of pages e.g 348" />
+          </Form.Item>
           <Form.Item label="Upload Book Cover Photo">
           <CameraUpload handleImage={handleImageUpload} />
           {/* {imageBase64 && <p>Image uploaded successfully!</p>} */}

@@ -8,6 +8,7 @@ import { storage } from "@/app/utility";
 import { getProfile } from "@/firebase/services/profileService";
 import { useAppContext } from "@/context/AppContext";
 import { useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 
 const { default: SignInWithGoogle } = require("./SignInWithGoogle");
 
@@ -16,6 +17,8 @@ export const Navbar = () => {
   const { isPremium, profile, setProfile} = useAppContext();
 
   const router = useRouter();
+
+  const pathName = usePathname();
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -35,7 +38,7 @@ export const Navbar = () => {
     fetchProfile();
   }, []);
 
-  return (
+  return ( pathName === '/' ? null :
     <>
     <div
       style={{
