@@ -23,7 +23,7 @@ export async function getExistingPurchasesArray() {
         if(service){
             try {
             const existingPurchases = await service.listPurchases();
-            alert('existingPurchases', existingPurchases);
+            alert(JSON.stringify(existingPurchases));
             return existingPurchases; // returns an array
         } catch (error) {
             console.error("Error fetching existing purchases:", error);
