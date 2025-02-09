@@ -21,7 +21,9 @@ export const Navbar = () => {
       setBookmarks(res);
     });
 
-    isUserPremium().then((result) => setIsPremium(result)).catch((err) => console.log(err));
+    isUserPremium().then((result) => {
+      alert(result);
+      setIsPremium(result)}).catch((err) => console.log(err));
   }, []);
 
   return (
@@ -46,8 +48,8 @@ export const Navbar = () => {
      
       <span>
         <h3 style={{ marginLeft: "20px", fontWeight: "bold" }}>Reeda 
-        
-        <br/>   {
+        <br/>   
+      {
       isPremium ? <span style={{
         padding: '3px 15px',
         fontSize: 'x-small',
@@ -58,7 +60,8 @@ export const Navbar = () => {
         left: '5px'
       }}>
         Premium
-      </span> :
+      </span> 
+      :
       ''
     }</h3>
       </span>

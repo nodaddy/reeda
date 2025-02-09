@@ -62,11 +62,14 @@ async function getDigitalGoodsService() {
 
 export const isUserPremium = async () => {
     const existingPurchasesArray = await getExistingPurchasesArray();
-    alert('existingPurchasesArray', existingPurchasesArray);
-    // in the case of reeda app if the array is not empty then that means that the user has bought 
-    // either a subscription or a lifetime access
-    return existingPurchasesArray?.length > 0;
-}
+    
+    // Debugging: Properly display the array in an alert
+    alert(`existingPurchasesArray: ${JSON.stringify(existingPurchasesArray)}`);
+    
+    // Ensure it's an array before checking length
+    return Array.isArray(existingPurchasesArray) && existingPurchasesArray.length > 0;
+};
+
 
 
 
