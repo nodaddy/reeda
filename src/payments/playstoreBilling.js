@@ -23,7 +23,7 @@ export async function getExistingPurchasesArray() {
         if(service){
             try {
             const existingPurchases = await service.listPurchases();
-            alert('existingPurchages', existingPurchages);
+            alert('existingPurchases', existingPurchases);
             return existingPurchases; // returns an array
         } catch (error) {
             console.error("Error fetching existing purchases:", error);
@@ -61,11 +61,11 @@ async function getDigitalGoodsService() {
 }
 
 export const isUserPremium = async () => {
-    const existingPurchagesArray = await getExistingPurchasesArray();
-    alert('existingPurchagesArray', existingPurchagesArray);
+    const existingPurchasesArray = await getExistingPurchasesArray();
+    alert('existingPurchasesArray', existingPurchasesArray);
     // in the case of reeda app if the array is not empty then that means that the user has bought 
     // either a subscription or a lifetime access
-    return existingPurchagesArray?.length > 0;
+    return existingPurchasesArray?.length > 0;
 }
 
 
