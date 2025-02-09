@@ -4,10 +4,11 @@
 import { useEffect, useState } from 'react';
 import SignInWithGoogle from '@/components/SignInWithGoogle';
 import { useRouter } from 'next/navigation';
-import { Alert, Typography } from 'antd';
+import { Alert, Divider, Typography } from 'antd';
 import BookList from '@/components/BookList';
 import { getProfile, updateProfile } from '@/firebase/services/profileService';
-import { storage } from './utility';
+import StreakCard from '@/components/StreakCard';
+import { storage } from '@/app/utility';
 import { isUserPremium } from '@/payments/playstoreBilling';
 import { useAppContext } from '@/context/AppContext';
 import { priTextColor } from '@/configs/cssValues';
@@ -19,24 +20,16 @@ import Image from 'next/image';
 const { Title } = Typography;
 
 const Home = () => {
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const router = useRouter();
-  const [goodsDetails, setGoodsDetails] = useState(null);
 
   const { profile, setProfile, isPremium, setIsPremium } = useAppContext();
 
   // differnece in seconds
   const [lastPageScanDifference, setLastPageScanDifference] = useState(0);
 
-  useEffect(()=> {
-    if(storage.getItem('user')) {
-      router.push('/home');
-    }
-  }, []);
-
   useEffect(() => {
-    if (profile?.streak?.lastPageScanTimestamp && storage.getItem('user')) {
+    if (profile?.streak?.lastPageScanTimestamp) {
       const now = Date.now();
       const lastPageScanTimestamp = profile.streak.lastPageScanTimestamp;
       const lastPageScanDifference = Math.ceil((now - lastPageScanTimestamp)/1000);
@@ -85,48 +78,16 @@ const Home = () => {
     fetchProfile();
   }, []);
 
-  return (
-    <div
-    align="center"
-    style={{
-      marginTop: '-10px'
+  return ( !loading &&
+    <div style={{
+      overflow: 'auto',
     }}>
-      <div
-      style={{
-        width: '76%',
-        borderRadius: '16px',
-        padding: '0px 40px'
-      }}>
-        <Title level={2} style={{ padding: '0px', color: priTextColor,
-        fontWeight: '300',
-      display: 'flex',
-      alignItems: 'flex-end',
-      }}>
-        <BookOpen size={35} /> &nbsp; Reeda
-        </Title>
-        <Title level={4} style={{textAlign: 'left', marginTop: '-5px', marginBottom: '20px', color: priTextColor, fontWeight: '300', 
-      display: 'flex',
-      
-      }}>
-           Take your reading productivity to the next level!
-           One page at a time
-        </Title>   
-        <br/>
-        <div> 
-      <br/>
-      <br/>
-      <Image src={scaninghands} alt=" " style={{
-        width: '100vw',
-        position: 'absolute',
-        bottom: '0px',
-        height: 'auto',
-        left: '0px'
-      }} />
-      <br/>
-      <br/>
-      <SignInWithGoogle router={router} /> 
-        </div>
-      </div> 
+      <StreakCard isPremium={false} streak={profile?.streak} isActive={lastPageScanDifference < 86400*2} /> 
+     <Divider />
+     <br/>
+      <BookList />
+      {/* <ContinueReading /> */}
+    <br/>
     </div>
   );
 };

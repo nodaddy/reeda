@@ -207,7 +207,7 @@ const BookList = () => {
                     style={{ backfaceVisibility: 'hidden',
                     borderRadius: '13px', 
                     padding: '0px 20px',
-                   boxShadow: '0 0px 8px rgba(0, 0, 0, 0.08)',
+                   boxShadow: '0 0px 8px rgba(0, 0, 0, 0.06)',
                     margin: '0px auto 23px auto',
                     width: '98%' }}
                     bodyStyle={{ padding: '10px 0px' }}

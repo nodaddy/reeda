@@ -106,8 +106,10 @@ if (currentHour >= 5 && currentHour < 12) {
     //  background: isPremium ? 'linear-gradient(135deg, #B08D01, goldenrod, gold,  whitesmoke)' : "linear-gradient(155deg,  silver,  whitesmoke)", // Gold, platinum, and light metallic gradient
     }}
      style={{
-      background: 'linear-gradient(11deg, silver, whitesmoke, whitesmoke) 0% 0% / 200% 200%',
-       width: '96%',
+      // boxShadow: '0 0px 8px rgba(0, 0, 0, 0.06)',
+
+      // background: 'linear-gradient(11deg, silver, whitesmoke, whitesmoke) 0% 0% / 200% 200%',
+       width: '98%',
        margin: 'auto',
      borderRadius: '12px',
 
@@ -134,18 +136,23 @@ if (currentHour >= 5 && currentHour < 12) {
              alignItems: 'flex-start' 
           }}>
     
-    <span ><sub style={{
+    <span >
+    {/* <Icon size={23} style={{ marginRight: '10px' }} /> */}
+      <sub style={{
       display: 'flex',
       alignItems: 'center',
       fontWeight: '300'
-    }}> <Icon size={23} style={{ marginRight: '10px' }} /> {greeting} </sub>
+    }}> 
+    {/* <Icon size={23} style={{ marginRight: '10px' }} />   */}
+    {greeting}
+    </sub>
     <div style={{
-      marginTop: '-10px',
+      marginTop: '-3px',
       fontSize: '16px',
       fontWeight: '300'
     }}>
-      <Icon size={23} style={{ marginRight: '10px', opacity: '0' }} />
-      {JSON.parse(storage.getItem('user')).displayName.split(" ").slice(0, 2).join(" ")}
+      {/* <Icon size={23} style={{ marginRight: '10px', opacity: '0' }} /> */}
+      {JSON.parse(storage.getItem('user'))?.displayName.split(" ").slice(0, 2).join(" ")}
       </div>
       </span>
   </div> 
@@ -155,8 +162,7 @@ if (currentHour >= 5 && currentHour < 12) {
         <div align="right"
         style={{
           backgroundColor: 'white',
-    /* border: 1px solid silver; */
-    padding: '7px 20px',
+    /* border: 1px solid silver; */ 
     borderRadius: '11px'
         }}
         >

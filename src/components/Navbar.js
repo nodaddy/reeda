@@ -1,6 +1,6 @@
 "use client"
 
-import { Coins, List, X } from "lucide-react";
+import { BookOpen, Coins, List, X } from "lucide-react";
 import Link from "next/link";
 import { Badge, Tooltip } from "antd";
 import { useEffect, useState } from "react";
@@ -59,7 +59,9 @@ export const Navbar = () => {
     >
      
       <span>
-        <h3 style={{ marginLeft: "20px", fontWeight: "bold" }}>Reeda 
+        <h3 style={{ marginLeft: "20px", fontWeight: "bold" }}> <BookOpen style={{
+          marginBottom: '-6px'
+        }} /> Reeda 
         <br/>   
       {
       isPremium ? <span style={{
@@ -160,6 +162,7 @@ export const Navbar = () => {
           <li style={{  padding: '18px 0px' }}>
             <span onClick={() => {
               storage.removeItem("user");
+              setProfile(null);
               router.push('/');
             }} style={{ color: "#e63946", textDecoration: "none" }}>Logout</span>
           </li>
