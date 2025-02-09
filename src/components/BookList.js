@@ -130,7 +130,7 @@ const BookList = () => {
     ref={ref}
     style={{ 
     padding: '0px 19px 34px 19px',
-    width: '87%',
+    width: '91%',
     marginTop: '5px',
     maxHeight: height,
     margin: 'auto',
@@ -180,7 +180,7 @@ const BookList = () => {
                   onChange={handleSearch}
                   prefix={<Search size={18} />}
                   allowClear
-                  style={{ outline: 'none', width: '75%' }}
+                  style={{ outline: 'none', width: filteredBooks?.length > 0 ? '75%' : '100%' }}
                 />
          {filteredBooks?.length > 0 && <BookPlus size={35} color={secColor} style={{ cursor: 'pointer' }} onClick={showModal} />}
 

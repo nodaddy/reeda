@@ -71,13 +71,15 @@ const Page = () => {
             <br/>
             <Alert
             type="success"
-            message={<><Sparkles style={{color: 'goldenrod'}} />&nbsp; Upgrade to premium to add multiple books and unlimited scans, get access to the Reeda store, and more.</>}
+            message={<><Sparkles size={18} style={{color: 'goldenrod'}} />&nbsp; Upgrade to premium to add multiple books and unlimited scans, get access to the Reeda store, and more.</>}
             style={{
                 width: '80%',
                 margin: 'auto',
                 marginTop: '5px',
+                borderRadius: '14px',
                 color: priTextColor,
-                paddingLeft: '20px',
+                backgroundColor: 'antiquewhite',
+                padding: '18px 20px',
                 fontFamily: "'Inter', sans-serif",
             }}
             />
