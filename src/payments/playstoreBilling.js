@@ -12,6 +12,7 @@ export async function initiatePurchaseFlow(itemIdsArray) {
             const { purchaseToken } = paymentResponse.details;
             await paymentResponse.complete();
             await service.acknowledge(purchaseToken, getPurchaseType(itemId));
+            window.location.reload();
         } catch (error) {
             console.error('Error during purchase flow:', error);
         }}
@@ -64,7 +65,7 @@ export const isUserPremium = async () => {
     const existingPurchasesArray = await getExistingPurchasesArray();
     
     // Debugging: Properly display the array in an alert
-    alert(`existingPurchasesArray: ${JSON.stringify(existingPurchasesArray)}`);
+    // alert(`existingPurchasesArray: ${JSON.stringify(existingPurchasesArray)}`);
     
     // Ensure it's an array before checking length
     return Array.isArray(existingPurchasesArray) && existingPurchasesArray.length > 0;

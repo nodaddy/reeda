@@ -142,7 +142,7 @@ export default function ImageUpload({ setBook, bookTitle, setData, setModalOpen,
       <br />
       <br />
       {!showCropper && <span>
-        <span>Snap a page!</span>
+        <span>Snap a page from {bookTitle}!</span>
         <div className={styles.fileInputContainer}>
           <input
             id="file-upload"

@@ -1,9 +1,33 @@
 'use client'
 import Plans from "@/components/Plans";
 import { priColor, priTextColor, secTextColor } from "@/configs/cssValues";
+import { isUserPremium } from "@/payments/playstoreBilling";
+import Link from "next/link";
+import { useEffect, useState } from "react";
 
 const Page = () => {
-    return (
+
+  const [isPremium, setIsPremium] = useState(false);
+
+  useEffect(() => {
+    isUserPremium().then((result) => {
+      // alert(result);
+      setIsPremium(result)}).catch((err) => console.log(err));
+  }, []);
+
+    return (  true ? 
+        <div align="center">
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        congratulations
+        <br/>
+        <br/>
+        {/* link to homepage */}
+        <Link href="/"> Let's go </Link>
+        </div>
+        :
         <div style={{marginTop: '0px'}}>
             <br/>
             <br/>

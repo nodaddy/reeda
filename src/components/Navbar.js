@@ -22,7 +22,7 @@ export const Navbar = () => {
     });
 
     isUserPremium().then((result) => {
-      alert(result);
+      // alert(result);
       setIsPremium(result)}).catch((err) => console.log(err));
   }, []);
 
