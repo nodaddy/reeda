@@ -104,7 +104,7 @@ getGoodsDetails();
     <div style={{
       overflow: 'auto',
     }}>
-      <StreakCard isPremium={isPremium} streak={profile?.streak} isActive={lastPageScanDifference < 86400*2} /> 
+      <StreakCard isPremium={false} streak={profile?.streak} isActive={lastPageScanDifference < 86400*2} /> 
       <BookList />
       {/* <ContinueReading /> */}
     <br/>

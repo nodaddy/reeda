@@ -6,7 +6,7 @@ import { Flame, Clock, Loader, GraduationCap } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { Sun, Moon } from 'lucide-react';
 
-const StreakCard = ({ streak, isActive, isPremium}) => {
+const StreakCard = ({ streak, isActive, isPremium = true}) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [loading, setLoading] = useState(true);
   const [timeLeft, setTimeLeft] = useState({ hours: 0, minutes: 0 });

@@ -134,9 +134,9 @@ export const Navbar = () => {
           <li style={{ borderBottom: "1px solid #ddd", padding: '18px 0px' }}>
             <Link onClick={() => setMenuOpen(false)} href="/profile" style={{ color: "#333", textDecoration: "none" }}>Profile</Link>
           </li>
-          <li style={{ borderBottom: "1px solid #ddd", padding: '18px 0px' }}>
+          {!isPremium && <li style={{ borderBottom: "1px solid #ddd", padding: '18px 0px' }}>
             <Link onClick={() => setMenuOpen(false)} href="/premium" style={{ color: "#333", textDecoration: "none" }}>Upgrade to premium</Link>
-          </li>
+          </li>}
           <li style={{ borderBottom: "1px solid #ddd", padding: '18px 0px' }}>
             <Link onClick={() => setMenuOpen(false)} href="/settings" style={{ color: "#333", textDecoration: "none" }}>Settings</Link>
           </li>
