@@ -70,15 +70,14 @@ const Page = () => {
 
             <br/>
             <Alert
-            message={<>Upgrade to premium to add <Tag> <BookPlus size={11} /> More Books</Tag>
-            <br/> unlock <Tag><Camera size={12} /> Unlimited Scans</Tag>and get access to the <Tag> <ShoppingBag size={11} /> Reeda Store</Tag></>}
+            type="success"
+            message={<>Upgrade to premium to add multiple books and unlimited scans, get access to the Reeda store, and more.</>}
             style={{
                 width: '80%',
                 margin: 'auto',
                 marginTop: '5px',
                 color: priTextColor,
                 paddingLeft: '20px',
-                lineHeight: '2',
                 fontFamily: "'Inter', sans-serif",
             }}
             />
