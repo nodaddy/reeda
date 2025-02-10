@@ -77,6 +77,7 @@ const Page = () => {
                 margin: 'auto',
                 marginTop: '5px',
                 borderRadius: '14px',
+                border: '0px',
                 color: priTextColor,
                 backgroundColor: 'antiquewhite',
                 padding: '18px 20px',

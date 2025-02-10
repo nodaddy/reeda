@@ -7,7 +7,7 @@ import { getProfile, updateProfile } from "@/firebase/services/profileService";
 import { createScan } from "@/firebase/services/scanService";
 import { getBookByTitleAndUserId, updateBookByUserIdAndTitle } from "@/firebase/services/bookService";
 import { Button, Modal } from "antd";
-import { addCoinsPerScan, scanPageRatio } from "@/configs/variables";
+import { addCoinsPerScan, scanPageRatio, streakMaintenanceIntervalInSeconds } from "@/configs/variables";
 import { storage } from "@/app/utility";
 import { getPageSummaryFromImage, getSimplifiedLanguage } from "@/openAI";
 import { useAppContext } from "@/context/AppContext";
@@ -91,21 +91,38 @@ export default function ImageUpload({ setBook, bookTitle, setData, setModalOpen,
     setBook(updatedBook);
     await createScan({ bookTitle, data });
 
-    // const profile = await getProfile(JSON.parse(storage.getItem('user')).email);
-    if ((Date.now() - profile?.lastPageScanTimestamp) / 1000 > 84600 && (Date.now() - profile?.lastPageScanTimestamp) / 1000 < 172800) { // < 48 hours & > 24 hours
+     // const profile = await getProfile(JSON.parse(storage.getItem('user')).email);
+     const timeDifferenceInSeconds = (Date.now() - profile?.streak.lastPageScanTimestamp) / 1000;
+     // alert(timeDifferenceInSeconds);
+     if (timeDifferenceInSeconds > streakMaintenanceIntervalInSeconds && timeDifferenceInSeconds < streakMaintenanceIntervalInSeconds * 2) { // < 48 hours & > 24 hours
+       setProfile(await updateProfile(profile.userId, {
+         ...profile,
+         coins: (profile?.coins || 0) + addCoinsPerScan,
+         streak: {
+             ...profile.streak,
+             days: (profile.streak?.days || 0) + 1,
+             lastPageScanTimestamp: Date.now(),
+         },
+         }))
+     } else if(timeDifferenceInSeconds > streakMaintenanceIntervalInSeconds * 2) {
       setProfile(await updateProfile(profile.userId, {
         ...profile,
         coins: (profile?.coins || 0) + addCoinsPerScan,
         streak: {
-            ...profile.streak,
-            days: (profile.streak?.days || 0) + 1, 
-            lastPageScanTimestamp: Date.now(),
-        },
+          ...profile.streak,
+          longestStreak: Math.max(profile.streak.longestStreak || 0, profile.streak?.days || 0),
+          days: 1,
+          lastPageScanTimestamp: Date.now(),
+      },
         }))
     } else {
       setProfile(await updateProfile(profile.userId, {
         ...profile,
-        coins: (profile?.coins || 0) + addCoinsPerScan
+        coins: (profile?.coins || 0) + addCoinsPerScan,
+        streak: {
+          ...profile.streak,
+          lastPageScanTimestamp: Date.now(),
+      },
         }))
     }
 

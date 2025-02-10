@@ -15,6 +15,7 @@ import { priTextColor } from '@/configs/cssValues';
 import { BookCopy, BookOpen } from 'lucide-react';
 import { scaninghands } from '@/assets';
 import Image from 'next/image';
+import { streakMaintenanceIntervalInSeconds } from '@/configs/variables';
 
 
 const { Title } = Typography;
@@ -82,7 +83,7 @@ const Home = () => {
     <div style={{
       overflow: 'auto',
     }}>
-      <StreakCard isPremium={false} streak={profile?.streak} isActive={lastPageScanDifference < 86400*2} /> 
+      <StreakCard isPremium={false} streak={profile?.streak} isActive={lastPageScanDifference < streakMaintenanceIntervalInSeconds*2} /> 
      <Divider />
      <br/>
       <BookList />

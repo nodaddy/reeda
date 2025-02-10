@@ -10,6 +10,7 @@ const AppContext = createContext();
 // 2️⃣ Create Provider Component
 export const AppProvider = ({ children }) => {
   const [profile, setProfile] = useState(null);
+  const [nightModeOn, setNightModeOn] = useState(false);
 
   useEffect(() => {
     if(!profile && storage.getItem('user')){
@@ -22,7 +23,7 @@ export const AppProvider = ({ children }) => {
   const [isPremium, setIsPremium] = useState(false);
 
   return (
-    <AppContext.Provider value={{ profile, setProfile, isPremium, setIsPremium }}>
+    <AppContext.Provider value={{ profile, setProfile, isPremium, setIsPremium, nightModeOn, setNightModeOn }}>
       {children}
     </AppContext.Provider>
   );

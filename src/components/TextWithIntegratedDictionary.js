@@ -2,6 +2,8 @@ import React, { useState, useEffect, useRef } from "react";
 import { Typography, Modal, Button, Slider, Popover } from "antd";
 import Dictionary from "@/app/dictionary/page";
 import { LetterText, MagnetIcon, TextIcon } from "lucide-react";
+import { useAppContext } from "@/context/AppContext";
+import { priTextColor } from "@/configs/cssValues";
 
 
 const { Text } = Typography;
@@ -10,6 +12,8 @@ const TextWithIntegratedDictionary = ({ text, fontSize, setFontSize }) => {
   const [selectedText, setSelectedText] = useState("");
   const [isModalVisible, setIsModalVisible] = useState(false);
   const textContainerRef = useRef(null);
+
+  const {nightModeOn} = useAppContext();
 
   // Function to handle single word click
   const handleWordClick = (word) => {
@@ -68,7 +72,7 @@ const TextWithIntegratedDictionary = ({ text, fontSize, setFontSize }) => {
               onClick={() => handleWordClick(part)}
               style={{
                 cursor: "pointer",
-                color: "#555555",
+                color: nightModeOn ? "lightgrey" : priTextColor,
                 fontSize: `${fontSize}px`,
                 display: "inline-block",
               }}

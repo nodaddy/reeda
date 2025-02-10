@@ -8,12 +8,13 @@ import { getProfile, updateProfile } from "@/firebase/services/profileService";
 import { createScan, getLatestScanByBookTitleAndUserId } from "@/firebase/services/scanService";
 import { getBookByTitleAndUserId, updateBookByUserIdAndTitle } from "@/firebase/services/bookService";
 import Cropper from 'react-easy-crop';
-import { addCoinsPerScan, scanPageRatio, scanPageRation } from "@/configs/variables";
+import { addCoinsPerScan, scanPageRatio, scanPageRation, streakMaintenanceIntervalInSeconds } from "@/configs/variables";
 import { priColor } from "@/configs/cssValues";
 import { storage } from "@/app/utility";
 import { getPageSummaryFromImage, getSimplifiedLanguage } from "@/openAI";
 import TextWithIntegratedDictionary from "./TextWithIntegratedDictionary";
 import { useAppContext } from "@/context/AppContext";
+import NightModeButton from "./NightModeButton";
 
 export default function ScanResults({ setBook, scans }) {
   console.log(scans);
@@ -32,7 +33,7 @@ export default function ScanResults({ setBook, scans }) {
 
   const [uploadingImage, setUploadingImage] = useState(false);
 
-  const { profile, setProfile } = useAppContext();
+  const { profile, setProfile, nightModeOn } = useAppContext();
 
 
   const onCropComplete = useCallback((_, croppedAreaPixels) => {
@@ -100,20 +101,37 @@ export default function ScanResults({ setBook, scans }) {
     await createScan({ bookTitle, data });
 
     // const profile = await getProfile(JSON.parse(storage.getItem('user')).email);
-    if ((Date.now() - profile?.lastPageScanTimestamp) / 1000 > 84600 && (Date.now() - profile?.lastPageScanTimestamp) / 1000 < 172800) { // < 48 hours & > 24 hours
+    const timeDifferenceInSeconds = (Date.now() - profile?.streak.lastPageScanTimestamp) / 1000;
+    // alert(timeDifferenceInSeconds);
+    if (timeDifferenceInSeconds > streakMaintenanceIntervalInSeconds && timeDifferenceInSeconds < streakMaintenanceIntervalInSeconds * 2) { // < 48 hours & > 24 hours
       setProfile(await updateProfile(profile.userId, {
         ...profile,
         coins: (profile?.coins || 0) + addCoinsPerScan,
         streak: {
             ...profile.streak,
-            days: (profile.streak?.days || 0) + 1, 
+            days: (profile.streak?.days || 0) + 1,
             lastPageScanTimestamp: Date.now(),
         },
+        }))
+    } else if(timeDifferenceInSeconds > streakMaintenanceIntervalInSeconds * 2) {
+      setProfile(await updateProfile(profile.userId, {
+        ...profile,
+        coins: (profile?.coins || 0) + addCoinsPerScan,
+        streak: {
+          ...profile.streak,
+          longestStreak: Math.max(profile.streak.longestStreak || 0, profile.streak?.days || 0),
+          days: 1,
+          lastPageScanTimestamp: Date.now(),
+      },
         }))
     } else {
       setProfile(await updateProfile(profile.userId, {
         ...profile,
-        coins: (profile?.coins || 0) + addCoinsPerScan
+        coins: (profile?.coins || 0) + addCoinsPerScan,
+        streak: {
+          ...profile.streak,
+          lastPageScanTimestamp: Date.now(),
+      },
         }))
     }
 
@@ -134,12 +152,12 @@ export default function ScanResults({ setBook, scans }) {
             overflow: 'scroll',
             width: '82%',
             margin: 'auto',
-            marginTop: '20px',
+            marginTop: '17px',
             borderTop: '0px',
             borderRadius: '10px',
             border: '1px solid silver',
-            backgroundColor: 'whitesmoke',
-            height: 'calc(100vh - 252px)', // This can be used if you want to explicitly set height too
+            backgroundColor: nightModeOn ? 'black' : 'white',
+            height: 'calc(100vh - 249px)', // This can be used if you want to explicitly set height too
             // padding: "25px",
             // display: "flex",
             // flexDirection: "column",
@@ -152,7 +170,7 @@ export default function ScanResults({ setBook, scans }) {
           <div
             style={{
               maxWidth: "800px",
-              padding: "10px 0px",
+              padding: "15px 0px",
               transition: "all 0.5s ease-in-out",
               overflowY: "auto",
             }}
@@ -210,7 +228,8 @@ export default function ScanResults({ setBook, scans }) {
             </div>
 
             <FontSizeControl fontSize={fontSize} setFontSize={setFontSize} />
- 
+
+            <NightModeButton /> 
              <div>
                 {/* Hidden file input */}
                 <input

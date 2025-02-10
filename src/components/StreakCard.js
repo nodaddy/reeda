@@ -117,8 +117,8 @@ if (currentHour >= 5 && currentHour < 12) {
        backgroundColor: 'transparent',
        backgroundSize: '200% 200%',
       //  animation: 'shine 3s ease-in-out infinite', // Shine animation for glaring effect
-       marginTop: '28px',
-       marginBottom: '23px',
+       marginTop: '18px',
+       marginBottom: '13px',
       //  boxShadow: '0 4px 15px rgba(0, 0, 0, 0.2)', // Stronger shadow for depth
      }}
    >
@@ -126,6 +126,7 @@ if (currentHour >= 5 && currentHour < 12) {
           display: 'flex',
           alignItems: 'flex-start',
           justifyContent: 'space-between',
+          alignItems: 'flex-start'
         }}>
         { <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }}>
           <div style={{ textAlign: 'left'}}> 
@@ -167,16 +168,18 @@ if (currentHour >= 5 && currentHour < 12) {
         }}
         >
           <Flame color={isActive ? '#fa541c' : '#bfbfbf'} size={30} />
-          <h4 style={{ margin: 0, color: isActive ? '#fa541c' : '#8c8c8c', fontWeight: '400' }}>
-              {isActive ? 'Streak active' : 'Streak inactive'}
+          <h4 style={{ margin: 0, color: isActive ? '#fa541c' : '#8c8c8c', fontWeight: '400', fontSize: '15px' }}>
+              {isActive ? <>On Streak <br/>{`${isActive ? streak?.days : 0} ${streak?.days > 1 ? 'Days' : 'Day'}`}</> 
+              : 
+              <>Streak Inactive <br/>{`${isActive ? streak?.longestStreak : 0} ${streak?.longestStreak > 1 ? 'Days' : 'Day'}`}</>}
             </h4>
-          <div align="center">
-            <p style={{ margin: 0, fontSize: '15px', fontWeight: 'bold', color: 'grey' }}>
+          {/* <div align="center">
+            <p style={{ margin: 0, fontSize: '13px', fontWeight: 'bold', color: 'grey' }}>
               <span style={{ display: 'flex', fontWeight: '400', justifyContent: 'flex-end', alignItems: 'center', fontSize: '13px' }}>
-                {`${isActive ? streak?.days : 0} ${streak?.days > 1 ? 'Days' : 'Day'}`}
+                {`Your longest streak - ${streak?.longestStreak} ${streak?.longestStreak > 1 ? 'Days' : 'Day'}`}
               </span>
             </p>
-          </div>
+          </div> */}
         </div>
         </div>
       </Card>
