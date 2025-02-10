@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useEffect, useRef, useState } from 'react';
-import { List, Card, Button, Title, Modal, Form, Input, Progress, Badge as BadgeAnt, message, Typography, Empty, Divider, Upload, Popconfirm, Popover } from 'antd';
+import { List, Card, Button, Title, Modal, Form, Input, Progress, Badge as BadgeAnt, message, Typography, Empty, Divider, Upload, Popconfirm, Popover, Alert } from 'antd';
 import { BookOpen, BookPlus, Camera, CheckCircle2, Delete, History, LetterText, Loader, MoreVertical, MoveRight, Play, PlayCircle, PlusCircle, RefreshCcw, Search, Text, Trash2, UploadIcon } from 'lucide-react';
 import { priColor, priTextColor, secColor, secTextColor } from '@/configs/cssValues';
 import { motion } from 'framer-motion';
@@ -24,6 +24,8 @@ const BookList = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [form] = Form.useForm();
   const [searchQuery, setSearchQuery] = useState('');
+
+  const [loadingRecap, setLoadingRecap] = useState(false);
 
   const [showBookSummaryTillNowModal, setShowBookSummaryTillNowModal] = useState(false);
 
@@ -60,23 +62,28 @@ const BookList = () => {
     });
   };
 
-  useEffect(() => {
-    if(selectedBookForSummary){
-    // get last 5(at max) scans
-    getLatestScansbyBookTitle(selectedBookForSummary.title, 5).then(res => {
-      if(res.length != 0){
-        getSummaryFromText(res.reduce((a, b) => a + b.data[0].summary, '')).then(res => {
-          setSummaryTillNow(res);
-        })
-      } else {
-        setSummaryTillNow('You have not started scanning this book yet.');
+  const getRecap = (selectedBook) => {
+    setLoadingRecap(true);
+    if(selectedBook){
+      // get last 5(at max) scans
+      getLatestScansbyBookTitle(selectedBook.title, 5).then(res => {
+        if(res.length != 0){
+          getSummaryFromText(res.reduce((a, b) => a + b.data[0].summary, '')).then(res => {
+            setSummaryTillNow(res);
+    setLoadingRecap(false);
+
+          })
+        } else {
+          setSummaryTillNow(<><Alert message="Start reading the book to get recap!" type="info" /></>);
+    setLoadingRecap(false);
+
+        }
+      }).catch(err => {
+        alert(JSON.stringify(err));
+      }).finally(() => {
+      })
       }
-    }).catch(err => {
-      alert(JSON.stringify(err));
-    }).finally(() => {
-    })
-    }
-  }, [selectedBookForSummary]);
+  }
 
   useEffect(() => {
     const updateHeight = () => {
@@ -412,6 +419,7 @@ const BookList = () => {
                             setOpenPopOver(null);
                             setShowBookSummaryTillNowModal(true);
                             setSelectedBookForSummary(item);
+                            getRecap(item);
                           }}
                           >
                           <History
@@ -540,9 +548,15 @@ const BookList = () => {
         }}
         footer={null}
         width={'90vw'}
-        style={{ padding: '20px', borderRadius: '20px', zIndex: '9999' }}
+        style={{ padding: '20px', borderRadius: '20px', zIndex: '9999', minHeight: '20vh' }}
       >
-        {summaryTillNow}
+        <div 
+        style={{
+          display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px 0px'
+        }}
+        >
+        {loadingRecap ? <Loader className='loader' size={27} /> : summaryTillNow}
+        </div>
       </Modal>
     </div>
   );
