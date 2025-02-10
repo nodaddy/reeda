@@ -85,17 +85,17 @@ color: priTextColor
         
       </div>
 
-      {book?.pagesRead && <p style={{
+      <p style={{
         fontSize: '14px',
         fontWeight: '500',
-        color: secTextColor,
+        color: priTextColor,
         margin: 0,
         display: 'inline-block',
         padding: '4px 12px'
       }}>
         {/* Page {book?.pagesRead}  */}
         <span>&nbsp;&nbsp; {title.toUpperCase()}</span>
-      </p>}
+      </p>
 </div>
 
       {

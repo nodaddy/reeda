@@ -28,6 +28,7 @@ bookData.title = bookData.title.trim();
       // Adding book document to Firestore
       const docRef = await addDoc(bookCollection, {
         ...bookData,
+        pagesRead: 0,
         userId,  // Ensure userId is included in the book data
         createdAt: new Date(), // Optionally add a creation timestamp
       });

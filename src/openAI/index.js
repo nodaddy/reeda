@@ -218,3 +218,43 @@ export const getSimplifiedLanguage = async (file) => {
     throw error;
   }
 };
+
+
+// Method to call the OpenAI API
+export const getSummaryFromText = async (words) => {
+  const url = 'https://api.openai.com/v1/chat/completions';
+
+  console.log(words);
+
+  try {
+    const response = await axios.post(
+      url,
+      {
+        model: 'gpt-4o-mini',
+        messages: [
+        {role: "system", content: `you are a person who helps summarise the text provided in no more than 7 sentences`},
+        {
+            role: "user",
+            content: words
+        }
+      ],
+        temperature: 0.7,
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${API_KEY}`,
+        },
+      }
+    ).then(response => response.data).catch(error => {
+          console.error('Error fetching chat completion:', error);
+          throw error;
+        });
+
+    console.log(response.choices[0].message.content);
+    return response.choices[0].message.content;
+  } catch (error) {
+    console.error('Error fetching chat completion:', error);
+    throw error;
+  }
+};

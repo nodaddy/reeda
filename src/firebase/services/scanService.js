@@ -2,7 +2,7 @@
 import { storage } from '@/app/utility';
 // services/scanService.js
 import { db } from '../../firebase';
-import { collection, addDoc, doc, updateDoc, deleteDoc, query, where, getDocs, orderBy, getCountFromServer  } from "firebase/firestore";
+import { collection, addDoc, doc, updateDoc, deleteDoc, query, where, getDocs, orderBy, getCountFromServer, limit  } from "firebase/firestore";
 const scanCollection = collection(db, "scans");
 
 // Create a new scan
@@ -21,7 +21,7 @@ export const createScan = async (scanData) => {
     const docRef = await addDoc(scanCollection, {
       ...scanData,
       userId,  // Ensure userId is included in the scan data
-      createdAt: new Date(), // Optionally add a creation timestamp
+      createdAt: Date.now(), // Optionally add a creation timestamp
     });
 
     console.log("Scan created with ID: ", docRef.id);
@@ -138,6 +138,38 @@ export const getScanCount = async () => {
       throw error; // Re-throw the error to be handled by the calling function
     }
   };
+
+  // Read latest X scans by userId, ordered by createdAt
+  export const getLatestScansbyBookTitle = async (bookTitle, maxScans = 5) => {
+    const userId = JSON.parse(storage.getItem('user')).email;
+  
+    try {
+      console.log('Getting latest scans');
+  
+      // Create a query to find scans by userId, ordered by createdAt, and limited to X results
+      const q = query(
+        scanCollection,
+        where("userId", "==", userId),
+        where("bookTitle", "==", bookTitle),
+        orderBy("createdAt", "desc"), // Order by latest createdAt timestamps
+        limit(maxScans) // Fetch only the latest X scans
+      );
+  
+      // Get the query snapshot
+      const querySnapshot = await getDocs(q);
+  
+      // Convert Firestore documents to array
+      return querySnapshot.docs.map((scanDoc) => ({
+        id: scanDoc.id,
+        ...scanDoc.data(),
+      }));
+  
+    } catch (error) {
+      console.error("Error getting latest scans: ", error);
+      throw error; // Re-throw the error to be handled by the calling function
+    }
+  };
+  
 
 // Read all scans by userId (stored inside the document)
 export const getScans = async () => {

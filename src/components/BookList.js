@@ -1,11 +1,11 @@
 'use client'
 
 import React, { useEffect, useRef, useState } from 'react';
-import { List, Card, Button, Title, Modal, Form, Input, Progress, Badge as BadgeAnt, message, Typography, Empty, Divider, Upload } from 'antd';
-import { BookOpen, BookPlus, Camera, Delete, Loader, MoveRight, Play, PlayCircle, PlusCircle, Search, Text, Trash2, UploadIcon } from 'lucide-react';
-import { priTextColor, secColor, secTextColor } from '@/configs/cssValues';
+import { List, Card, Button, Title, Modal, Form, Input, Progress, Badge as BadgeAnt, message, Typography, Empty, Divider, Upload, Popconfirm, Popover } from 'antd';
+import { BookOpen, BookPlus, Camera, CheckCircle2, Delete, History, LetterText, Loader, MoreVertical, MoveRight, Play, PlayCircle, PlusCircle, RefreshCcw, Search, Text, Trash2, UploadIcon } from 'lucide-react';
+import { priColor, priTextColor, secColor, secTextColor } from '@/configs/cssValues';
 import { motion } from 'framer-motion';
-import { createbook, getBooks, deleteBook} from '@/firebase/services/bookService';
+import { createbook, getBooks, deleteBook, getBookByTitleAndUserId, updateBookByUserIdAndTitle} from '@/firebase/services/bookService';
 import Link from 'next/link';
 import { getProfile, updateProfile } from '@/firebase/services/profileService';
 import { addCoinsPerNewBookAdded, freeBooks } from '@/configs/variables';
@@ -14,6 +14,9 @@ import { useAppContext } from '@/context/AppContext';
 import { useRouter } from 'next/navigation';
 import Compressor from 'compressorjs';
 import CameraUpload from './CameraUpload';
+import { getLatestScansbyBookTitle } from '@/firebase/services/scanService';
+import { getSummaryFromText } from '@/openAI';
+import { sum } from 'firebase/firestore';
 
 const BookList = () => {
   const [books, setBooks] = useState(null);
@@ -22,8 +25,16 @@ const BookList = () => {
   const [form] = Form.useForm();
   const [searchQuery, setSearchQuery] = useState('');
 
+  const [showBookSummaryTillNowModal, setShowBookSummaryTillNowModal] = useState(false);
+
+  const [selectedBookForSummary, setSelectedBookForSummary] = useState(null);
+
   const [loading, setLoading] = useState(false);
   const [height, setHeight] = useState(0);
+
+  const [openPopOver, setOpenPopOver] = useState(false);
+
+  const [summaryTillNow, setSummaryTillNow] = useState(null);
   
   const { isPremium } = useAppContext();
 
@@ -48,6 +59,24 @@ const BookList = () => {
       },
     });
   };
+
+  useEffect(() => {
+    if(selectedBookForSummary){
+    // get last 5(at max) scans
+    getLatestScansbyBookTitle(selectedBookForSummary.title, 5).then(res => {
+      if(res.length != 0){
+        getSummaryFromText(res.reduce((a, b) => a + b.data[0].summary, '')).then(res => {
+          setSummaryTillNow(res);
+        })
+      } else {
+        setSummaryTillNow('You have not started scanning this book yet.');
+      }
+    }).catch(err => {
+      alert(JSON.stringify(err));
+    }).finally(() => {
+    })
+    }
+  }, [selectedBookForSummary]);
 
   useEffect(() => {
     const updateHeight = () => {
@@ -280,7 +309,7 @@ const BookList = () => {
                       flexDirection: 'column',
                     }}>
                     
-                      {item.lastReadDate || (Math.random() * (63)).toFixed(0)} reads
+                      {item.pagesRead} reads
 
                       <span style={{
                         display: 'flex',
@@ -290,26 +319,126 @@ const BookList = () => {
                         gap: '12px'
                       }}>
 
-                    <Link href={'/scan/'+item.title}>
+                    {/* <Link href={'/scan/'+item.title}>
 
-                        <Text 
+                      <Text 
                         size={19}
                         style={{
                           color: priTextColor,
                           // border: '1px solid '+ defaultBorderColor,
                           borderRadius: '50%',
                         }} />
-                    </Link>
-                    <Link href={'/scan/'+item.title}>
+                    </Link> */}
+                    <Link 
+                    style={{
+                      textDecoration :'none',
+                      marginBottom: '-6px'
+                    }}
+                    href={'/scan/'+item.title}>
                     <BookOpen
-                        size={25}
+                        size={20}
                         style={{
-                          padding: '2px',
                           color: priTextColor,
                         }} />
                   </Link>
-                    
-                           
+
+                  
+                    <Popover
+                    open={openPopOver == item.title}
+                    onOpenChange={(open) => setOpenPopOver(open ? item.title : null)}
+                          content={
+                            <span style={{padding: '0px'}}>
+                                <Popconfirm
+                                onCancel={() => setOpenPopOver(null)}
+                          placement='top'
+                          title={ item.pagesRead === item.totalPages ? "Re-read this book?" : "Mark this book as completed?"}
+                          onConfirm={async () => {
+                            const book1 = await getBookByTitleAndUserId(item.title.trim());
+                            if (book1?.pagesRead !== item.totalPages) {
+                              await updateBookByUserIdAndTitle({ ...book1, pagesRead: item.totalPages }, book1.title);
+                              // message.success('Book marked as completed!');
+                              // update in filtered books
+                              const filtered = filteredBooks.map((book) => {
+                                if (book.title === item.title) {
+                                  return { ...book, pagesRead: item.totalPages };
+                                }
+                                return book;
+                              });
+                              setFilteredBooks(filtered);
+                              setOpenPopOver(null);
+                            } else if(book1?.pagesRead == item.totalPages){
+                                await updateBookByUserIdAndTitle({ ...book1, pagesRead: 0 }, book1.title);
+                                // message.success('Book marked as completed!');
+                                // update in filtered books
+                                const filtered = filteredBooks.map((book) => {
+                                  if (book.title === item.title) {
+                                    return { ...book, pagesRead: 0 };
+                                  }
+                                  return book;
+                              });
+                              setFilteredBooks(filtered);
+                              setOpenPopOver(null);
+
+                            }
+                          }}
+                          okText="Yes"
+                          cancelText="No"
+                        >
+                          <span style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '10px',
+                            marginBottom: '10px'
+                          }}>
+                          <CheckCircle2
+                            size={20}
+                            style={{
+                              color: item.pagesRead === item.totalPages ? "#0a0" : "#666",
+                              cursor: "pointer",
+                              marginRight: '-2px'
+                            }}
+                          /> 
+                          {item.pagesRead === item.totalPages ? "Re-read" : "Mark Completed"}
+                          </span>
+                          </Popconfirm>
+
+
+                          <span style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '10px',
+                          }}
+                          onClick={() => {
+                            setOpenPopOver(null);
+                            setShowBookSummaryTillNowModal(true);
+                            setSelectedBookForSummary(item);
+                          }}
+                          >
+                          <History
+                            size={20}
+                          /> 
+                          <span>Quick Recap</span>
+                          </span>
+
+
+                                  </span>
+                                } 
+                                trigger="click" 
+                                placement="topRight" 
+                                // open={visible} 
+                                // onOpenChange={setVisible}
+                              >
+                                <MoreVertical 
+                                  size={20} 
+                                  onClick={() => {
+                                    setOpenPopOver(item.title == openPopOver ? null : item.title);
+                                  }}
+                                  style={{ marginRight: "-5px", cursor: "pointer", color: item.title == openPopOver ? priColor  : ''}} 
+                                />
+                              </Popover>
+                                
+                                <br/>
+
                       </span>
                    
                     </div>
@@ -398,6 +527,22 @@ const BookList = () => {
           <Button disabled={!imageBase64} type="primary" htmlType="submit" block>Add Book</Button>
         </Form.Item>
         </Form>
+      </Modal>
+
+
+      {/* book summary show till now modal */}
+      <Modal
+        title={" Recap - " + selectedBookForSummary?.title }
+        open={showBookSummaryTillNowModal}
+        onCancel={() => {
+          setShowBookSummaryTillNowModal(false);
+          setSummaryTillNow(null);
+        }}
+        footer={null}
+        width={'90vw'}
+        style={{ padding: '20px', borderRadius: '20px', zIndex: '9999' }}
+      >
+        {summaryTillNow}
       </Modal>
     </div>
   );

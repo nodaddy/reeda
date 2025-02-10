@@ -3,7 +3,7 @@
 import { useState, useCallback, useEffect } from "react";
 import { Button, Tooltip, Modal } from "antd";
 import OriginalTextWithTooltips, { FontSizeControl } from "./TextWithIntegratedDictionary";
-import { Hourglass, Loader, Plane, Plus, Pointer, WholeWord } from "lucide-react";
+import { Camera, Hourglass, Loader, Plane, Plus, Pointer, WholeWord } from "lucide-react";
 import { getProfile, updateProfile } from "@/firebase/services/profileService";
 import { createScan, getLatestScanByBookTitleAndUserId } from "@/firebase/services/scanService";
 import { getBookByTitleAndUserId, updateBookByUserIdAndTitle } from "@/firebase/services/bookService";
@@ -189,7 +189,7 @@ export default function ScanResults({ setBook, scans }) {
               alignItems: "center",
               justifyContent: "space-around",
               position: "absolute",
-              width: "100vw",
+              width: "94%",
               bottom: "15px",
               padding: "0px 0px",
             }}
@@ -244,8 +244,8 @@ export default function ScanResults({ setBook, scans }) {
                 <label
                   htmlFor="file-upload"
                   style={{
-                    height: "40px",
-                    width: "40px",
+                    height: "45px",
+                    width: "45px",
                     borderRadius: "50%",
                     backgroundColor: priColor,
                     display: "flex",
@@ -254,7 +254,7 @@ export default function ScanResults({ setBook, scans }) {
                     cursor: "pointer",
                   }}
                 >
-                  <Plus size={30} color="white" />
+                  <Camera size={25} color="white" />
                 </label>
               </div> 
           </div>
