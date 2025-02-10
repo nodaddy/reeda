@@ -19,6 +19,7 @@ import Image from 'next/image';
 const { Title } = Typography;
 
 const Home = () => {
+  const userInStorage = storage.getItem('user');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const router = useRouter();
@@ -85,7 +86,7 @@ const Home = () => {
     fetchProfile();
   }, []);
 
-  return ( !storage.getItem('user') &&
+  return ( !userInStorage &&
     <div
     align="center"
     style={{
