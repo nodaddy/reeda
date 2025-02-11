@@ -175,7 +175,7 @@ export default function ImageUpload({ setBook, bookTitle, setData, setModalOpen,
           color: secTextColor
         }}>
           <NextImage src={flag} style={{
-            width: '40%',
+            width: '29%',
             height: 'auto'
           }} /> 
           <br/>

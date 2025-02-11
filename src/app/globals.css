@@ -9,10 +9,17 @@
 
 /* styles/globals.css */
 * {
-  user-select: none;
+  user-select: none !important;
   outline: none;
+  -webkit-tap-highlight-color: transparent;
   scrollbar-width: none; /* Firefox */
   -ms-overflow-style: none; /* IE and Edge */
+}
+
+*:focus {
+  user-select: none !important;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
 

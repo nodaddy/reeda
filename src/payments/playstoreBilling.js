@@ -28,7 +28,7 @@ export async function getExistingPurchasesArray() {
         }
         } catch (error) {
             console.error("Error fetching existing purchases:", error);
-            alert(`Error: ${JSON.stringify(error)}`);
+            alert(`Kindly restart the app for smoother experience!`);
             return []; // Return an empty array in case of an error
         }
 }
