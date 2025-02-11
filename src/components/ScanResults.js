@@ -16,6 +16,7 @@ import TextWithIntegratedDictionary from "./TextWithIntegratedDictionary";
 import { useAppContext } from "@/context/AppContext";
 import NightModeButton from "./NightModeButton";
 import UploadingScanLoader from "./UploadingScanLoader";
+import { logGAEvent } from "@/firebase/googleAnalytics";
 
 export default function ScanResults({ setBook, scans }) {
   console.log(scans);
@@ -206,7 +207,10 @@ export default function ScanResults({ setBook, scans }) {
                   color: activeView === "summary" ? "#FFFFFF" : "#555555",
                   transition: "all 0.3s ease",
                 }}
-                onClick={() => setActiveView("summary")}
+                onClick={() => {
+                  setActiveView("summary");
+                  logGAEvent('switch_between_takeaways_and_as_is');
+                }}
               >
                 Key Takeaways
               </Button>
@@ -220,7 +224,10 @@ export default function ScanResults({ setBook, scans }) {
                   color: activeView === "vocab" ? "#FFFFFF" : "#555555",
                   transition: "all 0.3s ease",
                 }}
-                onClick={() => setActiveView("vocab")}
+                onClick={() => {
+                  setActiveView("vocab");
+                  logGAEvent('switch_between_takeaways_and_as_is');
+                }}
               >
                 As is
               </Button>
@@ -255,7 +262,7 @@ export default function ScanResults({ setBook, scans }) {
                     cursor: "pointer",
                   }}
                 >
-                  <Camera size={25} color="white" />
+                  <Camera onClick={() => { logGAEvent('click_scan_more_pages_of_book') }} size={25} color="white" />
                 </label>
               </div> 
           </div>

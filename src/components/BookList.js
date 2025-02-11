@@ -17,6 +17,7 @@ import CameraUpload from './CameraUpload';
 import { getLatestScansbyBookTitle } from '@/firebase/services/scanService';
 import { getSummaryFromText } from '@/openAI';
 import { sum } from 'firebase/firestore';
+import { logGAEvent } from '@/firebase/googleAnalytics';
 
 const BookList = () => {
   const [books, setBooks] = useState(null);
@@ -220,7 +221,13 @@ const BookList = () => {
                   allowClear
                   style={{ outline: 'none', width: filteredBooks?.length > 0 ? '75%' : '100%' }}
                 />
-         {filteredBooks?.length > 0 && <><BookPlus size={35} color={secColor} style={{ cursor: 'pointer', marginRight: '8px' }} onClick={showModal} /></>}
+         {filteredBooks?.length > 0 && <>
+         <BookPlus size={35}
+         color={secColor} style={{ cursor: 'pointer', marginRight: '8px' }} onClick={() => {
+          showModal(true);
+          logGAEvent('click_add_book_icon');
+         }} />
+         </>}
 
         </div>
         </div>
@@ -441,6 +448,7 @@ const BookList = () => {
                                   size={20} 
                                   onClick={() => {
                                     setOpenPopOver(item.title == openPopOver ? null : item.title);
+                                    logGAEvent('click_more_options_on_book_card');
                                   }}
                                   style={{ marginRight: "-18px", cursor: "pointer", color: item.title == openPopOver ? priColor  : ''}} 
                                 />
@@ -501,7 +509,10 @@ const BookList = () => {
             color: secTextColor,
             fontFamily: "'Inter', sans-serif",
           }}>
-          <BookPlus size={50} color={secColor} style={{ cursor: 'pointer' }} onClick={showModal} />
+          <BookPlus size={50} color={secColor} style={{ cursor: 'pointer' }} onClick={() => {
+            showModal(true);
+            logGAEvent('click_add_book_icon');
+          }} />
           <br/>
           Add a book
           </div>

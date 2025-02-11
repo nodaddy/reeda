@@ -46,14 +46,6 @@ if (!self.define) {
     );
   };
 
-  self.addEventListener("alarm", (event) => {
-    self.registration.showNotification("Daily Reminder", {
-        body: "Don't forget to read today 📖",
-        icon: "/icon-512x512.png",
-        // badge: "/badge.png"
-    });
-});
-
   self.define = (depsNames, factory) => {
     const uri = nextDefineUri || ("document" in self ? document.currentScript.src : "") || location.href;
     if (registry[uri]) {

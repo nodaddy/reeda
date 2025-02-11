@@ -4,6 +4,7 @@ import { defaultBorderColor, priColor, priTextColor, secTextColor } from "@/conf
 import { BookPlus, Calendar, Camera, Check, CheckCircle, CheckSquare, CheckSquare2, Coins, Infinity, Leaf, MoveLeft, ShoppingBag, Sparkle, Sparkles, Star, Target} from "lucide-react";
 import { initiatePurchaseFlow } from "@/payments/playstoreBilling";
 import { useRouter } from "next/navigation";
+import { logGAEvent } from "@/firebase/googleAnalytics";
 
 const Plans = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -74,6 +75,7 @@ const Plans = () => {
                         <div 
                         onClick={() => {
                             initiatePurchaseFlow([plan.digitalGoodsId]);
+                            logGAEvent('click_purchase_button', {plan: plan.title});
                         }}
                         style={{
                 fontFamily: "'Inter', sans-serif",
@@ -100,6 +102,7 @@ const Plans = () => {
  
                         <div 
                         onClick={() => {
+                            logGAEvent('click_i_will_do_it_later_plans_page');
                             router.back();
                         }}
                         style={{

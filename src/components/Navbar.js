@@ -9,6 +9,7 @@ import { getProfile } from "@/firebase/services/profileService";
 import { useAppContext } from "@/context/AppContext";
 import { useRouter } from "next/navigation";
 import { usePathname } from "next/navigation";
+import { logGAEvent } from "@/firebase/googleAnalytics";
 
 const { default: SignInWithGoogle } = require("./SignInWithGoogle");
 
@@ -61,7 +62,11 @@ export const Navbar = () => {
       <Link style={{
         textDecoration: 'none',
         color: 'inherit'
-      }} href="/">
+      }}
+      onClick={() => {
+        logGAEvent('click_logo_navbar')
+      }}
+      href="/">
         <h3 style={{ marginLeft: "20px", fontWeight: "bold" }}> <BookOpen style={{
           marginBottom: '-6px'
         }} /> &nbsp;{currentBook ? currentBook.title : 'Reeda'}
@@ -85,7 +90,11 @@ export const Navbar = () => {
 
       <span style={{ display: "flex", alignItems: "center", gap: "15px" }}>
         {storage.getItem("user") && (
-            <div style={{
+            <div
+            onClick={() => {
+               logGAEvent('click_coins_navbar', {coins: profile?.coins});
+            }}
+            style={{
                 border: '1px solid '+ 'goldenrod',
                 borderRadius: '999px',
                 padding: '4px 14px',
@@ -118,7 +127,10 @@ export const Navbar = () => {
               color={"#555555"}
               size={25}
               style={{  cursor: "pointer", marginRight: "20px", display: currentBook ? 'none' : 'block' }}
-              onClick={() => setMenuOpen(true)}
+              onClick={() => {
+                setMenuOpen(true);
+                logGAEvent('click_options_navbar')
+              }}
             />
           )}
         </span>
@@ -154,7 +166,10 @@ export const Navbar = () => {
             <Link onClick={() => setMenuOpen(false)} href="/profile" style={{ color: "#333", textDecoration: "none" }}>Profile</Link>
           </li>
           {!isPremium && <li style={{ borderBottom: "1px solid #ddd", padding: '18px 0px' }}>
-            <Link onClick={() => setMenuOpen(false)} href="/premium" style={{ color: "#333", textDecoration: "none" }}>Upgrade to premium</Link>
+            <Link onClick={() => {
+              setMenuOpen(false);
+              logGAEvent('click_upgrade_to_premium_navbar');
+              }} href="/premium" style={{ color: "#333", textDecoration: "none" }}>Upgrade to premium</Link>
           </li>}
           {/* <li style={{ borderBottom: "1px solid #ddd", padding: '18px 0px' }}>
             <Link onClick={() => setMenuOpen(false)} href="/store" style={{ color: "#333", textDecoration: "none" }}>

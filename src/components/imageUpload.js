@@ -15,6 +15,7 @@ import { flag } from "@/assets";
 import NextImage from "next/image";
 import { secTextColor } from "@/configs/cssValues";
 import UploadingScanLoader from "./UploadingScanLoader";
+import { logGAEvent } from "@/firebase/googleAnalytics";
 
 export default function ImageUpload({ setBook, bookTitle, setData, setModalOpen, inResults }) {
   const [crop, setCrop] = useState({ x: 0, y: 0 });
@@ -194,7 +195,7 @@ export default function ImageUpload({ setBook, bookTitle, setData, setModalOpen,
             className={styles.fileInput}
           />
           <label htmlFor="file-upload" className={styles.fileInputLabel}>
-            <Camera size={32} color="white" />
+            <Camera onClick={() => { logGAEvent('click_scan_first_page_of_book') }} size={32} color="white" />
           </label>
         </div>
       </span>}
