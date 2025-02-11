@@ -14,7 +14,7 @@ const { default: SignInWithGoogle } = require("./SignInWithGoogle");
 
 export const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(null);
-  const { isPremium, profile, setProfile} = useAppContext();
+  const { isPremium, profile, setProfile, currentBook} = useAppContext();
 
   const router = useRouter();
 
@@ -64,7 +64,7 @@ export const Navbar = () => {
       }} href="/">
         <h3 style={{ marginLeft: "20px", fontWeight: "bold" }}> <BookOpen style={{
           marginBottom: '-6px'
-        }} /> &nbsp;Reeda 
+        }} /> &nbsp;{currentBook ? currentBook.title : 'Reeda'}
         <br/>   
       {
       isPremium ? <span style={{
@@ -95,7 +95,8 @@ export const Navbar = () => {
                 fontSize: '14px',
                 alignItems: 'center',
                 gap: '10px',
-                cursor: 'pointer'
+                cursor: 'pointer',
+                marginRight: currentBook ? '18px' : '0px'
             }}>
             <Badge
               count={profile?.coins || ' '}
@@ -116,7 +117,7 @@ export const Navbar = () => {
             <List
               color={"#555555"}
               size={25}
-              style={{  cursor: "pointer", marginRight: "20px" }}
+              style={{  cursor: "pointer", marginRight: "20px", display: currentBook ? 'none' : 'block' }}
               onClick={() => setMenuOpen(true)}
             />
           )}
@@ -173,6 +174,7 @@ export const Navbar = () => {
           </li>
         </ul>
       </div>
+      
     {/* Overlay when menu is open */}
     {menuOpen && (
         <div

@@ -12,6 +12,8 @@ export const AppProvider = ({ children }) => {
   const [profile, setProfile] = useState(null);
   const [nightModeOn, setNightModeOn] = useState(false);
 
+  const [currentBook, setCurrentBook] = useState(null);
+
   useEffect(() => {
     if(!profile && storage.getItem('user')){
         getProfile(JSON.parse(storage.getItem('user')).email).then(res => {
@@ -23,7 +25,10 @@ export const AppProvider = ({ children }) => {
   const [isPremium, setIsPremium] = useState(false);
 
   return (
-    <AppContext.Provider value={{ profile, setProfile, isPremium, setIsPremium, nightModeOn, setNightModeOn }}>
+    <AppContext.Provider value={{ profile, setProfile, isPremium, setIsPremium, nightModeOn, setNightModeOn,
+    currentBook,
+    setCurrentBook
+    }}>
       {children}
     </AppContext.Provider>
   );

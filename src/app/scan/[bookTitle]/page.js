@@ -8,6 +8,7 @@ import { getBookByTitleAndUserId } from "@/firebase/services/bookService";
 import { Book, BookOpen, Loader, MoveLeft } from "lucide-react";
 import Link from "next/link";
 import { priTextColor, secColor, secTextColor } from "@/configs/cssValues";
+import { useAppContext } from "@/context/AppContext";
 
 export default function ScanWithBookTitle() {
   const [data, setData] = useState(null);
@@ -19,6 +20,8 @@ export default function ScanWithBookTitle() {
 
   const title = decodeURIComponent(bookTitle);
 
+  const { setCurrentBook } = useAppContext();
+
   useEffect(() => {
     const loadData = async () => {
       await getLatestScanByBookTitleAndUserId(title).then((scan) => {
@@ -28,6 +31,7 @@ export default function ScanWithBookTitle() {
       });
       const getBook = async () => {
         const book = await getBookByTitleAndUserId(title);
+        setCurrentBook(book);
         setBook(book);
         setLoading(false);
       }
@@ -38,6 +42,11 @@ export default function ScanWithBookTitle() {
     setLoading(false);
 
     });
+
+    return () => {
+      // reset currentBook to null
+      setCurrentBook(null);
+    };
     
   }, []);
 
@@ -85,7 +94,7 @@ color: priTextColor
         
       </div>
 
-      <p style={{
+      {/* <p style={{
         fontSize: '14px',
         fontWeight: '500',
         color: priTextColor,
@@ -93,9 +102,8 @@ color: priTextColor
         display: 'inline-block',
         padding: '4px 12px'
       }}>
-        {/* Page {book?.pagesRead}  */}
         <span>&nbsp;&nbsp; {title.toUpperCase()}</span>
-      </p>
+      </p> */}
 </div>
 
       {
