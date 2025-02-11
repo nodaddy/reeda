@@ -20,6 +20,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <head>
+      <meta name="google" content="notranslate" />
       <link rel="preload" href="/_next/static/css/style.css" as="style" />
       </head>
        <link rel="manifest" href="/manifest.json" />
