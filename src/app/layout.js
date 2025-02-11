@@ -23,6 +23,7 @@ export default function RootLayout({ children }) {
       <link rel="preload" href="/_next/static/css/style.css" as="style" />
       </head>
        <link rel="manifest" href="/manifest.json" />
+       <link rel="icon" href="/favicon.ico" />
       <body className={`${font.className}`}>
         <AppProvider>
           <Navbar />
