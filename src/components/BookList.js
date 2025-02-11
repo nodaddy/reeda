@@ -351,9 +351,12 @@ const BookList = () => {
                     }}
                     href={'/scan/'+item.title}>
                     <BookOpen
-                        size={20}
+                        size={15}
                         style={{
-                          color: priTextColor,
+                          color: 'white',
+                          borderRadius: '4px',
+                          backgroundColor: secColor,
+                          padding: '5px'
                         }} />
                   </Link>
 
