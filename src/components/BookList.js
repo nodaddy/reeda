@@ -330,7 +330,6 @@ const BookList = () => {
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'flex-end',
-                        marginTop: '9px',
                         gap: '12px'
                       }}>
 
