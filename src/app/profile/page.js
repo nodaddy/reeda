@@ -1,10 +1,11 @@
 "use client";
 // pages/profile.js
 import { useEffect, useState } from 'react';
-import { Form, Input, Button, message } from 'antd';
+import { Form, Input, Button, message, Divider } from 'antd';
 import { getProfile, updateProfile, createProfile } from '../../firebase/services/profileService';
 import CustomButton from '@/components/CustomButton';
 import { storage } from '../utility';
+import { priTextColor } from '@/configs/cssValues';
 
 const ProfilePage = () => {
   const [form] = Form.useForm();
@@ -14,6 +15,7 @@ const ProfilePage = () => {
   const fetchProfile = async () => {
     try {
       setLoading(true);
+      const userId = JSON.parse(storage.getItem('user')).email;
 
       console.log(userId);
       let profileData;
@@ -88,8 +90,9 @@ const ProfilePage = () => {
   }, []);
 
   return (
-    <div style={{ maxWidth: 600, margin: '0 auto', padding: '24px' }}>
-      <h1>Profile</h1>
+    <div style={{ maxWidth: 600, margin: '0 auto', padding: '24px', color: priTextColor }}>
+      <h2>Profile</h2>
+      <Divider />
       <Form
         form={form}
         layout="vertical"
@@ -123,13 +126,13 @@ const ProfilePage = () => {
           <Input placeholder="Enter your email" disabled />
         </Form.Item>
 
-        <Form.Item
+        {/* <Form.Item
           label="Phone Number"
           name="phoneNumber"
           rules={[{ required: true, message: 'Please enter your phone number' }]}
         >
           <Input placeholder="Enter your phone number" />
-        </Form.Item>
+        </Form.Item> */}
 
         <Form.Item>
           <CustomButton type="primary" htmlType="submit" loading={loading}>

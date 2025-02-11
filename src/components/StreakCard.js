@@ -1,8 +1,8 @@
 import { storage } from '@/app/utility';
 import { priColor, priTextColor, secColor, secTextColor } from '@/configs/cssValues';
-import { Card, Button, Modal, Tooltip, Spin } from 'antd';
+import { Card, Button, Modal, Tooltip, Spin, Popover } from 'antd';
 import { time } from 'framer-motion';
-import { Flame, Clock, Loader, GraduationCap } from 'lucide-react';
+import { Flame, Clock, Loader, GraduationCap, HelpCircle } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { Sun, Moon } from 'lucide-react';
 
@@ -167,7 +167,16 @@ if (currentHour >= 5 && currentHour < 12) {
     borderRadius: '11px'
         }}
         >
-          <Flame color={isActive ? '#fa541c' : '#bfbfbf'} size={30} />
+          <Flame color={isActive ? '#fa541c' : '#bfbfbf'} size={35} /> 
+          <Popover placement='bottomLeft' content={<div style={{fontSize: '13px', fontWeight: '400', color: 'grey'}}>
+            {/* {`Your longest streak - ${streak?.longestStreak} ${streak?.longestStreak > 1 ? 'Days' : 'Day'}`} */}
+            Scan at least one page daily <br/> to continue your streak.
+            </div>}>
+            <HelpCircle style={{
+              color: priTextColor
+            }} size={13} />
+          </Popover>
+
           <h4 style={{ margin: 0, color: isActive ? '#fa541c' : '#8c8c8c', fontWeight: '400', fontSize: '15px' }}>
               {isActive ? <>On Streak <br/>{`${isActive ? streak?.days : 0} ${streak?.days > 1 ? 'Days' : 'Day'}`}</> 
               : 

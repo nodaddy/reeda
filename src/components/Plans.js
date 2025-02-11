@@ -67,7 +67,7 @@ const Plans = () => {
 <br/>
 <br/>
 
-        <div align="center">
+        <div align="center" style={{width: '74%', margin: 'auto'}}>
             {
                 plans.map((plan) => (
                     <div key={plan.id} style={{marginBottom: '15px'}}>
@@ -83,7 +83,7 @@ const Plans = () => {
                             alignItems: 'center',
                             // backgroundColor: priColor,
                             background: 'linear-gradient(135deg, #0070F3 0%, #4D9BFF 100%)',
-                            padding: '14px 25px',
+                            padding: '13px 25px',
                             width: '77%',
                             fontSize: '16px',
                             borderRadius: '8px',

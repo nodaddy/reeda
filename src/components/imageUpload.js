@@ -11,6 +11,10 @@ import { addCoinsPerScan, scanPageRatio, streakMaintenanceIntervalInSeconds } fr
 import { storage } from "@/app/utility";
 import { getPageSummaryFromImage, getSimplifiedLanguage } from "@/openAI";
 import { useAppContext } from "@/context/AppContext";
+import { flag } from "@/assets";
+import NextImage from "next/image";
+import { secTextColor } from "@/configs/cssValues";
+import UploadingScanLoader from "./UploadingScanLoader";
 
 export default function ImageUpload({ setBook, bookTitle, setData, setModalOpen, inResults }) {
   const [crop, setCrop] = useState({ x: 0, y: 0 });
@@ -135,7 +139,7 @@ export default function ImageUpload({ setBook, bookTitle, setData, setModalOpen,
   return (
     <div align="center">
       <Modal
-        title="Crop Image"
+        title="Crop and Upload Image"
         style={{ padding: "30px", borderRadius: "20px" }}
         okText={uploadingImage ? <Loader size={10} className="loader" /> : "Upload"}
         open={showCropper}
@@ -150,7 +154,9 @@ export default function ImageUpload({ setBook, bookTitle, setData, setModalOpen,
         }}
       >
         <div>
-          {uploadingImage ? <div style={{ height: '50vh' }}>animation</div> : <div>
+          {uploadingImage ? <div style={{ height: '50vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+            <UploadingScanLoader />
+          </div> : <div>
             <Cropper
               image={imageSrc}
               crop={crop}
@@ -162,12 +168,22 @@ export default function ImageUpload({ setBook, bookTitle, setData, setModalOpen,
             />
           </div>}
         </div>
-      </Modal>
-      <br />
-      <br />
-      <br />
+      </Modal> 
       {!showCropper && <span>
-        <span>Snap a page from {bookTitle}!</span>
+        <span style={{
+          fontFamily: "'Inter', sans-serif",
+          color: secTextColor
+        }}>
+          <NextImage src={flag} style={{
+            width: '40%',
+            height: 'auto'
+          }} /> 
+          <br/>
+          <br/>
+          <br/>
+          Snap a page from {bookTitle}!
+          <br/> and start reading!
+          </span>
         <div className={styles.fileInputContainer}>
           <input
             id="file-upload"

@@ -15,6 +15,7 @@ import { getPageSummaryFromImage, getSimplifiedLanguage } from "@/openAI";
 import TextWithIntegratedDictionary from "./TextWithIntegratedDictionary";
 import { useAppContext } from "@/context/AppContext";
 import NightModeButton from "./NightModeButton";
+import UploadingScanLoader from "./UploadingScanLoader";
 
 export default function ScanResults({ setBook, scans }) {
   console.log(scans);
@@ -263,7 +264,7 @@ export default function ScanResults({ setBook, scans }) {
 
       {/* Modal for cropping */}
       <Modal
-        title="Crop Image"
+        title="Crop and Upload Image"
         style={{ padding: "30px", borderRadius: "20px" }}
         okText={uploadingImage ? <Loader size={10} className="loader" /> : "Upload"}
         open={showCropper}
@@ -272,7 +273,9 @@ export default function ScanResults({ setBook, scans }) {
         onClose={() => setShowCropper(false)}
       >
         <div>
-          {uploadingImage ? <div style={{height: '50vh'}}>animation</div>:<div> 
+        {uploadingImage ? <div style={{ height: '50vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+            <UploadingScanLoader />
+          </div>:<div> 
             <Cropper
               image={imageSrc}
               crop={crop}

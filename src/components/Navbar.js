@@ -58,10 +58,13 @@ export const Navbar = () => {
       }}
     >
      
-      <span>
+      <Link style={{
+        textDecoration: 'none',
+        color: 'inherit'
+      }} href="/">
         <h3 style={{ marginLeft: "20px", fontWeight: "bold" }}> <BookOpen style={{
           marginBottom: '-6px'
-        }} /> Reeda 
+        }} /> &nbsp;Reeda 
         <br/>   
       {
       isPremium ? <span style={{
@@ -78,7 +81,7 @@ export const Navbar = () => {
       :
       ''
     }</h3>
-      </span>
+      </Link>
 
       <span style={{ display: "flex", alignItems: "center", gap: "15px" }}>
         {storage.getItem("user") && (
@@ -142,7 +145,9 @@ export const Navbar = () => {
           onClick={() => setMenuOpen(false)}
         />
 
-        <h3 style={{ padding: "7px 20px", fontSize: "19px", color: "#333", fontWeight: "500" }}>Menu</h3>
+        <h4 style={{ padding: "0px 20px", fontSize: "19px", color: "#333", fontWeight: "500" }}>
+          Menu
+        </h4>
         <ul style={{ listStyle: "none", padding: "20px", margin: "20px 0" }}>
           <li style={{ borderBottom: "1px solid #ddd", padding: '18px 0px' }}>
             <Link onClick={() => setMenuOpen(false)} href="/profile" style={{ color: "#333", textDecoration: "none" }}>Profile</Link>
@@ -150,15 +155,15 @@ export const Navbar = () => {
           {!isPremium && <li style={{ borderBottom: "1px solid #ddd", padding: '18px 0px' }}>
             <Link onClick={() => setMenuOpen(false)} href="/premium" style={{ color: "#333", textDecoration: "none" }}>Upgrade to premium</Link>
           </li>}
-          <li style={{ borderBottom: "1px solid #ddd", padding: '18px 0px' }}>
+          {/* <li style={{ borderBottom: "1px solid #ddd", padding: '18px 0px' }}>
             <Link onClick={() => setMenuOpen(false)} href="/store" style={{ color: "#333", textDecoration: "none" }}>
               The Reeda Store
-              {/* for permium users */}
+              
             </Link>
-          </li>
-          <li style={{ borderBottom: "1px solid #ddd", padding: '18px 0px' }}>
+          </li> */}
+          {/* <li style={{ borderBottom: "1px solid #ddd", padding: '18px 0px' }}>
             <Link onClick={() => setMenuOpen(false)} href="/settings" style={{ color: "#333", textDecoration: "none" }}>Settings</Link>
-          </li>
+          </li> */}
           <li style={{  padding: '18px 0px' }}>
             <span onClick={() => {
               storage.removeItem("user");

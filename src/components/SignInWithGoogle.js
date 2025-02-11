@@ -37,7 +37,7 @@ const SignInWithGoogle = ({router}) => {
         // Create a new profile if one doesn't exist
         await createProfile(userId, {
           streak: {days: 0, lastPageScanTimestamp: Date.now()},
-          coins: 0
+          coins: 10
         });
       }
 

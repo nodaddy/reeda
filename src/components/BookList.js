@@ -173,6 +173,7 @@ const BookList = () => {
     position: 'relative',
     borderRadius: '15px',
     overflowY: 'scroll',
+    overflowX: 'hidden',
     // background: 'linear-gradient(to bottom, #fafafa, #fafafa, #fafafa, #fafafa, #fafafa, white)'
     backgroundColor: 'white'
     }}>
@@ -181,7 +182,7 @@ const BookList = () => {
         width: '100%',
         top: '0px',
         zIndex: '2',
-        paddingLeft: '7px',
+        paddingLeft: '4px',
         backgroundColor: 'white'
         // backgroundColor: '#fafafa',
       }}>
@@ -316,7 +317,7 @@ const BookList = () => {
                       flexDirection: 'column',
                     }}>
                     
-                      {item.pagesRead} reads
+                      {/* {item.pagesRead} reads */}
 
                       <span style={{
                         display: 'flex',
@@ -441,7 +442,7 @@ const BookList = () => {
                                   onClick={() => {
                                     setOpenPopOver(item.title == openPopOver ? null : item.title);
                                   }}
-                                  style={{ marginRight: "-5px", cursor: "pointer", color: item.title == openPopOver ? priColor  : ''}} 
+                                  style={{ marginRight: "-18px", cursor: "pointer", color: item.title == openPopOver ? priColor  : ''}} 
                                 />
                               </Popover>
                                 
