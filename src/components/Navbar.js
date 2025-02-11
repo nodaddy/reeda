@@ -162,9 +162,9 @@ export const Navbar = () => {
           Menu
         </h4>
         <ul style={{ listStyle: "none", padding: "20px", margin: "20px 0" }}>
-          <li style={{ borderBottom: "1px solid #ddd", padding: '18px 0px' }}>
+          {/* <li style={{ borderBottom: "1px solid #ddd", padding: '18px 0px' }}>
             <Link onClick={() => setMenuOpen(false)} href="/profile" style={{ color: "#333", textDecoration: "none" }}>Profile</Link>
-          </li>
+          </li> */}
           {!isPremium && <li style={{ borderBottom: "1px solid #ddd", padding: '18px 0px' }}>
             <Link onClick={() => {
               setMenuOpen(false);

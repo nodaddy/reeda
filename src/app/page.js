@@ -35,7 +35,7 @@ const Home = () => {
   async function setDailyAlarm() {
     if ("alarms" in navigator) {
         const alarmTime = new Date();
-        alarmTime.setHours(22, 0, 0, 0); // Set to 9:00 PM
+        alarmTime.setHours(23, 0, 0, 0); // Set to 9:00 PM
         await navigator.alarms.set("dailyReminder", {
             when: alarmTime.getTime(),
             periodInMinutes: 1440, // Repeat every 24 hours
