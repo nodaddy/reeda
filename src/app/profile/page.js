@@ -1,11 +1,15 @@
 "use client";
 // pages/profile.js
 import { useEffect, useState } from 'react';
-import { Form, Input, Button, message, Divider } from 'antd';
+import { Form, Input, Button, message, Divider, Popconfirm } from 'antd';
 import { getProfile, updateProfile, createProfile } from '../../firebase/services/profileService';
 import CustomButton from '@/components/CustomButton';
 import { storage } from '../utility';
 import { priTextColor } from '@/configs/cssValues';
+import { handleDeleteAccount } from '@/firebase';
+import { MoveLeft } from 'lucide-react';
+import Link from 'next/link';
+import ReadingMetricsCard from '@/components/ReadingMetricsCard';
 
 const ProfilePage = () => {
   const [form] = Form.useForm();
@@ -89,7 +93,54 @@ const ProfilePage = () => {
     fetchProfile();
   }, []);
 
-  return (
+  return ( true ? 
+    <div
+    style={{
+      padding: '30px',
+      height: '70vw',
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center',
+    }}
+    >
+      {
+        storage.getItem('user') ? 
+<>
+      <>Hi! {JSON.parse(storage.getItem('user')).displayName}</>
+      {/* delete account button */}
+      <br/>
+      <ReadingMetricsCard />
+      <br/>
+      <Popconfirm
+        title="Are you sure you want to delete your account?"
+        onConfirm={handleDeleteAccount}
+        placement='topLeft'
+      >
+      <Button
+      style={{
+        position: 'absolute',
+        bottom: '20px',
+        right: '10px'
+      }}
+      onClick={() => {
+
+        }} type={'danger'}>
+          Delete my account
+        </Button>
+ 
+      </Popconfirm>
+      </>
+      :
+      <Link style={{
+        display: 'flex',
+        alignItems: 'center',
+        textDecoration: 'none'
+      }} href={'/'}> <MoveLeft />&nbsp;&nbsp;&nbsp;Home</Link>
+      }
+      
+      
+    </div>
+    :
     <div style={{ maxWidth: 600, margin: '0 auto', padding: '24px', color: priTextColor }}>
       <h2>Profile</h2>
       <Divider />

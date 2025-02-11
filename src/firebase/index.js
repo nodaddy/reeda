@@ -3,6 +3,7 @@ import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider} from "firebase/auth";
 import { getAnalytics } from "firebase/analytics";
 import { getFirestore } from "firebase/firestore";
+import { storage } from "@/app/utility";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -29,9 +30,31 @@ const auth = getAuth();
 const googleAuthProvider = new GoogleAuthProvider();
 const db = getFirestore(app);
 
+const handleDeleteAccount = async () => {
+  const user = auth.currentUser;
+
+  if (user) {
+    try {
+      await user.delete();
+      alert("Your account has been deleted successfully.");
+      storage.removeItem('user');
+      window.location.reload();
+      // Redirect user or show confirmation message
+    } catch (error) {
+      console.error("Error deleting account:", error.message);
+      if (error.code === "auth/requires-recent-login") {
+        alert("This action requires recent login. Please log out and try agian by loggin in again");
+        // Trigger reauthentication here
+      }
+    }
+  }
+};
+
+
 export {
     auth,
     db,
     googleAuthProvider,
-    analytics
+    analytics,
+    handleDeleteAccount
 }

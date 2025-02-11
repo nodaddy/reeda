@@ -34,30 +34,16 @@ useEffect(() => {
         alignItems: 'flex-start',
         paddingBottom: '30px'
       }}
-      bodyStyle={{padding: '0px 20px'}}
+      bodyStyle={{padding: '0px 0px'}}
     >
 
-            <div
-              style={{
-                boxShadow: '0px 0px 8px rgba(0, 0, 0, 0.15)',
-                padding: '18px',
-                borderRadius: '50%',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                position: 'fixed',
-                bottom: '115px',
-                right: '40px'
-              }}
-            >
-              <Share2 size={32} color={secColor} />
-            </div>
+         
 
      <Title level={4} style={{ marginBottom: '10px', fontWeight: '300', borderBottom: '0px solid #ccc', paddingBottom: '16px',
         display: 'flex',
         alignItems: 'center',
      }}>
-        My Reading Stats
+        Your Reading Stats
       </Title> 
 
       <Row gutter={[16, 16]} style={{ width: '100%' }} justify="space-between">
