@@ -13,6 +13,8 @@ export async function initiatePurchaseFlow(itemIdsArray) {
             alert(`purchaseToken: ${purchaseToken}`);
             await paymentResponse.complete();
             alert('payment response.complete');
+            alert(getPurchaseType(itemId));
+
             await service.acknowledge(purchaseToken, getPurchaseType(itemId));
             alert(getPurchaseType(itemId));
             alert('acknowledged');
