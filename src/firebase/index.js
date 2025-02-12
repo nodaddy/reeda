@@ -3,7 +3,7 @@ import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider} from "firebase/auth";
 import { getAnalytics } from "firebase/analytics";
 import { getFirestore } from "firebase/firestore";
-import { getMessaging, getToken } from "firebase/messaging";
+import { getMessaging, getToken, isSupported } from "firebase/messaging";
 import { storage } from "@/app/utility";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -34,8 +34,11 @@ if (typeof window !== "undefined") {
 const auth = getAuth();
 const googleAuthProvider = new GoogleAuthProvider();
 const db = getFirestore(app);
+const messaging = null;
 
-const messaging = getMessaging();
+if (typeof window !== "undefined" && (await isSupported())) {
+  messaging = getMessaging(app);
+}
 
 getToken(messaging, { vapidKey: process.env.NEXT_PUBLIC_FIREBASE_VAPID_KEY }).then((currentToken) => {
   if (currentToken) {
