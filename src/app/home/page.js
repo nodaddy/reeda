@@ -12,10 +12,11 @@ import { storage } from '@/app/utility';
 import { isUserPremium } from '@/payments/playstoreBilling';
 import { useAppContext } from '@/context/AppContext';
 import { priTextColor } from '@/configs/cssValues';
-import { BookCopy, BookOpen } from 'lucide-react';
+import { BookCopy, BookOpen, Info } from 'lucide-react';
 import { scaninghands } from '@/assets';
 import Image from 'next/image';
 import { streakMaintenanceIntervalInSeconds } from '@/configs/variables';
+import Link from 'next/link';
 
 
 const { Title } = Typography;
@@ -83,7 +84,17 @@ const Home = () => {
     <div style={{
       overflow: 'auto',
     }}>
+     
       <StreakCard isPremium={false} streak={profile?.streak} isActive={lastPageScanDifference < streakMaintenanceIntervalInSeconds*2} /> 
+      {!isPremium && <Alert style={{
+        padding: '15px 20px',
+        width: '93%',
+        margin: 'auto'
+      }} message={<> <Info size={13} /> You are using the free version.
+      You can add 1 book and can scan upto 5 pages.
+      <br/>
+      Click <Link href="/premium">here</Link> to unlock Reeda premium.
+      </>} type="warning" />}
      <Divider />
      <br/>
       <BookList />
