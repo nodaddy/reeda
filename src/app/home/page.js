@@ -86,7 +86,7 @@ const Home = () => {
     }}>
      
       <StreakCard isPremium={false} streak={profile?.streak} isActive={lastPageScanDifference < streakMaintenanceIntervalInSeconds*2} /> 
-      {isPremium && <Alert style={{
+      {!isPremium && <Alert style={{
         padding: '15px 20px',
         width: '93%',
         margin: 'auto'
