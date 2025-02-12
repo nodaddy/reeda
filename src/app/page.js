@@ -226,36 +226,17 @@ style={{height: 'auto', display: 'flex', alignItems: 'center', flexDirection: 'c
 
       </div>
 
- 
-      <br/>
-      <br/>
-      <br/>
-      <br/>
-      <br/>
-      <br/>
-      <br/>
-      <br/>
-      <br/>
-      <br/>
-      <br/>
-      <br/>
-      <br/>
-      <br/>
-      <br/>
-      <br/>
-      <br/>
-      <br/>
-      <br/>
-      <br/>
-      <br/>
-
+ <br/>
+ <br/>
+ <br/>
+   
+{/* 
       <Image src={scaninghands} alt=" " style={{
         width: '100vw',
-        position : 'fixed',
         bottom: '0px',
         left: '0px',
         height: 'auto',
-      }} />
+      }} /> */}
 
         </div>
       </div> 
