@@ -14,7 +14,7 @@ export async function initiatePurchaseFlow(itemIdsArray) {
             await paymentResponse.complete();
             alert('payment response.complete');
 
-            await service.acknowledge(purchaseToken, 'onetime');
+            await service.acknowledge(purchaseToken, 'inapp');
             alert('acknowledged');
             window.location.reload();
         } catch (error) {
