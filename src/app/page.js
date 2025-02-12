@@ -4,14 +4,14 @@
 import { useEffect, useState } from 'react';
 import SignInWithGoogle from '@/components/SignInWithGoogle';
 import { useRouter } from 'next/navigation';
-import { Alert, Typography } from 'antd';
+import { Alert, Divider, Popover, Typography } from 'antd';
 import BookList from '@/components/BookList';
 import { getProfile, updateProfile } from '@/firebase/services/profileService';
 import { storage } from './utility';
 import { isUserPremium } from '@/payments/playstoreBilling';
 import { useAppContext } from '@/context/AppContext';
-import { priTextColor } from '@/configs/cssValues';
-import { BookCopy, BookOpen, CheckCircle } from 'lucide-react';
+import { priColor, priTextColor, secTextColor } from '@/configs/cssValues';
+import { BookCopy, BookOpen, CheckCircle, Clock, HelpCircle, Info, Pointer, Store } from 'lucide-react';
 import { bookshelf, dic, recap, scaninghands } from '@/assets';
 import Image from 'next/image';
 
@@ -119,24 +119,158 @@ const Home = () => {
       }}>
         <BookOpen size={35} /> &nbsp; Reeda
         </Title>
-        <Title level={4} style={{textAlign: 'left', marginTop: '-5px', marginBottom: '20px', color: priTextColor, fontWeight: '300', 
+        <Title level={5} style={{textAlign: 'left', marginTop: '-5px', marginBottom: '20px', color: priTextColor, fontWeight: '300', 
       display: 'flex',
       
       }}>
-           Take your reading productivity to the next level!
-           One page at a time
+           Take your reading productivity to the next level! One page at a time.
+           
         </Title>   
         <br/>
+      <Divider />
+
         <br/>
       <SignInWithGoogle router={router} /> 
 
-        <div> 
+      <div> 
       <br/>
+      <Divider />
+
+
       <br/>
-      <br/>
-      <br/>
-      <div style={{
+
+     <Title level={4} style={{ padding: '0px', color: priTextColor,
+        fontWeight: '300',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center'
+      }}>
+         &nbsp; Revolutionizing<br/> Reading Experiences <br/>
+          
+      </Title> 
+      <br/> 
+
+
+      <div 
+      style={{
+        width: '100vw',
+        marginLeft: '-40px',
+        padding: '45px 0px'
+      }}
+      >
+
+<div style={{
         display: 'flex',
+        justifyContent: 'space-around',
+      }}>
+
+
+ <Image src={dic} alt=" " style={{
+        width: '50%',
+        height: 'auto',
+      }} />
+
+
+<div align="center"
+style={{height: 'auto', display: 'flex', alignItems: 'center', flexDirection: 'column', justifyContent: 'center'}}
+>
+      <Title level={4} style={{ paddingRight: '10px', color: priTextColor,
+        fontWeight: '300',
+      display: 'flex',
+      alignItems: 'flex-end',
+      }}>
+         In-Page 
+         <br/>
+         Dictionary&nbsp; 
+         <Popover 
+        placement='topRight'
+        title="In-Page Dictionary"
+        content={
+          <div style={{display: 'flex', flexDirection: 'column'}}>
+            <span style={{display: 'flex', alignItems: 'center'}}>
+              <Pointer size={20} /> &nbsp; Tap on words for meanings
+            </span>
+            <span style={{display: 'flex', alignItems: 'center'}}>
+              <CheckCircle size={20} /> &nbsp; AI Powered context
+            </span>
+            {/* <span style={{display: 'flex', alignItems: 'center'}}>
+              <HelpCircle size={20} /> &nbsp; 
+            </span> */}
+          </div>
+        }
+        >
+         <Info style={{color: priColor}} size={18} />
+        </Popover>
+        </Title>
+</div>
+
+
+
+      </div>
+
+      <br/>
+<br/>
+<br/>
+<br/>
+
+
+
+<div style={{
+        display: 'flex',
+        justifyContent: 'space-around',
+      }}>
+
+
+<div align="center"
+style={{height: 'auto', display: 'flex', alignItems: 'center', flexDirection: 'column', justifyContent: 'center'}}
+>
+      <Title level={4} style={{ paddingLeft: '10px', color: priTextColor,
+        fontWeight: '300',
+      display: 'flex',
+      alignItems: 'center',
+      }}>
+         Recap &nbsp; 
+         <Popover 
+        placement='topLeft'
+        title="Recap"
+        content={
+          <div style={{display: 'flex', flexDirection: 'column'}}>
+            <span style={{display: 'flex', alignItems: 'center'}}>
+              <Clock size={20} /> &nbsp; Picking a book after a break?
+            </span>
+            <span style={{display: 'flex', alignItems: 'center'}}>
+              <CheckCircle size={20} /> &nbsp; Get recap of what you've read thus far
+            </span>
+            {/* <span style={{display: 'flex', alignItems: 'center'}}>
+              <HelpCircle size={20} /> &nbsp; 
+            </span> */}
+          </div>
+        }
+        >
+         <Info style={{color: priColor}} size={18} />
+         </Popover>
+        </Title>
+</div>
+
+
+
+<Image src={recap} alt=" " style={{
+        width: '40%',
+        height: 'auto',
+      }} />
+
+      </div>
+  
+
+
+<br/>
+<br/>
+<br/>
+<br/>
+
+<div style={{
+        display: 'flex',
+       
         justifyContent: 'space-around',
       }}>
 <Image src={bookshelf} alt=" " style={{
@@ -147,84 +281,39 @@ const Home = () => {
 <div align="center"
 style={{height: 'auto', display: 'flex', alignItems: 'center', flexDirection: 'column', justifyContent: 'center'}}
 >
-      <Title level={4} style={{ padding: '0px', color: priTextColor,
+      <Title level={4} style={{ paddingRight: '10px', color: priTextColor,
         fontWeight: '300',
       display: 'flex',
-      alignItems: 'flex-end',
+      alignItems: 'center'
       }}>
-        Bookshelf
-        </Title>
+        Bookshelf &nbsp; 
+        <Popover 
+        placement='topLeft'
+        title="Bookshelf"
+        content={
+          <div style={{display: 'flex', flexDirection: 'column'}}>
+            <span style={{display: 'flex', alignItems: 'center'}}>
+              <BookCopy size={20} /> &nbsp; Add multiple books
+            </span>
+            <span style={{display: 'flex', alignItems: 'center'}}>
+              <CheckCircle size={20} /> &nbsp; Track Progress
+            </span>
+            {/* <span style={{display: 'flex', alignItems: 'center'}}>
+              <HelpCircle size={20} /> &nbsp; 
+            </span> */}
+          </div>
+        }
+        >
+          <Info style={{color: priColor}} size={18} />
+        </Popover>
+        </Title> 
 </div>
 
       </div>
 
 
-<br/>
-<br/>
-<br/>
-<br/>
-
-
-      <div style={{
-        display: 'flex',
-        justifyContent: 'space-around',
-      }}>
-
-<div align="center"
-style={{height: 'auto', display: 'flex', alignItems: 'center', flexDirection: 'column', justifyContent: 'center'}}
->
-      <Title level={4} style={{ padding: '0px', color: priTextColor,
-        fontWeight: '300',
-      display: 'flex',
-      alignItems: 'flex-end',
-      }}>
-         In-Page 
-         <br/>
-         Dictionary
-        </Title>
-</div>
-
-
- <Image src={dic} alt=" " style={{
-        width: '50%',
-        height: 'auto',
-      }} />
-
-
       </div>
 
-      <br/>
-<br/>
-<br/>
-<br/>
-
-
-      <div style={{
-        display: 'flex',
-        justifyContent: 'space-around',
-      }}>
-
-<Image src={recap} alt=" " style={{
-        width: '40%',
-        height: 'auto',
-      }} />
-
-<div align="center"
-style={{height: 'auto', display: 'flex', alignItems: 'center', flexDirection: 'column', justifyContent: 'center'}}
->
-      <Title level={4} style={{ padding: '0px', color: priTextColor,
-        fontWeight: '300',
-      display: 'flex',
-      alignItems: 'flex-end',
-      }}>
-         Recap
-        </Title>
-</div>
-
-
-
-
-      </div>
 
  <br/>
  <br/>
