@@ -147,12 +147,12 @@ const Home = () => {
       </Title> 
       <br/> 
 
-
+<Divider />
       <div 
       style={{
         width: '100vw',
         marginLeft: '-40px',
-        padding: '45px 0px'
+        padding: '10px 0px'
       }}
       >
 
@@ -171,15 +171,17 @@ const Home = () => {
 <div align="center"
 style={{height: 'auto', display: 'flex', alignItems: 'center', flexDirection: 'column', justifyContent: 'center'}}
 >
-      <Title level={4} style={{ paddingRight: '10px', color: priTextColor,
+<Title level={4} style={{ paddingRight: '10px', color: priTextColor,
         fontWeight: '300',
       display: 'flex',
-      alignItems: 'center'
+      alignItems: 'flex-end',
       }}>
-        Bookshelf &nbsp; 
-        <Popover 
-        placement='topLeft'
-        title="Bookshelf"
+         Digital
+         <br/>
+         Bookshelf&nbsp; 
+         <Popover 
+        placement='topRight'
+        title="In-Page Dictionary"
         content={
           <div style={{display: 'flex', flexDirection: 'column'}}>
             <span style={{display: 'flex', alignItems: 'center'}}>
@@ -194,9 +196,12 @@ style={{height: 'auto', display: 'flex', alignItems: 'center', flexDirection: 'c
           </div>
         }
         >
-          <Info style={{color: priColor}} size={18} />
+         <Info style={{color: priColor,
+          transform: 'translateY(-4px)',
+        
+        }} size={18} />
         </Popover>
-        </Title> 
+        </Title>
 </div>
 
       </div>
@@ -205,11 +210,7 @@ style={{height: 'auto', display: 'flex', alignItems: 'center', flexDirection: 'c
 
 
 
-      <br/>
-<br/>
-<br/>
-<br/>
-
+      <Divider />
 
 
 <div style={{
@@ -244,7 +245,9 @@ style={{height: 'auto', display: 'flex', alignItems: 'center', flexDirection: 'c
           </div>
         }
         >
-         <Info style={{color: priColor}} size={18} />
+         <Info style={{color: priColor ,
+         transform: 'translate(-3px, 2px)',
+        }} size={18} />
          </Popover>
         </Title>
 </div>
@@ -260,10 +263,7 @@ style={{height: 'auto', display: 'flex', alignItems: 'center', flexDirection: 'c
   
 
 
-<br/>
-<br/>
-<br/>
-<br/>
+      <Divider />
 
 
 <div style={{
@@ -323,9 +323,8 @@ style={{height: 'auto', display: 'flex', alignItems: 'center', flexDirection: 'c
       </div>
 
 
- <br/>
- <br/>
- <br/>
+      <Divider />
+
    
 {/* 
       <Image src={scaninghands} alt=" " style={{
