@@ -3,6 +3,7 @@ import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider} from "firebase/auth";
 import { getAnalytics } from "firebase/analytics";
 import { getFirestore } from "firebase/firestore";
+import { getMessaging, getToken } from "firebase/messaging";
 import { storage } from "@/app/utility";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -19,6 +20,10 @@ const firebaseConfig = {
   measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
 };
 
+
+
+
+
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 let analytics;
@@ -29,6 +34,22 @@ if (typeof window !== "undefined") {
 const auth = getAuth();
 const googleAuthProvider = new GoogleAuthProvider();
 const db = getFirestore(app);
+
+const messaging = getMessaging();
+
+getToken(messaging, { vapidKey: process.env.NEXT_PUBLIC_FIREBASE_VAPID_KEY }).then((currentToken) => {
+  if (currentToken) {
+    // Send the token to your server and update the UI if necessary
+    // ...
+  } else {
+    // Show permission request UI
+    console.log('No registration token available. Request permission to generate one.');
+    // ...
+  }
+}).catch((err) => {
+  console.log('An error occurred while retrieving token. ', err);
+  // ...
+});
 
 const handleDeleteAccount = async () => {
   const user = auth.currentUser;
@@ -56,5 +77,7 @@ export {
     db,
     googleAuthProvider,
     analytics,
-    handleDeleteAccount
+    handleDeleteAccount,
+    messaging,
+    firebaseConfig
 }
