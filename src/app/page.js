@@ -12,7 +12,7 @@ import { isUserPremium } from '@/payments/playstoreBilling';
 import { useAppContext } from '@/context/AppContext';
 import { priTextColor } from '@/configs/cssValues';
 import { BookCopy, BookOpen } from 'lucide-react';
-import { scaninghands } from '@/assets';
+import { bookshelf, dic, recap, scaninghands } from '@/assets';
 import Image from 'next/image';
 
 
@@ -107,13 +107,10 @@ const Home = () => {
     <div
     align="center"
     style={{
-      marginTop: '-10px'
+      margin: '-20px 30px',
     }}>
       <div
       style={{
-        width: '76%',
-        borderRadius: '16px',
-        padding: '0px 40px'
       }}>
         <Title level={2} style={{ padding: '0px', color: priTextColor,
         fontWeight: '300',
@@ -130,19 +127,25 @@ const Home = () => {
            One page at a time
         </Title>   
         <br/>
+      <SignInWithGoogle router={router} /> 
+
         <div> 
       <br/>
       <br/>
-      <Image src={scaninghands} alt=" " style={{
-        width: '100vw',
-        position: 'absolute',
-        bottom: '0px',
+      <Image src={dic} alt=" " style={{
+        width: '80%',
         height: 'auto',
-        left: '0px'
       }} />
       <br/>
+      <Image src={recap} alt=" " style={{
+        width: '80%',
+        height: 'auto',
+      }} />
+      <Image src={bookshelf} alt=" " style={{
+        width: '80%',
+        height: 'auto',
+      }} />
       <br/>
-      <SignInWithGoogle router={router} /> 
         </div>
       </div> 
     </div>
