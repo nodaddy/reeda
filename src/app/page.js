@@ -123,7 +123,7 @@ const Home = () => {
       display: 'flex',
       
       }}>
-           Take your reading productivity to the next level! One page at a time.
+           Take your reading productivity to the next level with AI. One page at a time.
            
         </Title>   
         <br/>
@@ -199,7 +199,10 @@ style={{height: 'auto', display: 'flex', alignItems: 'center', flexDirection: 'c
           </div>
         }
         >
-         <Info style={{color: priColor}} size={18} />
+         <Info style={{color: priColor,
+          transform: 'translateY(-3px)',
+        
+        }} size={18} />
         </Popover>
         </Title>
 </div>
