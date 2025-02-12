@@ -52,9 +52,9 @@ async function subscribeUser(token, topic) {
   alert(JSON.stringify(data));
 }
 
+if(typeof navigator !== "undefined") {
 getToken(messaging, { vapidKey: process.env.NEXT_PUBLIC_FIREBASE_VAPID_KEY }).then((currentToken) => {
   if (currentToken) {
-  alert(currentToken);
     subscribeUser(currentToken, dailyReminderTopic);
     
   } else {
@@ -66,6 +66,7 @@ getToken(messaging, { vapidKey: process.env.NEXT_PUBLIC_FIREBASE_VAPID_KEY }).th
   console.log('An error occurred while retrieving token. ', err);
   // ...
 });
+}
 
 const handleDeleteAccount = async () => {
   const user = auth.currentUser;
