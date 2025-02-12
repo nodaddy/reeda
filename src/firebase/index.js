@@ -34,7 +34,7 @@ if (typeof window !== "undefined") {
 const auth = getAuth();
 const googleAuthProvider = new GoogleAuthProvider();
 const db = getFirestore(app);
-const messaging = null;
+let messaging = null;
 
 if (typeof window !== "undefined" && (await isSupported())) {
   messaging = getMessaging(app);
