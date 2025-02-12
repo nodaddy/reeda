@@ -167,7 +167,7 @@ const Home = () => {
         justifyContent: 'space-around',
       }}>
 <Image src={bookshelf} alt=" " style={{
-        width: '45%',
+        width: '41%',
         height: 'auto',
       }} />
 
@@ -255,7 +255,7 @@ style={{height: 'auto', display: 'flex', alignItems: 'center', flexDirection: 'c
 
 
 <Image src={recap} alt=" " style={{
-        width: '45%',
+        width: '42%',
         height: 'auto',
       }} />
 
@@ -276,7 +276,7 @@ style={{height: 'auto', display: 'flex', alignItems: 'center', flexDirection: 'c
 
 
  <Image src={dic} alt=" " style={{
-        width: '50%',
+        width: '45%',
         height: 'auto',
       }} />
 
