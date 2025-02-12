@@ -72,14 +72,14 @@ export const Navbar = () => {
         }} /> &nbsp;{currentBook ? currentBook.title.substring(0, 16) + (currentBook.title.length > 16 ? '...' : '') : 'Reeda'}
         <br/>   
       {
-      isPremium ? <span style={{
+      !isPremium ? <span style={{
         padding: '3px 15px',
         fontSize: 'x-small',
         backgroundColor: 'transparent',
         color: '#fa541c',
         position: 'absolute',
         bottom: '10px',
-        left: '5px'
+        left: '38px'
       }}>
         Premium
       </span> 
