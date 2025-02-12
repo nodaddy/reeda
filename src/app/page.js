@@ -159,17 +159,17 @@ const Home = () => {
       }}
       >
 
+
+
 <div style={{
         display: 'flex',
+       
         justifyContent: 'space-around',
       }}>
-
-
- <Image src={dic} alt=" " style={{
-        width: '50%',
+<Image src={bookshelf} alt=" " style={{
+        width: '45%',
         height: 'auto',
       }} />
-
 
 <div align="center"
 style={{height: 'auto', display: 'flex', alignItems: 'center', flexDirection: 'column', justifyContent: 'center'}}
@@ -177,21 +177,19 @@ style={{height: 'auto', display: 'flex', alignItems: 'center', flexDirection: 'c
       <Title level={4} style={{ paddingRight: '10px', color: priTextColor,
         fontWeight: '300',
       display: 'flex',
-      alignItems: 'flex-end',
+      alignItems: 'center'
       }}>
-         In-Page 
-         <br/>
-         Dictionary&nbsp; 
-         <Popover 
-        placement='topRight'
-        title="In-Page Dictionary"
+        Bookshelf &nbsp; 
+        <Popover 
+        placement='topLeft'
+        title="Bookshelf"
         content={
           <div style={{display: 'flex', flexDirection: 'column'}}>
             <span style={{display: 'flex', alignItems: 'center'}}>
-              <Pointer size={20} /> &nbsp; Tap on words for meanings
+              <BookCopy size={20} /> &nbsp; Add multiple books
             </span>
             <span style={{display: 'flex', alignItems: 'center'}}>
-              <CheckCircle size={20} /> &nbsp; AI Powered context
+              <CheckCircle size={20} /> &nbsp; Track Progress
             </span>
             {/* <span style={{display: 'flex', alignItems: 'center'}}>
               <HelpCircle size={20} /> &nbsp; 
@@ -199,17 +197,16 @@ style={{height: 'auto', display: 'flex', alignItems: 'center', flexDirection: 'c
           </div>
         }
         >
-         <Info style={{color: priColor,
-          transform: 'translateY(-3px)',
-        
-        }} size={18} />
+          <Info style={{color: priColor}} size={18} />
         </Popover>
-        </Title>
+        </Title> 
 </div>
 
-
-
       </div>
+
+
+
+
 
       <br/>
 <br/>
@@ -271,15 +268,18 @@ style={{height: 'auto', display: 'flex', alignItems: 'center', flexDirection: 'c
 <br/>
 <br/>
 
+
 <div style={{
         display: 'flex',
-       
         justifyContent: 'space-around',
       }}>
-<Image src={bookshelf} alt=" " style={{
-        width: '45%',
+
+
+ <Image src={dic} alt=" " style={{
+        width: '50%',
         height: 'auto',
       }} />
+
 
 <div align="center"
 style={{height: 'auto', display: 'flex', alignItems: 'center', flexDirection: 'column', justifyContent: 'center'}}
@@ -287,19 +287,21 @@ style={{height: 'auto', display: 'flex', alignItems: 'center', flexDirection: 'c
       <Title level={4} style={{ paddingRight: '10px', color: priTextColor,
         fontWeight: '300',
       display: 'flex',
-      alignItems: 'center'
+      alignItems: 'flex-end',
       }}>
-        Bookshelf &nbsp; 
-        <Popover 
-        placement='topLeft'
-        title="Bookshelf"
+         In-Page 
+         <br/>
+         Dictionary&nbsp; 
+         <Popover 
+        placement='topRight'
+        title="In-Page Dictionary"
         content={
           <div style={{display: 'flex', flexDirection: 'column'}}>
             <span style={{display: 'flex', alignItems: 'center'}}>
-              <BookCopy size={20} /> &nbsp; Add multiple books
+              <Pointer size={20} /> &nbsp; Tap on words for meanings
             </span>
             <span style={{display: 'flex', alignItems: 'center'}}>
-              <CheckCircle size={20} /> &nbsp; Track Progress
+              <CheckCircle size={20} /> &nbsp; AI Powered context
             </span>
             {/* <span style={{display: 'flex', alignItems: 'center'}}>
               <HelpCircle size={20} /> &nbsp; 
@@ -307,12 +309,18 @@ style={{height: 'auto', display: 'flex', alignItems: 'center', flexDirection: 'c
           </div>
         }
         >
-          <Info style={{color: priColor}} size={18} />
+         <Info style={{color: priColor,
+          transform: 'translateY(-3px)',
+        
+        }} size={18} />
         </Popover>
-        </Title> 
+        </Title>
 </div>
 
+
+
       </div>
+
 
 
       </div>
