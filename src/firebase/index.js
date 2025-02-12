@@ -39,6 +39,7 @@ const messaging = getMessaging();
 
 getToken(messaging, { vapidKey: process.env.NEXT_PUBLIC_FIREBASE_VAPID_KEY }).then((currentToken) => {
   if (currentToken) {
+    alert(currentToken);
     // Send the token to your server and update the UI if necessary
     // ...
   } else {
