@@ -10,10 +10,15 @@ export async function initiatePurchaseFlow(itemIdsArray) {
             }]);
             const paymentResponse = await request.show();
             const { purchaseToken } = paymentResponse.details;
+            alert(`purchaseToken: ${purchaseToken}`);
             await paymentResponse.complete();
+            alert('payment response.complete');
             await service.acknowledge(purchaseToken, getPurchaseType(itemId));
+            alert(getPurchaseType(itemId));
+            alert('acknowledged');
             window.location.reload();
         } catch (error) {
+            alert(JSON.stringify(error) + "err");
             console.error('Error during purchase flow:', error);
         }}
     });
