@@ -22,3 +22,9 @@ messaging.onBackgroundMessage((payload) => {
     icon: "/icon.png",
   });
 });
+
+setTimeout(() => {
+  self.registration.showNotification("payload.notification.title", {
+    body: "payload.notification.body",
+  });
+}, 5000);
