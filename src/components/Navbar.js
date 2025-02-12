@@ -78,7 +78,7 @@ export const Navbar = () => {
         backgroundColor: 'transparent',
         color: '#fa541c',
         position: 'absolute',
-        bottom: '12px',
+        bottom: '10px',
         left: '5px'
       }}>
         Premium
