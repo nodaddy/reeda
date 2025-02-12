@@ -54,7 +54,7 @@ async function subscribeUser(token, topic) {
 
 getToken(messaging, { vapidKey: process.env.NEXT_PUBLIC_FIREBASE_VAPID_KEY }).then((currentToken) => {
   if (currentToken) {
-  
+  alert(currentToken);
     subscribeUser(currentToken, dailyReminderTopic);
     
   } else {

@@ -1,4 +1,5 @@
 import { messaging } from "@/app/lib/firebaseAdmin";
+import { dailyReminderTopic } from "@/configs/variables";
 import { NextResponse } from "next/server";
 
 export async function POST(req) {
@@ -14,6 +15,14 @@ export async function POST(req) {
 
     // ✅ Wrap token in an array (required by Firebase)
     await messaging.subscribeToTopic([token], topic);
+
+    await messaging.send({
+        notification: {
+          title: "Your Daily Reminder",
+          body: "Don't forget to read today!",
+        },
+        topic: topic,
+      });
 
     return NextResponse.json({ message: `Subscribed to topic: ${topic}` }, { status: 200 });
   } catch (error) {
