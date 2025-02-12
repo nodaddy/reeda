@@ -255,7 +255,7 @@ style={{height: 'auto', display: 'flex', alignItems: 'center', flexDirection: 'c
 
 
 <Image src={recap} alt=" " style={{
-        width: '40%',
+        width: '45%',
         height: 'auto',
       }} />
 
@@ -274,7 +274,7 @@ style={{height: 'auto', display: 'flex', alignItems: 'center', flexDirection: 'c
         justifyContent: 'space-around',
       }}>
 <Image src={bookshelf} alt=" " style={{
-        width: '40%',
+        width: '45%',
         height: 'auto',
       }} />
 
