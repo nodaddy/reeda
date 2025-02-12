@@ -35,4 +35,6 @@ export const AppProvider = ({ children }) => {
 };
 
 // 3️⃣ Custom Hook for Using Context
-export const useAppContext = () => useContext(AppContext);
+export const useAppContext = () => {
+  return useContext(AppContext);
+};

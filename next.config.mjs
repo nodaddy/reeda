@@ -2,9 +2,9 @@ import withPWA from 'next-pwa';
 
 const nextConfig = {
   reactStrictMode: false,
-  compiler: {
-    removeConsole: true, // Removes all console logs in production
-  },
+  // compiler: {
+  //   removeConsole: true, // Removes all console logs in production
+  // },
   experimental: {
     outputFileTracingIncludes: {
       '/api/**/*': ['./node_modules/**/*.wasm', './node_modules/**/*.proto'],

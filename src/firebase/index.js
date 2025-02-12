@@ -5,6 +5,7 @@ import { getAnalytics } from "firebase/analytics";
 import { getFirestore } from "firebase/firestore";
 import { getMessaging, getToken, isSupported } from "firebase/messaging";
 import { storage } from "@/app/utility";
+import { dailyReminderTopic } from "@/configs/variables";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -40,11 +41,22 @@ if (typeof window !== "undefined" && (await isSupported())) {
   messaging = getMessaging(app);
 }
 
+async function subscribeUser(token, topic) {
+  const response = await fetch("/api/subscribe-to-topic", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ token, topic }), // ✅ JSON.stringify() required
+  });  
+
+  const data = await response.json();
+  alert(JSON.stringify(data));
+}
+
 getToken(messaging, { vapidKey: process.env.NEXT_PUBLIC_FIREBASE_VAPID_KEY }).then((currentToken) => {
   if (currentToken) {
-    alert(currentToken);
-    // Send the token to your server and update the UI if necessary
-    // ...
+  
+    subscribeUser(currentToken, dailyReminderTopic);
+    
   } else {
     // Show permission request UI
     console.log('No registration token available. Request permission to generate one.');

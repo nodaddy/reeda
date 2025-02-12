@@ -1,6 +1,7 @@
+'use client'
 import { logGAEvent } from "@/firebase/googleAnalytics";
 
-const { useAppContext } = require("@/context/AppContext")
+import { useAppContext } from "@/context/AppContext";
 const { Moon, Sun } = require("lucide-react")
 
 const NightModeButton = () => {
