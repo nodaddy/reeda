@@ -127,14 +127,11 @@ const Home = () => {
            
         </Title>   
         <br/>
-      <Divider />
 
         <br/>
       <SignInWithGoogle router={router} /> 
 
       <div> 
-      <br/>
-      <Divider />
 
 
       <br/>
