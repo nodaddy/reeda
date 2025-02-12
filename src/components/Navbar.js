@@ -69,7 +69,7 @@ export const Navbar = () => {
       href="/">
         <h3 style={{ marginLeft: "20px", fontWeight: "bold" }}> <BookOpen style={{
           marginBottom: '-6px'
-        }} /> &nbsp;{currentBook ? currentBook.title.substring(0, 16) + currentBook.title.length > 16 ? '...' : '' : 'Reeda'}
+        }} /> &nbsp;{currentBook ? currentBook.title.substring(0, 16) + (currentBook.title.length > 16 ? '...' : '') : 'Reeda'}
         <br/>   
       {
       isPremium ? <span style={{
