@@ -11,7 +11,7 @@ import { storage } from './utility';
 import { isUserPremium } from '@/payments/playstoreBilling';
 import { useAppContext } from '@/context/AppContext';
 import { priTextColor } from '@/configs/cssValues';
-import { BookCopy, BookOpen } from 'lucide-react';
+import { BookCopy, BookOpen, CheckCircle } from 'lucide-react';
 import { bookshelf, dic, recap, scaninghands } from '@/assets';
 import Image from 'next/image';
 
@@ -127,25 +127,136 @@ const Home = () => {
            One page at a time
         </Title>   
         <br/>
+        <br/>
       <SignInWithGoogle router={router} /> 
 
         <div> 
       <br/>
       <br/>
-      <Image src={dic} alt=" " style={{
-        width: '80%',
-        height: 'auto',
-      }} />
       <br/>
-      <Image src={recap} alt=" " style={{
-        width: '80%',
-        height: 'auto',
-      }} />
-      <Image src={bookshelf} alt=" " style={{
-        width: '80%',
-        height: 'auto',
-      }} />
       <br/>
+      <div style={{
+        display: 'flex',
+        justifyContent: 'space-around',
+      }}>
+<Image src={bookshelf} alt=" " style={{
+        width: '40%',
+        height: 'auto',
+      }} />
+
+<div align="center"
+style={{height: 'auto', display: 'flex', alignItems: 'center', flexDirection: 'column', justifyContent: 'center'}}
+>
+      <Title level={4} style={{ padding: '0px', color: priTextColor,
+        fontWeight: '300',
+      display: 'flex',
+      alignItems: 'flex-end',
+      }}>
+        Bookshelf
+        </Title>
+</div>
+
+      </div>
+
+
+<br/>
+<br/>
+<br/>
+<br/>
+
+
+      <div style={{
+        display: 'flex',
+        justifyContent: 'space-around',
+      }}>
+
+<div align="center"
+style={{height: 'auto', display: 'flex', alignItems: 'center', flexDirection: 'column', justifyContent: 'center'}}
+>
+      <Title level={4} style={{ padding: '0px', color: priTextColor,
+        fontWeight: '300',
+      display: 'flex',
+      alignItems: 'flex-end',
+      }}>
+         In-Page 
+         <br/>
+         Dictionary
+        </Title>
+</div>
+
+
+ <Image src={dic} alt=" " style={{
+        width: '50%',
+        height: 'auto',
+      }} />
+
+
+      </div>
+
+      <br/>
+<br/>
+<br/>
+<br/>
+
+
+      <div style={{
+        display: 'flex',
+        justifyContent: 'space-around',
+      }}>
+
+<Image src={recap} alt=" " style={{
+        width: '40%',
+        height: 'auto',
+      }} />
+
+<div align="center"
+style={{height: 'auto', display: 'flex', alignItems: 'center', flexDirection: 'column', justifyContent: 'center'}}
+>
+      <Title level={4} style={{ padding: '0px', color: priTextColor,
+        fontWeight: '300',
+      display: 'flex',
+      alignItems: 'flex-end',
+      }}>
+         Recap
+        </Title>
+</div>
+
+
+
+
+      </div>
+
+ 
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+
+      <Image src={scaninghands} alt=" " style={{
+        width: '100vw',
+        position : 'fixed',
+        bottom: '0px',
+        left: '0px',
+        height: 'auto',
+      }} />
+
         </div>
       </div> 
     </div>
