@@ -90,7 +90,60 @@ export const Navbar = () => {
     }</h3>
       </Link>
 
-      <span style={{ display: "flex", alignItems: "center", gap: "15px" }}>
+      <span style={{ display: "flex", alignItems: "center", gap: "14px" }}>
+
+
+
+      {
+  storage.getItem("user") && !currentBook &&
+  <Popover
+  placement="bottomLeft"
+  content={
+    <div>
+            <Input
+              type="number"
+              placeholder={storage.getItem('daily-target')}
+              onChange={(e)=>{
+                storage.setItem('daily-target', e.target.value);
+              }}
+            />
+            <CustomButton type="primary" onClick={() => { window.location.reload(); }} style={{ marginTop: 8 }}>
+              Save
+            </CustomButton>
+          </div>
+  }
+  title={`Set daily target (number of pages)`}
+  trigger={'click'}
+  >
+  {/* <Badge
+  offset={[0, -4]}
+  style={{
+    fontSize: '11px',
+    boxShadow: '0px',
+    color: priColor, 
+    backgroundColor: 'transparent',
+    boxShadow: '0px 0px 0px transparent'
+  }}
+  count={`${((getPagesReadToday() / (storage.getItem('daily-target') || 1))*100).toFixed(0)}%`} showZero> */}
+      <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        // border: '1px solid silver',
+        // backgroundColor: 'whitesmoke',
+        borderRadius: '999px',
+        gap: '5px'
+      }}>
+    <Target style={{
+        color: priColor
+      }} size={24} />
+
+      <span>{`${((getPagesReadToday() / (storage.getItem('daily-target') || 1))*100).toFixed(0)}%`}</span>
+      </div>
+      
+    {/* </Badge> */}
+  </Popover>
+}
+
         {storage.getItem("user") && (
             <div
             onClick={() => {
@@ -124,39 +177,7 @@ export const Navbar = () => {
             </div>
         )}
 
-{
-  storage.getItem("user") && !currentBook &&
-  <Popover
-  placement="bottomLeft"
-  content={
-    <div>
-            <Input
-              type="number"
-              placeholder={storage.getItem('daily-target')}
-              onChange={(e)=>{
-                storage.setItem('daily-target', e.target.value);
-              }}
-            />
-            <CustomButton type="primary" onClick={() => { window.location.reload(); }} style={{ marginTop: 8 }}>
-              Save
-            </CustomButton>
-          </div>
-  }
-  title={`Set daily target (number of pages)`}
-  trigger={'click'}
-  >
-  <Badge
-  offset={[0, -4]}
-  style={{
-    backgroundColor: secColor
-  }}
-  count={`${((getPagesReadToday() / (storage.getItem('daily-target') || 1))*100).toFixed(0)}%`} showZero>
-      <Target style={{
-        color: "#555555"
-      }} size={27} />
-    </Badge>
-  </Popover>
-}
+
 
 {storage.getItem("user") && (
             <List
