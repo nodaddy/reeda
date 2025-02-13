@@ -17,14 +17,14 @@ const messaging = firebase.messaging();
 // Handle background messages
 messaging.onBackgroundMessage((payload) => {
   console.log("Received background message ", payload);
+  alert(JSON.stringify(payload));
   self.registration.showNotification(payload.notification.title, {
     body: payload.notification.body,
     icon: "/icon.png",
   });
+  alert(JSON.stringify('payload'));
 });
 
-setTimeout(() => {
-  self.registration.showNotification("payload.notification.title", {
-    body: "payload.notification.body",
-  });
-}, 5000);
+self.registration.showNotification(" baba payload.notification.title", {
+  body: "payload.notification.body",
+});
