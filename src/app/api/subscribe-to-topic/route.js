@@ -22,6 +22,11 @@ export async function POST(req) {
             body: "Major event just happened!",
             icon: "/icon-512x512.png"
           },
+        notification: {
+            title: "Hello!",
+            body: "This is a topic-based notification",
+            click_action: "https://yourpwa.com"
+        },
         topic: topic,
         android:{
             priority:"high"
