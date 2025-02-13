@@ -196,7 +196,7 @@ style={{height: 'auto', display: 'flex', alignItems: 'center', flexDirection: 'c
 
 
 
-      <Divider />
+      
 
 
 <div style={{
@@ -249,7 +249,7 @@ style={{height: 'auto', display: 'flex', alignItems: 'center', flexDirection: 'c
   
 
 
-      <Divider />
+      
 
 
 <div style={{
@@ -309,7 +309,7 @@ style={{height: 'auto', display: 'flex', alignItems: 'center', flexDirection: 'c
       </div>
 
 
-      <Divider />
+      
 
    
 {/* 
