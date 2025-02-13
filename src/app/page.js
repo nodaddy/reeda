@@ -11,7 +11,7 @@ import { storage } from './utility';
 import { isUserPremium } from '@/payments/playstoreBilling';
 import { useAppContext } from '@/context/AppContext';
 import { priColor, priTextColor, secTextColor } from '@/configs/cssValues';
-import { BookCopy, BookOpen, CheckCircle, Clock, HelpCircle, Info, Pointer, Sparkles, Store } from 'lucide-react';
+import { BookCopy, BookOpen, CheckCircle, Clock, Facebook, HelpCircle, Info, Instagram, Pointer, Sparkles, Store, Twitter, X } from 'lucide-react';
 import { bookshelf, dailyGoal, dic, recap, scaninghands } from '@/assets';
 import Image from 'next/image';
 import requestNotificationPermission from '@/requestPermission';
@@ -104,17 +104,32 @@ const Home = () => {
       }}>
         <BookOpen size={32} style={{marginBottom: '2px'}} /> &nbsp;Reeda
         </Title>
-        <Title level={3} style={{textAlign: 'center', marginTop: '80px', marginBottom: '40px', color: secTextColor, 
+        <Title level={3} style={{textAlign: 'center', marginTop: '38px', marginBottom: '0px', marginLeft: '-38px',
+        width: '100vw', backgroundColor: priColor,
+        color: 'white', 
+        padding: '30px',
         fontWeight: '300',
       display: 'flex',
       
       }}>
            {/* Take your reading productivity to the next level with AI. One page at a time. */}
-           <div align="center" style={{width: '85vw'}}> <Sparkles size={30} style={{color: 'goldenrod'}} />
+           <div align="center" style={{width: '100vw'}}> <Sparkles size={30} style={{color: 'white'}} />
             &nbsp; Revolutionizing<br/> Reading Experiences </div>
            
+        </Title>    
+        <Title level={5} style={{textAlign: 'center', marginBottom: '40px', marginTop :'0px', marginLeft: '-38px',
+        width: '100vw', backgroundColor: '#909090',
+        color: 'white', 
+        padding: '7px',
+        fontWeight: '400',
+      display: 'flex',
+      
+      }}>
+           {/* Take your reading productivity to the next level with AI. One page at a time. */}
+           <div align="center" style={{width: '100vw'}}>
+            &nbsp; One page at a time  </div>
+           
         </Title>   
-        <br/>
 
         <br/>
         <div align="left">
@@ -401,6 +416,19 @@ style={{height: 'auto', display: 'flex', alignItems: 'center', flexDirection: 'c
         </div>
       </div> 
       <br/>
+      <br/>
+      <br/>
+      <div style={{width: '100vw', marginLeft: '-38px', padding: '20px 0px', backgroundColor: '#909090', color: 'white',
+    display: 'flex',
+    justifyContent: 'space-around',
+    alignItems: 'center'
+    }}>
+        <span>Reeda</span>
+
+        <span>
+          <Instagram /> &nbsp; <Twitter /> &nbsp; <Facebook />
+        </span>
+      </div>
     </div>
   );
 };
