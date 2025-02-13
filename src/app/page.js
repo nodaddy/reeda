@@ -112,9 +112,9 @@ const Home = () => {
       display: 'flex',
       
       }}>
-           {/* Take your reading productivity to the next level with AI. One page at a time. */}
-           <div align="center" style={{width: '100vw'}}> <Sparkles size={30} style={{color: 'white'}} />
-            &nbsp; Revolutionizing<br/> Reading Experiences </div>
+           <div align="center" style={{width: '100vw'}}> 
+           {/* <Sparkles size={30} style={{color: 'white'}} /> */}
+            Revolutionizing<br/> Reading Experiences </div>
            
         </Title>    
         <Title level={5} style={{textAlign: 'center', marginBottom: '40px', marginTop :'0px', marginLeft: '-38px',
@@ -125,7 +125,6 @@ const Home = () => {
       display: 'flex',
       
       }}>
-           {/* Take your reading productivity to the next level with AI. One page at a time. */}
            <div align="center" style={{width: '100vw'}}>
             &nbsp; One page at a time  </div>
            
