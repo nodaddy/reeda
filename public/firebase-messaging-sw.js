@@ -14,15 +14,15 @@ firebase.initializeApp({
 // Initialize Messaging
 const messaging = firebase.messaging();
 
-self.addEventListener('push', function(event) {
-  const payload = event.data ? event.data.json() : {};
-  event.waitUntil(
-      self.registration.showNotification(payload.notification.title, {
-          body: payload.notification.body,
-          icon: '/icon-512x512.png'
-      })
-  );
-});
+// self.addEventListener('push', function(event) {
+//   const payload = event.data ? event.data.json() : {};
+//   event.waitUntil(
+//       self.registration.showNotification(payload.notification.title, {
+//           body: payload.notification.body,
+//           icon: '/icon-512x512.png'
+//       })
+//   );
+// });
 
 // Handle background messages
 // messaging.onBackgroundMessage((payload) => {
