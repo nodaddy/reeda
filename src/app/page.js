@@ -102,7 +102,7 @@ const Home = () => {
       display: 'flex',
       alignItems: 'flex-end',
       }}>
-        <BookOpen size={32} /> &nbsp; Reeda
+        <BookOpen size={32} style={{marginBottom: '2px'}} /> &nbsp;Reeda
         </Title>
         <Title level={3} style={{textAlign: 'center', marginTop: '70px', marginBottom: '25px', color: secTextColor, 
         fontWeight: '300',
