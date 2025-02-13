@@ -110,8 +110,8 @@ const Home = () => {
       
       }}>
            {/* Take your reading productivity to the next level with AI. One page at a time. */}
-           <div align="center" style={{width: '85vw'}}> <Sparkles size={35} style={{color: 'goldenrod'}} />
-            &nbsp;Revolutionizing<br/> Reading Experiences </div>
+           <div align="center" style={{width: '85vw'}}> <Sparkles size={30} style={{color: 'goldenrod'}} />
+            &nbsp; Revolutionizing<br/> Reading Experiences </div>
            
         </Title>   
         <br/>

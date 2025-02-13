@@ -63,7 +63,7 @@ const SignInWithGoogle = ({router}) => {
         size="large"
         style={{ fontSize: '16px', 
         position: 'absolute',
-        top: '40px',
+        top: '38px',
         right: '36px',
         padding: '0px', border: '0px solid silver', backgroundColor: 'white', borderRadius: '999px'}}
         onClick={handleSignIn}
