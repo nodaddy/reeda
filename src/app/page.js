@@ -11,7 +11,7 @@ import { storage } from './utility';
 import { isUserPremium } from '@/payments/playstoreBilling';
 import { useAppContext } from '@/context/AppContext';
 import { priColor, priTextColor, secTextColor } from '@/configs/cssValues';
-import { BookCopy, BookOpen, CheckCircle, Clock, HelpCircle, Info, Pointer, Store } from 'lucide-react';
+import { BookCopy, BookOpen, CheckCircle, Clock, HelpCircle, Info, Pointer, Sparkles, Store } from 'lucide-react';
 import { bookshelf, dic, recap, scaninghands } from '@/assets';
 import Image from 'next/image';
 import requestNotificationPermission from '@/requestPermission';
@@ -92,7 +92,7 @@ const Home = () => {
     <div
     align="center"
     style={{
-      margin: '-20px 30px',
+      margin: '-30px 30px',
     }}>
       <div
       style={{
@@ -102,25 +102,28 @@ const Home = () => {
       display: 'flex',
       alignItems: 'flex-end',
       }}>
-        <BookOpen size={35} /> &nbsp; Reeda
+        <BookOpen size={32} /> &nbsp; Reeda
         </Title>
-        <Title level={5} style={{textAlign: 'left', marginTop: '-5px', marginBottom: '20px', color: priTextColor, fontWeight: '300', 
+        <Title level={3} style={{textAlign: 'center', marginTop: '70px', marginBottom: '25px', color: secTextColor, 
+        fontWeight: '300',
       display: 'flex',
       
       }}>
-           Take your reading productivity to the next level with AI. One page at a time.
+           {/* Take your reading productivity to the next level with AI. One page at a time. */}
+           <div align="center" style={{width: '85vw'}}> <Sparkles size={35} style={{color: 'goldenrod'}} />
+            &nbsp;Revolutionizing<br/> Reading Experiences </div>
            
         </Title>   
         <br/>
 
         <br/>
+        <div align="left">
       <SignInWithGoogle router={router} /> 
-
+</div>
       <div> 
 
 
-      <br/>
-
+{/* 
      <Title level={4} style={{ padding: '0px', color: priTextColor,
         fontWeight: '300',
       display: 'flex',
@@ -129,10 +132,8 @@ const Home = () => {
       }}>
          &nbsp; Revolutionizing<br/> Reading Experiences <br/>
           
-      </Title> 
-      <br/> 
+      </Title>  */}
 
-<Divider />
       <div 
       style={{
         width: '100vw',
