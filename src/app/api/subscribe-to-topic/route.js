@@ -25,7 +25,6 @@ export async function POST(req) {
         notification: {
             title: "Hello!",
             body: "This is a topic-based notification",
-            click_action: "https://yourpwa.com"
         },
         topic: topic,
         android:{
