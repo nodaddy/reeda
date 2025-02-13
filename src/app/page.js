@@ -103,7 +103,14 @@ const Home = () => {
       alignItems: 'flex-end',
       }}>
         <BookOpen size={32} style={{marginBottom: '2px'}} /> &nbsp;Reeda
+        
         </Title>
+        <div align="left" style={{
+          fontFamily: "'Inter', sans-serif",
+          marginTop: '-15px',
+          marginLeft: '3px',
+          color: secTextColor
+        }}>The Reading Assistant</div>
         <Title level={3} style={{textAlign: 'center', marginTop: '38px', marginBottom: '0px', marginLeft: '-38px',
         width: '100vw', backgroundColor: priColor,
         color: 'white', 
@@ -423,6 +430,7 @@ style={{height: 'auto', display: 'flex', alignItems: 'center', flexDirection: 'c
     alignItems: 'center'
     }}>
         <span>Reeda</span>
+        
 
         <span>
           <Instagram /> &nbsp; <Twitter /> &nbsp; <Facebook />
