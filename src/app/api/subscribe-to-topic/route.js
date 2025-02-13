@@ -16,27 +16,6 @@ export async function POST(req) {
     // ✅ Wrap token in an array (required by Firebase)
     await messaging.subscribeToTopic([token], topic);
 
-    await messaging.send({
-        data: {
-            title: "Breaking News",
-            body: "Major event just happened!",
-            icon: "/icon-512x512.png"
-          },
-        notification: {
-            title: "Hello!",
-            body: "This is a topic-based notification",
-        },
-        topic: topic,
-        android:{
-            priority:"high"
-          },
-          webpush: {
-            headers: {
-              Urgency: "high"
-            }
-          }
-      });
-
     return NextResponse.json({ message: `Subscribed to topic: ${topic}` }, { status: 200 });
   } catch (error) {
     console.error("Error subscribing to topic:", error);

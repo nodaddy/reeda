@@ -48,8 +48,8 @@ async function subscribeUser(token, topic) {
     body: JSON.stringify({ token, topic }), // ✅ JSON.stringify() required
   });  
 
-  const data = await response.json();
-  alert(JSON.stringify(data));
+  // const data = await response.json();
+  // alert(JSON.stringify(data));
 }
 
 if(typeof navigator !== "undefined") {
