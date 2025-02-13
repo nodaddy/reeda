@@ -1,15 +1,17 @@
 "use client"
 
-import { BookOpen, Coins, List, X } from "lucide-react";
+import { BookOpen, Coins, File, FileDiff, List, LucideTarget, Rocket, Target, X } from "lucide-react";
 import Link from "next/link";
-import { Badge, Tooltip } from "antd";
+import { Badge, Input, Popover, Tooltip } from "antd";
 import { useEffect, useState } from "react";
-import { storage } from "@/app/utility";
+import { getPagesReadToday, storage } from "@/app/utility";
 import { getProfile } from "@/firebase/services/profileService";
 import { useAppContext } from "@/context/AppContext";
 import { useRouter } from "next/navigation";
 import { usePathname } from "next/navigation";
 import { logGAEvent } from "@/firebase/googleAnalytics";
+import { priColor, priTextColor, secColor, secTextColor } from "@/configs/cssValues";
+import CustomButton from "./CustomButton";
 
 const { default: SignInWithGoogle } = require("./SignInWithGoogle");
 
@@ -51,7 +53,7 @@ export const Navbar = () => {
         alignItems: "center",
         padding: "5px 0px",
         justifyContent: "space-between",
-        zIndex: "999999",
+        zIndex: "999",
         backgroundColor: "white",
         fontWeight: "300",
         color: '#555555',
@@ -121,6 +123,40 @@ export const Navbar = () => {
             </Badge>Coins
             </div>
         )}
+
+{
+  storage.getItem("user") && !currentBook &&
+  <Popover
+  placement="bottomLeft"
+  content={
+    <div>
+            <Input
+              type="number"
+              placeholder="Set daily target"
+              onChange={(e)=>{
+                storage.setItem('daily-target', e.target.value);
+              }}
+            />
+            <CustomButton type="primary" onClick={() => { window.location.reload(); }} style={{ marginTop: 8 }}>
+              Save
+            </CustomButton>
+          </div>
+  }
+  title='Set daily target (number of pages)'
+  trigger={'click'}
+  >
+  <Badge
+  offset={[0, -4]}
+  style={{
+    backgroundColor: secColor
+  }}
+  count={`${((getPagesReadToday() / storage.getItem('daily-target'))*100).toFixed(0)}%`} showZero>
+      <Target style={{
+        color: "#555555"
+      }} size={27} />
+    </Badge>
+  </Popover>
+}
 
 {storage.getItem("user") && (
             <List

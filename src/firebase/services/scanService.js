@@ -1,5 +1,5 @@
 'use client'
-import { storage } from '@/app/utility';
+import { getPagesReadToday, storage, updatePagesRead } from '@/app/utility';
 // services/scanService.js
 import { db } from '../../firebase';
 import { collection, addDoc, doc, updateDoc, deleteDoc, query, where, getDocs, orderBy, getCountFromServer, limit  } from "firebase/firestore";
@@ -23,7 +23,8 @@ export const createScan = async (scanData) => {
       userId,  // Ensure userId is included in the scan data
       createdAt: Date.now(), // Optionally add a creation timestamp
     });
-
+    alert("scan scan");
+    updatePagesRead(1);
     console.log("Scan created with ID: ", docRef.id);
     return docRef.id;  // Return the document ID
   } catch (error) {
