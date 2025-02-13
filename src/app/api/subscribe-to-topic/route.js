@@ -17,11 +17,20 @@ export async function POST(req) {
     await messaging.subscribeToTopic([token], topic);
 
     await messaging.send({
-        notification: {
-          title: "Your Daily Reminder",
-          body: "Don't forget to read today!",
-        },
+        data: {
+            title: "Breaking News",
+            body: "Major event just happened!",
+            icon: "/icon.png"
+          },
         topic: topic,
+        android:{
+            priority:"high"
+          },
+          webpush: {
+            headers: {
+              Urgency: "high"
+            }
+          }
       });
 
     return NextResponse.json({ message: `Subscribed to topic: ${topic}` }, { status: 200 });
