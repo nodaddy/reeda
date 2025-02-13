@@ -196,7 +196,7 @@ style={{height: 'auto', display: 'flex', alignItems: 'center', flexDirection: 'c
 
 
 <Image src={dailyGoal} alt=" " style={{
-        width: '45%',
+        width: '55%',
         height: 'auto',
       }} />
 
@@ -214,7 +214,7 @@ style={{height: 'auto', display: 'flex', alignItems: 'center', flexDirection: 'c
         justifyContent: 'space-around',
       }}>
 <Image src={bookshelf} alt=" " style={{
-        width: '46%',
+        width: '50%',
         height: 'auto',
       }} />
 
@@ -310,7 +310,7 @@ style={{height: 'auto', display: 'flex', alignItems: 'center', flexDirection: 'c
 
 
 <Image src={recap} alt=" " style={{
-        width: '45%',
+        width: '50%',
         height: 'auto',
       }} />
 
@@ -332,7 +332,7 @@ style={{height: 'auto', display: 'flex', alignItems: 'center', flexDirection: 'c
 
 
  <Image src={dic} alt=" " style={{
-        width: '45%',
+        width: '50%',
         height: 'auto',
       }} />
 
