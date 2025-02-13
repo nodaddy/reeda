@@ -92,7 +92,7 @@ const BookList = () => {
         const offsetTop = ref.current.offsetTop;
       // alert(offsetTop);
 
-        setHeight(`calc(100vh - ${offsetTop + 40}px)`);
+        setHeight(`calc(100vh - ${offsetTop + 11}px)`);
       }
     };
 
@@ -166,7 +166,7 @@ const BookList = () => {
     <div 
     ref={ref}
     style={{ 
-    padding: '0px 19px 34px 19px',
+    padding: '0px 19px 0px 19px',
     width: '91%',
     marginTop: '5px',
     maxHeight: height,

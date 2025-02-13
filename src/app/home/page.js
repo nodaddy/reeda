@@ -116,7 +116,6 @@ const Home = () => {
      <br/>
       <BookList />
       {/* <ContinueReading /> */}
-    <br/>
     </div>
   );
 };
