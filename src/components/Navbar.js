@@ -145,7 +145,7 @@ export const Navbar = () => {
           </div>
   }
   title={<span style={{
-    fontWeight: '300'
+    fontWeight: '400'
   }}>Set Daily Goal ( Pages )</span>}
   trigger={'click'}
   >
