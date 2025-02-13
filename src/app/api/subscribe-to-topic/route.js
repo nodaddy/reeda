@@ -20,7 +20,7 @@ export async function POST(req) {
         data: {
             title: "Breaking News",
             body: "Major event just happened!",
-            icon: "/icon.png"
+            icon: "/icon-512x512.png"
           },
         topic: topic,
         android:{
