@@ -14,6 +14,16 @@ firebase.initializeApp({
 // Initialize Messaging
 const messaging = firebase.messaging();
 
+self.addEventListener('push', function(event) {
+  const payload = event.data ? event.data.json() : {};
+  event.waitUntil(
+      self.registration.showNotification(payload.notification.title, {
+          body: payload.notification.body,
+          icon: '/icon.png'
+      })
+  );
+});
+
 // Handle background messages
 messaging.onBackgroundMessage((payload) => {
   console.log("Received background message ", payload);
