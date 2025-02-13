@@ -132,7 +132,7 @@ export const Navbar = () => {
     <div>
             <Input
               type="number"
-              placeholder="Set daily target"
+              placeholder={storage.getItem('daily-target')}
               onChange={(e)=>{
                 storage.setItem('daily-target', e.target.value);
               }}
@@ -142,7 +142,7 @@ export const Navbar = () => {
             </CustomButton>
           </div>
   }
-  title='Set daily target (number of pages)'
+  title={`Set daily target (number of pages)`}
   trigger={'click'}
   >
   <Badge
@@ -150,7 +150,7 @@ export const Navbar = () => {
   style={{
     backgroundColor: secColor
   }}
-  count={`${((getPagesReadToday() / storage.getItem('daily-target'))*100).toFixed(0)}%`} showZero>
+  count={`${((getPagesReadToday() / storage.getItem('daily-target') || 1)*100).toFixed(0)}%`} showZero>
       <Target style={{
         color: "#555555"
       }} size={27} />
