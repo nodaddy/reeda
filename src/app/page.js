@@ -165,7 +165,6 @@ const Home = () => {
 
 
 
-
       
 
 
@@ -213,13 +212,13 @@ style={{height: 'auto', display: 'flex', alignItems: 'center', flexDirection: 'c
 <Image src={dailyGoal} alt=" " style={{
         width: '55%',
         height: 'auto',
+        marginTop: '37px'
       }} />
 
       </div>
 
 
 
-<br/>
 <br/>
 <br/>
 
@@ -275,7 +274,6 @@ style={{height: 'auto', display: 'flex', alignItems: 'center', flexDirection: 'c
 
 
 
-      <br/>
       <br/>
       <br/>
 
