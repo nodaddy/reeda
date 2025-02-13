@@ -97,7 +97,7 @@ export const Navbar = () => {
       {
   storage.getItem("user") && !currentBook &&
   <Popover
-  placement="bottomLeft"
+  placement="bottom"
   content={
     <div>
             <Input
@@ -112,7 +112,7 @@ export const Navbar = () => {
             </CustomButton>
           </div>
   }
-  title={`Set daily target (number of pages)`}
+  title={`Daily target (no. of pages)`}
   trigger={'click'}
   >
   {/* <Badge
