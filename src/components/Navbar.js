@@ -2,7 +2,7 @@
 
 import { BookOpen, Coins, File, FileDiff, List, LucideTarget, Rocket, Target, X } from "lucide-react";
 import Link from "next/link";
-import { Badge, Input, Popover, Tooltip } from "antd";
+import { Badge, Button, Input, Popover, Progress, Tooltip } from "antd";
 import { useEffect, useState } from "react";
 import { getPagesReadToday, storage } from "@/app/utility";
 import { getProfile } from "@/firebase/services/profileService";
@@ -10,8 +10,7 @@ import { useAppContext } from "@/context/AppContext";
 import { useRouter } from "next/navigation";
 import { usePathname } from "next/navigation";
 import { logGAEvent } from "@/firebase/googleAnalytics";
-import { priColor, priTextColor, secColor, secTextColor } from "@/configs/cssValues";
-import CustomButton from "./CustomButton";
+import { priColor } from "@/configs/cssValues";
 
 const { default: SignInWithGoogle } = require("./SignInWithGoogle");
 
@@ -93,57 +92,6 @@ export const Navbar = () => {
       <span style={{ display: "flex", alignItems: "center", gap: "14px" }}>
 
 
-
-      {
-  storage.getItem("user") && !currentBook &&
-  <Popover
-  placement="bottom"
-  content={
-    <div>
-            <Input
-              type="number"
-              placeholder={storage.getItem('daily-target')}
-              onChange={(e)=>{
-                storage.setItem('daily-target', e.target.value);
-              }}
-            />
-            <CustomButton type="primary" onClick={() => { window.location.reload(); }} style={{ marginTop: 8 }}>
-              Save
-            </CustomButton>
-          </div>
-  }
-  title={`Daily target (no. of pages)`}
-  trigger={'click'}
-  >
-  {/* <Badge
-  offset={[0, -4]}
-  style={{
-    fontSize: '11px',
-    boxShadow: '0px',
-    color: priColor, 
-    backgroundColor: 'transparent',
-    boxShadow: '0px 0px 0px transparent'
-  }}
-  count={`${((getPagesReadToday() / (storage.getItem('daily-target') || 1))*100).toFixed(0)}%`} showZero> */}
-      <div style={{
-        display: 'flex',
-        alignItems: 'center',
-        // border: '1px solid silver',
-        // backgroundColor: 'whitesmoke',
-        borderRadius: '999px',
-        gap: '5px'
-      }}>
-    <Target style={{
-        color: priColor
-      }} size={24} />
-
-      <span>{`${((getPagesReadToday() / (storage.getItem('daily-target') || 1))*100).toFixed(0)}%`}</span>
-      </div>
-      
-    {/* </Badge> */}
-  </Popover>
-}
-
         {storage.getItem("user") && (
             <div
             onClick={() => {
@@ -178,11 +126,60 @@ export const Navbar = () => {
         )}
 
 
+{
+  storage.getItem("user") && !currentBook &&
+  <Popover
+  placement="bottomLeft"
+  content={
+    <div>
+            <Input
+              type="number"
+              placeholder={storage.getItem('daily-target')}
+              onChange={(e)=>{
+                storage.setItem('daily-target', e.target.value);
+              }}
+            />
+            <Button type="link" onClick={() => { window.location.reload(); }} style={{ marginTop: 5, padding: '0px' }}>
+              Save
+            </Button>
+          </div>
+  }
+  title={`Daily target (no. of pages)`}
+  trigger={'click'}
+  >
+  {/* <Badge
+  offset={[0, -4]}
+  style={{
+    fontSize: '11px',
+    boxShadow: '0px',
+    color: priColor, 
+    backgroundColor: 'transparent',
+    boxShadow: '0px 0px 0px transparent'
+  }}
+  count={`${((getPagesReadToday() / (storage.getItem('daily-target') || 1))*100).toFixed(0)}%`} showZero> */}
+     <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+      <Progress
+        type="circle"
+        percent={(Math.min((getPagesReadToday()/(storage.getItem('daily-target') || 1)) * 100, 100)).toFixed(0)}
+        strokeWidth={14} // Thicker stroke for a premium feel
+        strokeColor={{
+          "0%": "#52c41a", // Start color (green)
+          "100%": priColor, // End color (blue)
+        }}
+        format={() => `${getPagesReadToday()}`}
+        // format={() => } // Hide percentage text inside
+        width={30} // Adjust size
+      />
+    </div>
+      
+    {/* </Badge> */}
+  </Popover>
+}
 
 {storage.getItem("user") && (
             <List
               color={"#555555"}
-              size={25}
+              size={26}
               style={{  cursor: "pointer", marginRight: "20px", display: currentBook ? 'none' : 'block' }}
               onClick={() => {
                 setMenuOpen(true);
