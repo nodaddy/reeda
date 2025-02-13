@@ -22,7 +22,7 @@ export async function POST(req) {
             body: "Major event just happened!",
             icon: "/icon.png"
           },
-        topic: topic,
+        to: topic,
         android:{
             priority:"high"
           },
