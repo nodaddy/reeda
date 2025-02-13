@@ -1,6 +1,6 @@
 "use client"
 
-import { BookOpen, Coins, File, FileDiff, List, LucideTarget, Rocket, Target, X } from "lucide-react";
+import { BookOpen, Coins, File, FileDiff, List, LucideTarget, MessageCircle, MessageCircleCodeIcon, Rocket, Target, X } from "lucide-react";
 import Link from "next/link";
 import { Badge, Button, Input, Popover, Progress, Tooltip } from "antd";
 import { useEffect, useState } from "react";
@@ -138,7 +138,12 @@ export const Navbar = () => {
               onChange={(e)=>{
                 storage.setItem('daily-target', e.target.value);
               }}
+              style={{
+                maxWidth: '58px'
+              }}
             />
+            &nbsp;
+            &nbsp;
             <Button type="link" onClick={() => { window.location.reload(); }} style={{ marginTop: 5, padding: '0px' }}>
               Save
             </Button>
@@ -239,6 +244,11 @@ export const Navbar = () => {
           {/* <li style={{ borderBottom: "1px solid #ddd", padding: '18px 0px' }}>
             <Link onClick={() => setMenuOpen(false)} href="/settings" style={{ color: "#333", textDecoration: "none" }}>Settings</Link>
           </li> */}
+          <li style={{ borderBottom: "1px solid #ddd", padding: '18px 0px' }}>
+            <Link onClick={() => setMenuOpen(false)} href="https://wa.me/918126153920" style={{ color: "#333", textDecoration: "none" }}>
+              Contact us &nbsp;<MessageCircleCodeIcon /> 
+            </Link>
+          </li>
           <li style={{  padding: '18px 0px' }}>
             <span onClick={() => {
               storage.removeItem("user");

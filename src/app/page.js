@@ -12,7 +12,7 @@ import { isUserPremium } from '@/payments/playstoreBilling';
 import { useAppContext } from '@/context/AppContext';
 import { priColor, priTextColor, secTextColor } from '@/configs/cssValues';
 import { BookCopy, BookOpen, CheckCircle, Clock, HelpCircle, Info, Pointer, Sparkles, Store } from 'lucide-react';
-import { bookshelf, dic, recap, scaninghands } from '@/assets';
+import { bookshelf, dailyGoal, dic, recap, scaninghands } from '@/assets';
 import Image from 'next/image';
 import requestNotificationPermission from '@/requestPermission';
 
@@ -144,6 +144,69 @@ const Home = () => {
 
 
 
+
+
+
+
+
+
+
+      
+
+
+<div style={{
+        display: 'flex',
+        justifyContent: 'space-around',
+      }}>
+
+
+<div align="center"
+style={{height: 'auto', display: 'flex', alignItems: 'center', flexDirection: 'column', justifyContent: 'center'}}
+>
+      <Title level={4} style={{ paddingLeft: '10px', color: priTextColor,
+        fontWeight: '300',
+      display: 'flex',
+      alignItems: 'center',
+      }}>
+         Set goals &nbsp; 
+         <Popover 
+        placement='topLeft'
+        title="Recap"
+        content={
+          <div style={{display: 'flex', flexDirection: 'column'}}>
+            <span style={{display: 'flex', alignItems: 'center'}}>
+              <Clock size={20} /> &nbsp; Need to read with an aim?
+            </span>
+            <span style={{display: 'flex', alignItems: 'center'}}>
+              <CheckCircle size={20} /> &nbsp; Set daily target for reading
+            </span>
+            {/* <span style={{display: 'flex', alignItems: 'center'}}>
+              <HelpCircle size={20} /> &nbsp; 
+            </span> */}
+          </div>
+        }
+        >
+         <Info style={{color: priColor ,
+         transform: 'translate(-3px, 2px)',
+        }} size={18} />
+         </Popover>
+        </Title>
+</div>
+
+
+
+<Image src={dailyGoal} alt=" " style={{
+        width: '45%',
+        height: 'auto',
+      }} />
+
+      </div>
+
+
+
+<br/>
+
+
 <div style={{
         display: 'flex',
        
@@ -191,6 +254,11 @@ style={{height: 'auto', display: 'flex', alignItems: 'center', flexDirection: 'c
 </div>
 
       </div>
+
+
+
+
+      <br/>
 
 
 
@@ -250,6 +318,10 @@ style={{height: 'auto', display: 'flex', alignItems: 'center', flexDirection: 'c
 
 
       
+      <br/>
+
+
+
 
 
 <div style={{
@@ -322,6 +394,7 @@ style={{height: 'auto', display: 'flex', alignItems: 'center', flexDirection: 'c
 
         </div>
       </div> 
+      <br/>
     </div>
   );
 };

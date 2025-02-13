@@ -238,7 +238,7 @@ const BookList = () => {
           style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(1, 1fr)', // Ensures exactly 2 items per row
-            marginTop: '15px',
+            marginTop: '13px',
             width: '100%', // Ensures the grid takes full width
             zIndex: '1'
           }}>
@@ -355,7 +355,7 @@ const BookList = () => {
                           color: 'white',
                           borderRadius: '4px',
                           backgroundColor: secColor,
-                          padding: '5px'
+                          padding: '5px 5px 4px 5px'
                         }} />
                   </Link>
 
@@ -447,12 +447,12 @@ const BookList = () => {
                                 // onOpenChange={setVisible}
                               >
                                 <MoreVertical 
-                                  size={20} 
+                                  size={25} 
                                   onClick={() => {
                                     setOpenPopOver(item.title == openPopOver ? null : item.title);
                                     logGAEvent('click_more_options_on_book_card');
                                   }}
-                                  style={{ marginRight: "-18px", cursor: "pointer", color: item.title == openPopOver ? priColor  : ''}} 
+                                  style={{ marginRight: "-22px", cursor: "pointer", color: item.title == openPopOver ? priColor  : ''}} 
                                 />
                               </Popover>
                                 

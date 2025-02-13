@@ -106,9 +106,8 @@ const Home = () => {
         margin: 'auto'
       }} message={<> <Lightbulb size={20} /> 
       &nbsp;
-      Using the free version.
-      You can add upto 1 book and can scan upto 5 pages.
-      <br/>
+      Using free version,
+      you can add upto 1 book! 
       Click <Link href="/premium">here</Link> to unlock Reeda premium.
       </>} type="warning" />}
      {isPremium && <Divider />}
