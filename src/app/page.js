@@ -108,7 +108,9 @@ const Home = () => {
         width: '100vw', backgroundColor: priColor,
         color: 'white', 
         padding: '30px',
-        fontWeight: '400',
+        fontWeight: '300',
+        position: 'sticky',
+        top: '0px',
       display: 'flex',
       
       }}>
