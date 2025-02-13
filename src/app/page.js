@@ -104,7 +104,7 @@ const Home = () => {
       }}>
         <BookOpen size={32} style={{marginBottom: '2px'}} /> &nbsp;Reeda
         </Title>
-        <Title level={3} style={{textAlign: 'center', marginTop: '70px', marginBottom: '25px', color: secTextColor, 
+        <Title level={3} style={{textAlign: 'center', marginTop: '80px', marginBottom: '40px', color: secTextColor, 
         fontWeight: '300',
       display: 'flex',
       
