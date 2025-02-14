@@ -114,9 +114,10 @@ const Home = () => {
         <Title level={3} style={{textAlign: 'center', marginTop: '38px', marginBottom: '0px', marginLeft: '-38px',
         width: '100vw', backgroundColor: priColor,
         color: 'white', 
-        padding: '30px',
+        padding: '17px',
         fontWeight: '300',
         position: 'sticky',
+        zIndex: '99999',
         top: '0px',
       display: 'flex',
       
@@ -126,7 +127,7 @@ const Home = () => {
             Revolutionizing<br/> Reading Experiences </div>
            
         </Title>    
-        <Title level={5} style={{textAlign: 'center', marginBottom: '40px', marginTop :'0px', marginLeft: '-38px',
+        <Title level={5} style={{textAlign: 'center', marginBottom: '0px', marginTop :'0px', marginLeft: '-38px',
         width: '100vw', backgroundColor: '#909090',
         color: 'white', 
         padding: '7px',
@@ -139,7 +140,6 @@ const Home = () => {
            
         </Title>   
 
-        <br/>
         <div align="left">
       <SignInWithGoogle router={router} /> 
 </div>
@@ -161,7 +161,6 @@ const Home = () => {
       style={{
         width: '100vw',
         marginLeft: '-40px',
-        padding: '10px 0px'
       }}
       >
 
@@ -179,6 +178,8 @@ const Home = () => {
 <div style={{
         display: 'flex',
         justifyContent: 'space-around',
+        padding: '55px 5px',
+        backgroundColor: 'aliceblue'
       }}>
 
 
@@ -193,7 +194,7 @@ style={{height: 'auto', display: 'flex', alignItems: 'center', flexDirection: 'c
          Set goals &nbsp; 
          <Popover 
         placement='topLeft'
-        title="Recap"
+        title="Set a Daily Reading Goal"
         content={
           <div style={{display: 'flex', flexDirection: 'column'}}>
             <span style={{display: 'flex', alignItems: 'center'}}>
@@ -220,7 +221,6 @@ style={{height: 'auto', display: 'flex', alignItems: 'center', flexDirection: 'c
 <Image src={dailyGoal} alt=" " style={{
         width: '55%',
         height: 'auto',
-        marginTop: '37px'
       }} />
 
       </div>
@@ -295,6 +295,8 @@ style={{height: 'auto', display: 'flex', alignItems: 'center', flexDirection: 'c
 <div style={{
         display: 'flex',
         justifyContent: 'space-around',
+        padding: '45px 5px',
+        backgroundColor: 'aliceblue'
       }}>
 
 
