@@ -1,5 +1,4 @@
 import { messaging } from "@/app/lib/firebaseAdmin";
-import { dailyReminderTopic } from "@/configs/variables";
 import { NextResponse } from "next/server";
 
 export async function POST(req) {
