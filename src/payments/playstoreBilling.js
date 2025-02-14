@@ -10,15 +10,15 @@ export async function initiatePurchaseFlow(itemIdsArray) {
             }]);
             const paymentResponse = await request.show();
             const { purchaseToken } = paymentResponse.details;
-            alert(`purchaseToken: ${purchaseToken}`);
+            // alert(`purchaseToken: ${purchaseToken}`);
             await paymentResponse.complete();
-            alert('payment response.complete');
+            // alert('payment response.complete');
 
             await service.acknowledge(purchaseToken, 'inapp');
-            alert('acknowledged');
+            // alert('acknowledged');
             window.location.reload();
         } catch (error) {
-            alert(JSON.stringify(error) + "err");
+            alert(JSON.stringify(error) + "Kindly restart the app for smoother experience!");
             console.error('Error during purchase flow:', error);
         }}
     });
