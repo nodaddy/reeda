@@ -3,16 +3,13 @@ import { motion } from "framer-motion";
 import { Loader2 } from "lucide-react";
 
 const quotes = [
-    "Creating Summary",
+    "Scanning for key takeaways",
     "Creating in-page dictionary",
-    "We're almost done",
-    "We're almost done",
-    "We're almost done",
-    "We're almost done",
-    "We're almost done",
-    "We're almost done",
-    "We're almost done",
-    "We're almost done",
+    "Almost done",
+    "Almost done",
+    "Almost done",
+    "Almost done",
+    "Almost done",
 ];
 
 const UploadingScanLoader = () => {
