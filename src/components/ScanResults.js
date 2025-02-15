@@ -21,10 +21,10 @@ import { logGAEvent } from "@/firebase/googleAnalytics";
 export default function ScanResults({ setBook, scans }) {
   console.log(scans);
   const bookTitle = scans?.bookTitle;
-  const [activeView, setActiveView] = useState("vocab");
+  const [activeView, setActiveView] = useState("summary");
   const [data, setData] = useState(scans?.data ? [scans.data[0]] : null);
 
-  const [fontSize, setFontSize] = useState(17); // Default font size
+  const [fontSize, setFontSize] = useState(15); // Default font size
   
   // States for cropper
   const [crop, setCrop] = useState({ x: 0, y: 0 });

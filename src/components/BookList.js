@@ -209,9 +209,9 @@ const BookList = () => {
         }}>My Books</span>
        
         </BadgeAnt>
-        <br/>
+        <div style={{height: '5px'}}></div>
         <sup style={{fontFamily: "'Inter', sans-serif", fontSize: '14px', color: secTextColor, paddingLeft: '2px', 
-        transform: 'translateY(-2px)',
+        
       }}>
           Collection of your physical books </sup>
         
