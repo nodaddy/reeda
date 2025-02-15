@@ -548,7 +548,7 @@ const BookList = () => {
         </Form.Item>
         <Form.Item>
           <Button disabled={!imageBase64} style={{
-            backgroundColor: 'black'
+            backgroundColor: !imageBase64 ? '' : 'black'
           }} type="primary" htmlType="submit" block>Add Book</Button>
         </Form.Item>
         </Form>
