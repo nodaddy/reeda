@@ -97,7 +97,6 @@ const Home = () => {
     <div style={{
       overflow: 'auto',
     }}>
-     
       <StreakCard isPremium={false} streak={profile?.streak} isActive={lastPageScanDifference < streakMaintenanceIntervalInSeconds*2} /> 
       {!isPremium && <Alert style={{
         border: '0px',

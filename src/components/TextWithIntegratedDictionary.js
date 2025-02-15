@@ -65,7 +65,7 @@ const TextWithIntegratedDictionary = ({ text, fontSize, setFontSize }) => {
           wordBreak: "break-word", // Avoid text overflow
         }}
       >
-        {text.split(/(\s+)/).map((part, index) =>
+        {text?.split(/(\s+)/).map((part, index) =>
           part.trim() ? (
             <Text
               key={index}

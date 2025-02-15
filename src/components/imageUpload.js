@@ -9,7 +9,7 @@ import { getBookByTitleAndUserId, updateBookByUserIdAndTitle } from "@/firebase/
 import { Button, Modal } from "antd";
 import { addCoinsPerScan, scanPageRatio, streakMaintenanceIntervalInSeconds } from "@/configs/variables";
 import { storage } from "@/app/utility";
-import { getPageSummaryFromImage, getSimplifiedLanguage } from "@/openAI";
+import { getPageSummaryFromImage, getPageSummaryFromImageStream, getSimplifiedLanguage, getSimplifiedLanguageStream } from "@/openAI";
 import { useAppContext } from "@/context/AppContext";
 import { flag } from "@/assets";
 import NextImage from "next/image";
@@ -78,9 +78,26 @@ export default function ImageUpload({ setBook, bookTitle, setData, setModalOpen 
     setUploadingImage(true);
     const croppedFile = await getCroppedImage(imageSrc, croppedAreaPixels);
 
-    const [summary, simpleLang] = await Promise.all([
-      getPageSummaryFromImage(croppedFile, 5),
-      getSimplifiedLanguage(croppedFile),
+    let scanDataResponse = [{
+      summary: '',
+      simpleLang: ''
+    }];
+
+    await Promise.all([
+      getPageSummaryFromImageStream(croppedFile, 5, (chunk) => {
+      setModalOpen(false);
+      scanDataResponse = [{...scanDataResponse[0], summary: scanDataResponse[0].summary + chunk }];
+        setData((prev) => {
+          return prev ? {...prev, data: [{ ...prev.data[0], summary: prev.data[0].summary + chunk }]} : { bookTitle: bookTitle, data: [{ simpleLang: '' , summary: chunk }] };
+        });
+      }),
+      getSimplifiedLanguageStream(croppedFile, (chunk) => {
+      setModalOpen(false);
+      scanDataResponse = [{...scanDataResponse[0], simpleLang: scanDataResponse[0].simpleLang + chunk }];
+      setData((prev) => {
+        return prev ? {...prev, data: [{ ...prev.data[0], simpleLang: prev.data[0].simpleLang + chunk }]} : { bookTitle: bookTitle, data: [{summary: '', simpleLang: chunk }] };
+        });
+      }),
     ])
 
     const book = await getBookByTitleAndUserId(bookTitle);
@@ -89,12 +106,8 @@ export default function ImageUpload({ setBook, bookTitle, setData, setModalOpen 
         bookTitle
     );
 
-    const data = [{
-        summary,
-        simpleLang
-    }]
     setBook(updatedBook);
-    await createScan({ bookTitle, data });
+    await createScan({ bookTitle, data: scanDataResponse });
 
      // const profile = await getProfile(JSON.parse(storage.getItem('user')).email);
      const timeDifferenceInSeconds = (Date.now() - profile?.streak.lastPageScanTimestamp) / 1000;
@@ -130,11 +143,7 @@ export default function ImageUpload({ setBook, bookTitle, setData, setModalOpen 
       },
         }))
     }
-
-    setData({ data: data, bookTitle: bookTitle });
     setUploadingImage(false);
-    setShowCropper(false);
-    setModalOpen(false);
   };
 
   return (
@@ -147,7 +156,8 @@ export default function ImageUpload({ setBook, bookTitle, setData, setModalOpen 
           <Button key="back" onClick={() => setShowCropper(false)}>
             Cancel
           </Button>,
-          <Button key="submit" style={{backgroundColor: 'black'}} type="primary" onClick={() => { if (!uploadingImage) { handleUpload(); } }}>
+          <Button key="submit" style={{backgroundColor: 'black'}} type="primary" onClick={() => { 
+            if (!uploadingImage) { handleUpload(); } }}>
             {uploadingImage ? <Loader size={10} className="loader" /> : "Upload"}
           </Button>,
         ]}

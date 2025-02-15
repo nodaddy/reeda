@@ -3,7 +3,7 @@
 import { Input, Card, Typography, Layout, Space, Button } from 'antd';
 import { SearchOutlined, BookOutlined } from '@ant-design/icons';
 import React, { useEffect, useRef, useState } from 'react';
-import { getMeaning } from '@/openAI';
+import { getMeaning, getMeaningStream } from '@/openAI';
 import { Loader, Search } from 'lucide-react';
 
 const { Header, Content } = Layout;
@@ -20,13 +20,14 @@ const Dictionary = ({incomingWords}) => {
     useEffect(() => {
         // Update the word if incomingWords changes
         setWord(incomingWords);
+        setMeaning('');
       }, [incomingWords]);
   
     useEffect(() => {
       if (word !== prevWordRef.current) {
         setLoading(true);
-        getMeaning(word).then((meaning) => {
-          setMeaning(meaning);
+        getMeaningStream(word, (chunk) => {
+          setMeaning((prev) => prev + chunk);
           setLoading(false);
         });
       }

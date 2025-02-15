@@ -89,7 +89,7 @@ export const Navbar = () => {
     }</h3>
       </Link>
 
-      <span style={{ display: "flex", alignItems: "center", gap: "14px" }}>
+      <span style={{ display: "flex", alignItems: "center", }}>
 
 
         {storage.getItem("user") && (
@@ -108,7 +108,7 @@ export const Navbar = () => {
                 alignItems: 'center',
                 gap: '10px',
                 cursor: 'pointer',
-                marginRight: currentBook ? '18px' : '0px'
+                marginRight: currentBook ? '18px' : '14px'
             }}>
             <Badge
               count={profile?.coins || ' '}
@@ -127,7 +127,7 @@ export const Navbar = () => {
 
 
 {
-  storage.getItem("user") && !currentBook &&
+  storage.getItem("user") &&
   <Popover
   placement="bottomLeft"
   content={
@@ -155,7 +155,8 @@ export const Navbar = () => {
   }}>Set Daily Goal ( Pages )</span>}
   trigger={'click'}
   >
-     <div style={{ display: "flex", alignItems: "center", gap: "10px" }}
+     <div style={{ display: "flex", alignItems: "center", gap: "10px", marginRight: currentBook ? '20px' : '14px'
+ }}
      onClick={() => {
       logGAEvent('click_set_daily_goal');
      }}
@@ -168,7 +169,7 @@ export const Navbar = () => {
           "0%": "#52c41a", // Start color (green)
           "100%": priColor, // End color (blue)
         }}
-        format={() => `${getPagesReadToday()}`}
+        format={() => getPagesReadToday() == storage.getItem('daily-target') ? null : `${getPagesReadToday()}`}
         // format={() => } // Hide percentage text inside
         width={30} // Adjust size
       />

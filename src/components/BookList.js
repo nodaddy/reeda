@@ -15,7 +15,7 @@ import { useRouter } from 'next/navigation';
 import Compressor from 'compressorjs';
 import CameraUpload from './CameraUpload';
 import { getLatestScansbyBookTitle } from '@/firebase/services/scanService';
-import { getSummaryFromText } from '@/openAI';
+import { getSummaryFromText, getSummaryFromTextStream } from '@/openAI';
 import { sum } from 'firebase/firestore';
 import { logGAEvent } from '@/firebase/googleAnalytics';
 
@@ -68,13 +68,12 @@ const BookList = () => {
     setLoadingRecap(true);
     if(selectedBook){
       // get last 5(at max) scans
-      getLatestScansbyBookTitle(selectedBook.title, 5).then(res => {
+      getLatestScansbyBookTitle(selectedBook.title, 5).then(async (res) => {
         if(res.length != 0){
-          getSummaryFromText(res.reduce((a, b) => a + b.data[0].summary, '')).then(res => {
-            setSummaryTillNow(res);
-    setLoadingRecap(false);
-
-          })
+          await getSummaryFromTextStream(res.reduce((a, b) => a + b.data[0].summary, ''), (chunk) => {
+            setSummaryTillNow((prev) => ((prev || '') + chunk));
+            setLoadingRecap(false);
+          });
         } else {
           setSummaryTillNow(<><Alert message="Start reading the book to get recap!" type="info" /></>);
     setLoadingRecap(false);
@@ -273,16 +272,17 @@ const BookList = () => {
                       display: 'flex',
                       justifyContent: 'space-between', 
                       width: '100%',
-                      alignItems: 'center'
+                      alignItems: 'flex-end'
                     }}>
 
 
                     <img src={item.cover} style={{
-                      width: '45px',
+                      width: '47px',
                       backgroundColor: '#f5f5f5',
-                      height: '59px',
-                      borderRadius: '5px',  
+                      height: '62px',
+                      borderRadius: '3px',  
                       marginRight: '15px',
+                      transform: 'translateY(-3px)',
                       objectFit: 'cover',
                       // border: '1px solid silver'
                     }} />
@@ -301,7 +301,7 @@ const BookList = () => {
                       percent={Math.min(item.pagesRead ? ((item.pagesRead / (item.totalPages || 100)) * 100 + 4) : 3, 100)}
                       size="small"
                       showInfo={false}
-                      strokeWidth={4}
+                      strokeWidth={5}
                       style={{ marginTop: '3px' }}
                     />
 
@@ -366,11 +366,11 @@ const BookList = () => {
                     }}
                     href={'/scan/'+item.title}>
                     <BookOpen
-                        size={15}
+                        size={25}
                         style={{
-                          color: 'white',
+                          color: priColor,
                           borderRadius: '4px',
-                          backgroundColor: secColor,
+                          backgroundColor: 'transparent',
                           padding: '5px 5px 4px 5px'
                         }} />
                   </Link>

@@ -11,7 +11,7 @@ import { storage } from './utility';
 import { isUserPremium } from '@/payments/playstoreBilling';
 import { useAppContext } from '@/context/AppContext';
 import { priColor, priTextColor, secTextColor } from '@/configs/cssValues';
-import { Bell, BookCopy, BookOpen, CheckCircle, Clock, Facebook, Goal, HelpCircle, Hourglass, Info, Instagram, LetterText, Library, Pointer, RefreshCcw, Sparkles, Store, Twitter, X } from 'lucide-react';
+import { Bell, BookCopy, BookOpen, CheckCircle, Clock, Facebook, Goal, HelpCircle, Hourglass, Info, Instagram, LetterText, Library, Pointer, Popcorn, RefreshCcw, Sparkles, Store, Twitter, X } from 'lucide-react';
 import { bookshelf, dailyGoal, dic, recap, scaninghands } from '@/assets';
 import Image from 'next/image';
 
@@ -168,20 +168,24 @@ const Home = () => {
          <Library size={14} /> Bookshelf
         </span>
         <span style={tagStyle(Math.random() * 2)}>
-          <Hourglass size={14} /> Summarise
+          <Hourglass size={14} /> Summarise Pages
         </span>
         <span style={tagStyle(Math.random() * 2)}>
-          <Goal size={14} /> Set Goals
+          <Goal size={14} /> Track Goals
         </span>
+        
         <span style={tagStyle(Math.random() * 2)}>
-          <LetterText size={14} /> In-page dictionary
+          <LetterText size={14} /> Build Vocabulary
         </span>
       
         <span style={tagStyle(Math.random() * 2)}>
-        <RefreshCcw size={14} /> Recap previous reading
+        <RefreshCcw size={14} /> Recap Previous Readings
         </span>
         <span style={tagStyle(Math.random() * 2)}>
          <Bell size={14} /> Reminders
+        </span>
+        <span style={tagStyle(Math.random() * 2)}>
+          <Popcorn size={14} /> In-page dictionary
         </span>
       </div>
 

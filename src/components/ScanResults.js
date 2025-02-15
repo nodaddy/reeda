@@ -11,7 +11,7 @@ import Cropper from 'react-easy-crop';
 import { addCoinsPerScan, scanPageRatio, scanPageRation, streakMaintenanceIntervalInSeconds } from "@/configs/variables";
 import { priColor } from "@/configs/cssValues";
 import { storage } from "@/app/utility";
-import { getPageSummaryFromImage, getSimplifiedLanguage } from "@/openAI";
+import { getPageSummaryFromImage, getPageSummaryFromImageStream, getSimplifiedLanguage, getSimplifiedLanguageStream } from "@/openAI";
 import TextWithIntegratedDictionary from "./TextWithIntegratedDictionary";
 import { useAppContext } from "@/context/AppContext";
 import NightModeButton from "./NightModeButton";
@@ -19,10 +19,10 @@ import UploadingScanLoader from "./UploadingScanLoader";
 import { logGAEvent } from "@/firebase/googleAnalytics";
 
 export default function ScanResults({ setBook, scans }) {
-  console.log(scans);
+  // console.log(scans);
   const bookTitle = scans?.bookTitle;
   const [activeView, setActiveView] = useState("summary");
-  const [data, setData] = useState(scans?.data ? [scans.data[0]] : null);
+  const [data, setData] = useState(null);
 
   const [fontSize, setFontSize] = useState(16); // Default font size
   
@@ -41,6 +41,10 @@ export default function ScanResults({ setBook, scans }) {
   const onCropComplete = useCallback((_, croppedAreaPixels) => {
     setCroppedAreaPixels(croppedAreaPixels);
   }, []);
+
+  useEffect(() => {
+   setData(scans?.data ? [scans.data[0]] : null);
+  }, [scans]);
 
   const handleFileChange = async (e) => {
     const files = e.target.files;
@@ -84,9 +88,27 @@ export default function ScanResults({ setBook, scans }) {
     setUploadingImage(true);
     const croppedFile = await getCroppedImage(imageSrc, croppedAreaPixels);
 
-    const [summary, simpleLang] = await Promise.all([
-      getPageSummaryFromImage(croppedFile, 5),
-      getSimplifiedLanguage(croppedFile),
+    
+    let scanDataResponse = [{
+      summary: '',
+      simpleLang: ''
+    }];
+
+    await Promise.all([
+      getPageSummaryFromImageStream(croppedFile, 5, (chunk) => {
+      setShowCropper(false);
+      scanDataResponse = [{...scanDataResponse[0], summary: scanDataResponse[0].summary + chunk }];
+        setData((prev) => {
+          return prev ? [{ ...prev[0], summary: prev[0].summary + chunk }] : [{ summary: chunk }];
+        });
+      }),
+      getSimplifiedLanguageStream(croppedFile, (chunk) => {
+    setShowCropper(false);
+      scanDataResponse = [{...scanDataResponse[0], simpleLang: scanDataResponse[0].simpleLang + chunk }];
+      setData((prev) => {
+        return prev ? [{ ...prev[0], simpleLang: prev[0].simpleLang + chunk }] : [{ simpleLang: chunk }];
+        });
+      }),
     ])
 
     const book = await getBookByTitleAndUserId(bookTitle);
@@ -94,13 +116,10 @@ export default function ScanResults({ setBook, scans }) {
         { ...book, pagesRead: book?.pagesRead ? book?.pagesRead + 1 : 1 },
         bookTitle
     );
-
-    const data = [{
-        summary,
-        simpleLang
-    }]
+    
     setBook(updatedBook);
-    await createScan({ bookTitle, data });
+    await createScan({ bookTitle, data: scanDataResponse });
+
 
     // const profile = await getProfile(JSON.parse(storage.getItem('user')).email);
     const timeDifferenceInSeconds = (Date.now() - profile?.streak.lastPageScanTimestamp) / 1000;
@@ -137,7 +156,6 @@ export default function ScanResults({ setBook, scans }) {
         }))
     }
 
-    setData({ ...data });
     setUploadingImage(false);
     setShowCropper(false);
   };
@@ -262,7 +280,7 @@ export default function ScanResults({ setBook, scans }) {
                     cursor: "pointer",
                   }}
                 >
-                  <Camera onClick={() => { logGAEvent('click_scan_more_pages_of_book') }} size={25} color="white" />
+                  <Camera onClick={() => { logGAEvent('click_scan_more_pages_of_book'); }} size={25} color="white" />
                 </label>
               </div> 
           </div>
@@ -277,7 +295,13 @@ export default function ScanResults({ setBook, scans }) {
           <Button key="back" onClick={() => setShowCropper(false)}>
             Cancel
           </Button>,
-          <Button key="submit" style={{backgroundColor: 'black'}} type="primary" onClick={() => { if (!uploadingImage) { handleUpload(); } }}>
+          <Button key="submit" style={{backgroundColor: 'black'}} type="primary" onClick={() => { 
+            // setShowCropper(false);
+            setData([{
+              summary: '',
+              simpleLang: ''
+            }])
+            if (!uploadingImage) { handleUpload(); } }}>
             {uploadingImage ? <Loader size={10} className="loader" /> : "Upload"}
           </Button>,
         ]}

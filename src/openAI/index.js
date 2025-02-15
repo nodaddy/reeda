@@ -1,6 +1,3 @@
-import OpenAI from "openai";
-import axios from 'axios';
-
 // Replace with your actual OpenAI API key
 const API_KEY = process.env.NEXT_PUBLIC_OPEN_AI_API_KEY;
 
@@ -12,21 +9,59 @@ const API_KEY = process.env.NEXT_PUBLIC_OPEN_AI_API_KEY;
 // });
 
 // Method to call the OpenAI API
-export const getPageSummaryFromImage = async (file, sentenceLimit) => {
+// Shared helper function to handle streaming responses
+const handleStream = async (response, onData) => {
+  const reader = response.body.getReader();
+  const decoder = new TextDecoder('utf-8');
+  let buffer = '';
+  
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    
+    // Decode the chunk and add it to our buffer
+    const chunk = decoder.decode(value, { stream: true });
+    buffer += chunk;
+    
+    // Split the buffer into lines and process each complete line
+    const lines = buffer.split('\n');
+    buffer = lines.pop() || ''; // Keep the last incomplete line in the buffer
+    
+    for (const line of lines) {
+      if (!line.trim() || line === 'data: [DONE]') continue;
+      
+      try {
+        const jsonString = line.replace(/^data: /, '').trim();
+        const json = JSON.parse(jsonString);
+        const content = json.choices[0]?.delta?.content;
+        if (content) {
+          onData(content);
+        }
+      } catch (error) {
+        console.warn('Error parsing JSON:', error);
+      }
+    }
+  }
+};
+
+export const getPageSummaryFromImageStream = async (file, sentenceLimit, onData) => {
   const url = 'https://api.openai.com/v1/chat/completions';
 
   try {
-    // Convert image to base64
     const imageBase64 = await toBase64(file);
 
-    const response = await axios.post(
-      url,
-      {
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${API_KEY}`,
+      },
+      body: JSON.stringify({
         model: 'gpt-4o',
         messages: [
           {
             role: "system",
-            content: `You are a summarizer who extracts text from a book page and returns the key takeaways from the text which would help the reader in a quick read, provide only the takeaways in the image text without any additional commentar`
+            content: `You are a summarizer, provide only the takeaways in the image text without any additional commentar, be quick as much as possible, i want instant result`
           },
           {
             role: "user",
@@ -39,19 +74,170 @@ export const getPageSummaryFromImage = async (file, sentenceLimit) => {
           }
         ],
         temperature: 0,
-      },
-      {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${API_KEY}`,
-        },
-      }
-    );
+        stream: true
+      })
+    });
 
-    console.log(response);
-    return response.data.choices[0].message.content;
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    await handleStream(response, onData);
   } catch (error) {
     console.error('Error processing image:', error);
+    throw error;
+  }
+};
+
+export const getMeaningStream = async (words, onData) => {
+  const url = 'https://api.openai.com/v1/chat/completions';
+
+  try {
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${API_KEY}`,
+      },
+      body: JSON.stringify({
+        model: 'gpt-4o-mini',
+        messages: [
+          {
+            role: "system",
+            content: `you have to tell the meaning of the given words with as simple words as possible, explain quickly with as simple words as possible`
+          },
+          {
+            role: "user",
+            content: "tell me the meaning of" + words
+          }
+        ],
+        temperature: 0.4,
+        stream: true
+      })
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    await handleStream(response, onData);
+  } catch (error) {
+    console.error('Error fetching chat completion:', error);
+    throw error;
+  }
+};
+
+export const getSimplifiedLanguageStream = async (file, onData) => {
+  const url = 'https://api.openai.com/v1/chat/completions';
+
+  try {
+    const imageBase64 = await toBase64(file);
+
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${API_KEY}`,
+      },
+      body: JSON.stringify({
+        model: 'gpt-4o-mini',
+        messages: [
+          {
+            role: "system",
+            content: `You are an AI that extracts text from images of book page, provide only the text in the image without any additional commentary, be quick as much as possible, i want instant result`
+          },
+          {
+            role: "user",
+            content: [
+              {
+                type: "image_url",
+                image_url: { url: `data:${file.type};base64,${imageBase64}` }
+              }
+            ]
+          }
+        ],
+        temperature: 0,
+        stream: true
+      })
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    await handleStream(response, onData);
+  } catch (error) {
+    console.error('Error processing image:', error);
+    throw error;
+  }
+};
+
+export const getSummaryFromTextStream = async (words, onData) => {
+  const url = 'https://api.openai.com/v1/chat/completions';
+
+  try {
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${API_KEY}`,
+      },
+      body: JSON.stringify({
+        model: 'gpt-4o-mini',
+        messages: [
+          { role: 'system', content: 'You are a person who helps summarize the text provided, be quick as much as possible and give response within 60 words' },
+          { role: 'user', content: words },
+        ],
+        temperature: 0.7,
+        stream: true,
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    const reader = response.body.getReader();
+    const decoder = new TextDecoder('utf-8');
+    let done = false;
+    let buffer = '';
+
+    while (!done) {
+      const { value, done: doneReading } = await reader.read();
+      done = doneReading;
+
+      // Decode the chunk and add it to our buffer
+      const chunk = decoder.decode(value, { stream: true });
+      buffer += chunk;
+
+      // Split the buffer into lines and process each complete line
+      const lines = buffer.split('\n');
+      buffer = lines.pop() || ''; // Keep the last incomplete line in the buffer
+
+      for (const line of lines) {
+        // Skip empty lines
+        if (!line.trim()) continue;
+
+        // Remove the "data: " prefix and parse the JSON
+        const jsonString = line.replace(/^data: /, '').trim();
+        
+        // Skip "[DONE]" message
+        if (jsonString === '[DONE]') continue;
+
+        try {
+          const json = JSON.parse(jsonString);
+          // Extract the content from the delta if it exists
+          const content = json.choices[0]?.delta?.content;
+          if (content) {
+            onData(content);
+          }
+        } catch (error) {
+          console.warn('Error parsing JSON:', error);
+        }
+      }
+    }
+  } catch (error) {
+    console.error('Error fetching chat completion:', error);
     throw error;
   }
 };
@@ -130,131 +316,4 @@ const toBase64 = (file, maxWidth = 1024, maxHeight = 1024, quality = 0.3) => {
 
     reader.onerror = (error) => reject(error);
   });
-};
-
-
-
-// Method to call the OpenAI API
-export const getMeaning = async (words) => {
-  const url = 'https://api.openai.com/v1/chat/completions';
-
-  console.log(words);
-
-  try {
-    const response = await axios.post(
-      url,
-      {
-        model: 'gpt-4o-mini',
-        messages: [
-        {role: "system", content: `you have to tell the meaning of the given words with as simple words as possible, explain quickly with as simple words as possible`},
-        {
-            role: "user",
-            content: "tell me the meaning of" + words
-        }
-      ],
-        temperature: 0.4,
-      },
-      {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${API_KEY}`,
-        },
-      }
-    ).then(response => response.data).catch(error => {
-          console.error('Error fetching chat completion:', error);
-          throw error;
-        });
-
-    console.log(response.choices[0].message.content);
-    return response.choices[0].message.content;
-  } catch (error) {
-    console.error('Error fetching chat completion:', error);
-    throw error;
-  }
-};
-
-// Method to call the OpenAI API
-export const getSimplifiedLanguage = async (file) => {
-  const url = 'https://api.openai.com/v1/chat/completions';
-
-  try {
-    // Convert image to base64
-    const imageBase64 = await toBase64(file);
-
-    const response = await axios.post(
-      url,
-      {
-        model: 'gpt-4o-mini',
-        messages: [
-          {
-            role: "system",
-            content: `You are an AI that extracts text from images of book page, provide only the text in the image without any additional commentary`
-          },
-          {
-            role: "user",
-            content: [
-              {
-                type: "image_url",
-                image_url: { url: `data:${file.type};base64,${imageBase64}` }
-              }
-            ]
-          }
-        ],
-        temperature: 0,
-      },
-      {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${API_KEY}`,
-        },
-      }
-    );
-
-    let responseText = response.data.choices[0].message.content.trim();
-
-    return responseText; 
-  } catch (error) {
-    console.error('Error processing image:', error);
-    throw error;
-  }
-};
-
-
-// Method to call the OpenAI API
-export const getSummaryFromText = async (words) => {
-  const url = 'https://api.openai.com/v1/chat/completions';
-
-  console.log(words);
-
-  try {
-    const response = await axios.post(
-      url,
-      {
-        model: 'gpt-4o-mini',
-        messages: [
-        {role: "system", content: `you are a person who helps summarise the text provided in no more than 7 sentences`},
-        {
-            role: "user",
-            content: words
-        }
-      ],
-        temperature: 0.7,
-      },
-      {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${API_KEY}`,
-        },
-      }
-    ).then(response => response.data).catch(error => {
-          console.error('Error fetching chat completion:', error);
-          throw error;
-        });
-
-    console.log(response.choices[0].message.content);
-    return response.choices[0].message.content;
-  } catch (error) {
-    console.error('Error fetching chat completion:', error);
-    throw error;
-  }
 };
