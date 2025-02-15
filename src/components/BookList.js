@@ -194,6 +194,7 @@ const BookList = () => {
             paddingTop: '18px',
       
       }}>
+        <div>
        {/* <BadgeAnt count={books?.length} showZero={false} color={secColor} offset={[5, 3]} > */}
         <BadgeAnt count={books?.length} showZero={true} color={secColor}  offset={[4, -3]}>
         <span style={{
@@ -206,9 +207,15 @@ const BookList = () => {
             borderRadius: '6px'
 
         }}>My Books</span>
-        <sup>Collection of your physical books </sup>
+       
         </BadgeAnt>
-        {/* </BadgeAnt> */}
+        <br/>
+        <sup style={{fontFamily: "'Inter', sans-serif", fontSize: '14px', color: secTextColor, paddingLeft: '2px', 
+        transform: 'translateY(-2px)',
+      }}>
+          Collection of your physical books </sup>
+        
+       </div>
  
        
         </div>
@@ -227,7 +234,7 @@ const BookList = () => {
                 />
          {filteredBooks?.length > 0 && <>
          <BookPlus size={35}
-         color={priColor} style={{ cursor: 'pointer', marginRight: '8px' }} onClick={() => {
+         color={priColor} style={{ cursor: 'pointer', marginRight: '6px' }} onClick={() => {
           showModal(true);
           logGAEvent('click_add_book_icon');
          }} />
@@ -254,9 +261,10 @@ const BookList = () => {
                   <Card
                     style={{ backfaceVisibility: 'hidden',
                     borderRadius: '13px', 
-                    padding: '0px 20px',
-                   boxShadow: '0 0px 8px rgba(0, 0, 0, 0.06)',
-                    margin: '0px auto 23px auto',
+                    //padding: '0px 20px',
+                   //boxShadow: '0 0px 8px rgba(0, 0, 0, 0.06)',
+                    margin: '0px auto 12px auto',
+                    border: '0px',
                     width: '98%' }}
                     bodyStyle={{ padding: '10px 0px' }}
                   >
@@ -460,7 +468,7 @@ const BookList = () => {
                                     setOpenPopOver(item.title == openPopOver ? null : item.title);
                                     logGAEvent('click_more_options_on_book_card');
                                   }}
-                                  style={{ marginRight: "-22px", cursor: "pointer", color: item.title == openPopOver ? priColor  : ''}} 
+                                  style={{ marginRight: "-18px", cursor: "pointer", color: item.title == openPopOver ? priColor  : ''}} 
                                 />
                               </Popover>
                                 
