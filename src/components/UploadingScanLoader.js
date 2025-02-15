@@ -3,11 +3,9 @@ import { motion } from "framer-motion";
 import { Loader2 } from "lucide-react";
 
 const quotes = [
-    "Cropping the image",
-    "Reading the text in the page",
-    "Creating context for the text",
     "Creating Summary",
-    "Adding meanings and explanations",
+    "Creating in-page dictionary",
+    "We're almost done",
     "We're almost done",
     "We're almost done",
     "We're almost done",
@@ -23,7 +21,7 @@ const UploadingScanLoader = () => {
     useEffect(() => {
         const interval = setInterval(() => {
             setQuoteIndex((prevIndex) => (prevIndex + 1) % quotes.length);
-        }, 3000); // Change quote every 3 seconds
+        }, 1500); // Change quote every 3 seconds
 
         return () => clearInterval(interval);
     }, []);

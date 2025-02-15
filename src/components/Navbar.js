@@ -167,11 +167,11 @@ export const Navbar = () => {
         strokeWidth={14} // Thicker stroke for a premium feel
         strokeColor={{
           "0%": "#52c41a", // Start color (green)
-          "100%": priColor, // End color (blue)
+          "100%": "#52c41a", // End color (blue)
         }}
         format={() => getPagesReadToday() == storage.getItem('daily-target') ? null : `${getPagesReadToday()}`}
         // format={() => } // Hide percentage text inside
-        width={30} // Adjust size
+        width={27} // Adjust size
       />
     </div>
       
