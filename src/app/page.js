@@ -11,7 +11,7 @@ import { storage } from './utility';
 import { isUserPremium } from '@/payments/playstoreBilling';
 import { useAppContext } from '@/context/AppContext';
 import { priColor, priTextColor, secTextColor } from '@/configs/cssValues';
-import { Bell, BookCopy, BookOpen, CheckCircle, Clock, Facebook, Goal, HelpCircle, Hourglass, Info, Instagram, LetterText, Library, Pointer, Popcorn, RefreshCcw, Sparkles, Store, Twitter, X } from 'lucide-react';
+import { Bell, Book, BookCopy, BookOpen, CheckCircle, Clock, Facebook, Goal, HelpCircle, Hourglass, Info, Instagram, LetterText, Library, Pointer, Popcorn, RefreshCcw, Sparkles, Store, Twitter, X } from 'lucide-react';
 import { bookshelf, dailyGoal, dic, recap, scaninghands } from '@/assets';
 import Image from 'next/image';
 
@@ -168,10 +168,10 @@ const Home = () => {
          <Library size={14} /> Bookshelf
         </span>
         <span style={tagStyle(Math.random() * 2)}>
-          <Hourglass size={14} /> Summarise Pages
+          <Hourglass size={14} /> Page Summary
         </span>
         <span style={tagStyle(Math.random() * 2)}>
-          <Goal size={14} /> Track Goals
+          <Goal size={14} /> Goals Tracking
         </span>
         
         <span style={tagStyle(Math.random() * 2)}>
@@ -185,7 +185,7 @@ const Home = () => {
          <Bell size={14} /> Reminders
         </span>
         <span style={tagStyle(Math.random() * 2)}>
-          <Popcorn size={14} /> In-page dictionary
+          <Book size={14} /> In-page dictionary
         </span>
       </div>
 
