@@ -49,7 +49,7 @@
     align-items: center;
     width: 70px;
     height: 70px;
-    background-color: var(--primary-color);
+    background-color: black;
     border-radius: 50%;
     cursor: pointer;
     transition: background-color 0.3s;
@@ -58,10 +58,7 @@
     right: 50%;
     transform: translateX(50%);
   }
-  
-  .fileInputLabel:hover {
-    background-color: var(--secondary-color);
-  }
+
   
   .fileInputLabel svg {
     width: 32px;

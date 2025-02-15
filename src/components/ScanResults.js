@@ -255,7 +255,7 @@ export default function ScanResults({ setBook, scans }) {
                     height: "45px",
                     width: "45px",
                     borderRadius: "50%",
-                    backgroundColor: priColor,
+                    backgroundColor: 'black',
                     display: "flex",
                     justifyContent: "center",
                     alignItems: "center",
@@ -273,9 +273,15 @@ export default function ScanResults({ setBook, scans }) {
       <Modal
         title="Crop and Upload Image"
         style={{ padding: "30px", borderRadius: "20px" }}
-        okText={uploadingImage ? <Loader size={10} className="loader" /> : "Upload"}
+        footer={[
+          <Button key="back" onClick={() => setShowCropper(false)}>
+            Cancel
+          </Button>,
+          <Button key="submit" style={{backgroundColor: 'black'}} type="primary" onClick={() => { if (!uploadingImage) { handleUpload(); } }}>
+            {uploadingImage ? <Loader size={10} className="loader" /> : "Upload"}
+          </Button>,
+        ]}
         open={showCropper}
-        onOk={() => { if(!uploadingImage) {handleUpload()}}}
         onCancel={() => setShowCropper(false)}
         onClose={() => setShowCropper(false)}
       >

@@ -456,7 +456,8 @@ style={{height: 'auto', display: 'flex', alignItems: 'center', flexDirection: 'c
       <br/>
       <br/>
       <br/>
-      <div style={{width: '100vw', marginLeft: '-38px', padding: '20px 0px', backgroundColor: '#909090', color: 'white',
+      <div style={{width: '100vw', marginLeft: '-38px', padding: '20px 0px', 
+      backgroundColor: 'black', color: 'white',
     display: 'flex',
     justifyContent: 'space-around',
     alignItems: 'center'

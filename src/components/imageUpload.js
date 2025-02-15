@@ -142,11 +142,15 @@ export default function ImageUpload({ setBook, bookTitle, setData, setModalOpen 
       <Modal
         title="Crop and Upload Image"
         style={{ padding: "30px", borderRadius: "20px" }}
-        okText={uploadingImage ? <Loader size={10} className="loader" /> : "Upload"}
         open={showCropper}
-        onOk={() => { 
-          if (!uploadingImage) { handleUpload(); }
-        }}
+        footer={[
+          <Button key="back" onClick={() => setShowCropper(false)}>
+            Cancel
+          </Button>,
+          <Button key="submit" style={{backgroundColor: 'black'}} type="primary" onClick={() => { if (!uploadingImage) { handleUpload(); } }}>
+            {uploadingImage ? <Loader size={10} className="loader" /> : "Upload"}
+          </Button>,
+        ]}
         onCancel={() => {
           setShowCropper(false);
         }}

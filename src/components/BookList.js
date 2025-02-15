@@ -223,7 +223,7 @@ const BookList = () => {
                 />
          {filteredBooks?.length > 0 && <>
          <BookPlus size={35}
-         color={secColor} style={{ cursor: 'pointer', marginRight: '8px' }} onClick={() => {
+         color={priColor} style={{ cursor: 'pointer', marginRight: '8px' }} onClick={() => {
           showModal(true);
           logGAEvent('click_add_book_icon');
          }} />
@@ -289,7 +289,8 @@ const BookList = () => {
                       percent={Math.min(item.pagesRead ? ((item.pagesRead / (item.totalPages || 100)) * 100 + 4) : 3, 100)}
                       size="small"
                       showInfo={false}
-                      style={{ marginTop: '4px' }}
+                      strokeWidth={4}
+                      style={{ marginTop: '3px' }}
                     />
 
                     {/* Delete Button */}
@@ -546,7 +547,9 @@ const BookList = () => {
           {/* {imageBase64 && <p>Image uploaded successfully!</p>} */}
         </Form.Item>
         <Form.Item>
-          <Button disabled={!imageBase64} type="primary" htmlType="submit" block>Add Book</Button>
+          <Button disabled={!imageBase64} style={{
+            backgroundColor: 'black'
+          }} type="primary" htmlType="submit" block>Add Book</Button>
         </Form.Item>
         </Form>
       </Modal>
