@@ -22,7 +22,7 @@ export const AppProvider = ({ children }) => {
     }
   }, [profile]);
 
-  const [isPremium, setIsPremium] = useState(false);
+  const [isPremium, setIsPremium] = useState(true);
 
   return (
     <AppContext.Provider value={{ profile, setProfile, isPremium, setIsPremium, nightModeOn, setNightModeOn,

@@ -16,7 +16,6 @@ const { Title } = Typography;
 
 const SignInWithGoogle = ({router}) => {
   const [loading, setLoading] = useState(false);
-  const [modalVisible, setModalVisible] = useState(false);
   const [error, setError] = useState(null);
 
   const {setProfile} = useAppContext();
@@ -37,7 +36,7 @@ const SignInWithGoogle = ({router}) => {
         // Create a new profile if one doesn't exist
         await createProfile(userId, {
           streak: {days: 0, lastPageScanTimestamp: Date.now()},
-          coins: 10
+          coins: 0
         });
       }
 
@@ -50,7 +49,6 @@ const SignInWithGoogle = ({router}) => {
       setError('Something went wrong. Please try again.');
     } finally {
       setLoading(false);
-      setModalVisible(false);
     }
   };
 

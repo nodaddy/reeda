@@ -17,7 +17,7 @@ import { secTextColor } from "@/configs/cssValues";
 import UploadingScanLoader from "./UploadingScanLoader";
 import { logGAEvent } from "@/firebase/googleAnalytics";
 
-export default function ImageUpload({ setBook, bookTitle, setData, setModalOpen, inResults }) {
+export default function ImageUpload({ setBook, bookTitle, setData, setModalOpen }) {
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);

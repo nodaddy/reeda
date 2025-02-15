@@ -18,7 +18,9 @@ export async function initiatePurchaseFlow(itemIdsArray) {
             // alert('acknowledged');
             window.location.reload();
         } catch (error) {
-            alert(JSON.stringify(error) + "Kindly restart the app for smoother experience!");
+            // alert(JSON.stringify(error) + "Kindly restart the app!");
+            window.location.reload();
+
             console.error('Error during purchase flow:', error);
         }}
     });

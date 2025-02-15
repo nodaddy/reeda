@@ -12,44 +12,71 @@ const API_KEY = process.env.NEXT_PUBLIC_OPEN_AI_API_KEY;
 // });
 
 // Method to call the OpenAI API
-export const getPageSummaryFromImage = async (file, sentenceLimit) => {
+const getPageSummaryFromImage = async (file, onDataChunk) => {
   const url = 'https://api.openai.com/v1/chat/completions';
 
   try {
     // Convert image to base64
     const imageBase64 = await toBase64(file);
 
-    const response = await axios.post(
-      url,
-      {
-        model: 'gpt-4o',
-        messages: [
-          {
-            role: "system",
-            content: `You are a summarizer who extracts text from a book page and returns the key takeaways from the text which would help the reader in a quick read, provide only the takeaways in the image text without any additional commentar`
-          },
-          {
-            role: "user",
-            content: [
-              {
-                type: "image_url",
-                image_url: {url: `data:${file.type};base64,${imageBase64}`}
-              }
-            ]
-          }
-        ],
-        temperature: 0,
-      },
-      {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${API_KEY}`,
+    // Set up the request payload
+    const payload = {
+      model: 'gpt-4o',
+      messages: [
+        {
+          role: 'system',
+          content: 'You are a summarizer who extracts text from a book page and returns the key takeaways from the text to help the reader quickly understand the content. Provide only the takeaways from the image text without any additional commentary.',
         },
-      }
-    );
+        {
+          role: 'user',
+          content: [
+            {
+              type: 'image_url',
+              image_url: { url: `data:${file.type};base64,${imageBase64}` },
+            },
+          ],
+        },
+      ],
+      temperature: 0,
+      stream: true, // Enable streaming
+    };
 
-    console.log(response);
-    return response.data.choices[0].message.content;
+    // Set up the request headers
+    const headers = {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${API_KEY}`,
+    };
+
+    // Send the POST request with streaming response
+    const response = await axios.post(url, payload, {
+      headers,
+      responseType: 'stream', // Handle streaming response
+    });
+
+    // Process the streamed response
+    response.data.on('data', (chunk) => {
+      const data = chunk.toString();
+      try {
+        const parsedData = JSON.parse(data);
+        if (parsedData.choices && parsedData.choices[0].delta && parsedData.choices[0].delta.content) {
+          onDataChunk(parsedData.choices[0].delta.content);
+        }
+      } catch (error) {
+        console.error('Error parsing chunk:', error);
+      }
+    });
+
+    // Handle the end of the stream
+    return new Promise((resolve, reject) => {
+      response.data.on('end', () => {
+        resolve();
+      });
+
+      response.data.on('error', (error) => {
+        console.error('Error during streaming:', error);
+        reject(error);
+      });
+    });
   } catch (error) {
     console.error('Error processing image:', error);
     throw error;
