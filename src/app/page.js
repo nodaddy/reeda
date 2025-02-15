@@ -11,7 +11,7 @@ import { storage } from './utility';
 import { isUserPremium } from '@/payments/playstoreBilling';
 import { useAppContext } from '@/context/AppContext';
 import { priColor, priTextColor, secTextColor } from '@/configs/cssValues';
-import { BookCopy, BookOpen, CheckCircle, Clock, Facebook, HelpCircle, Info, Instagram, Pointer, Sparkles, Store, Twitter, X } from 'lucide-react';
+import { Bell, BookCopy, BookOpen, CheckCircle, Clock, Facebook, Goal, HelpCircle, Hourglass, Info, Instagram, LetterText, Library, Pointer, RefreshCcw, Sparkles, Store, Twitter, X } from 'lucide-react';
 import { bookshelf, dailyGoal, dic, recap, scaninghands } from '@/assets';
 import Image from 'next/image';
 
@@ -25,10 +25,24 @@ const Home = () => {
   const router = useRouter();
   const [goodsDetails, setGoodsDetails] = useState(null);
 
-  const { profile, setProfile, isPremium, setIsPremium } = useAppContext();
+  const { profile, setProfile } = useAppContext();
 
   // differnece in seconds
   const [lastPageScanDifference, setLastPageScanDifference] = useState(0);
+
+  const tagStyle = (delay) => ({
+    display: 'flex',
+    alignItems: 'center',
+    gap: '6px',
+    padding: '8px 17px',
+    backgroundColor: 'black',
+    borderRadius: '999px',
+    color: 'white',
+    fontWeight: '400',
+    fontSize: '12px',
+    animation: `wiggle 2s ease-in-out ${delay}s infinite`,
+  });
+  
 
   useEffect(()=> {
 
@@ -60,10 +74,6 @@ const Home = () => {
       setLastPageScanDifference(lastPageScanDifference);
     }
   }, [profile]);
-
-  useEffect(() => {
-    isUserPremium().then((result) => setIsPremium(result)).catch((err) => console.log(err));
-  }, []);
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -127,7 +137,8 @@ const Home = () => {
            
         </Title>    
         <Title level={5} style={{textAlign: 'center', marginBottom: '0px', marginTop :'0px', marginLeft: '-38px',
-        width: '100vw', backgroundColor: '#909090',
+        width: '100vw', 
+        backgroundColor: '#909090',
         color: 'white', 
         padding: '7px',
         fontWeight: '400',
@@ -143,6 +154,40 @@ const Home = () => {
       <SignInWithGoogle router={router} /> 
 </div>
       <div> 
+
+
+
+
+
+      <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '14px', 
+      flexWrap: 'wrap', width: '100vw', 
+      padding: '30px 0px',
+      fontFamily: "'Inter', sans-serif",
+      marginLeft: '-38px'}}>
+        <span style={tagStyle(Math.random() * 2)}>
+         <Library size={14} /> Bookshelf
+        </span>
+        <span style={tagStyle(Math.random() * 2)}>
+          <Hourglass size={14} /> Summarise
+        </span>
+        <span style={tagStyle(Math.random() * 2)}>
+          <Goal size={14} /> Set Goals
+        </span>
+        <span style={tagStyle(Math.random() * 2)}>
+          <LetterText size={14} /> In-page dictionary
+        </span>
+      
+        <span style={tagStyle(Math.random() * 2)}>
+        <RefreshCcw size={14} /> Recap previous reading
+        </span>
+        <span style={tagStyle(Math.random() * 2)}>
+         <Bell size={14} /> Reminders
+        </span>
+      </div>
+
+
+
+
 
       <div 
       style={{

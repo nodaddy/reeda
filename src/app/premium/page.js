@@ -14,8 +14,7 @@ const Page = () => {
   useEffect(() => {
     isUserPremium().then((result) => {
       // alert(result);
-    //   setIsPremium(result)}).catch((err) => console.log(err));
-    setIsPremium(true)}).catch((err) => console.log(err));
+      setIsPremium(result)}).catch((err) => console.log(err));
   }, []);
 
     return (  isPremium ? 

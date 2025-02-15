@@ -11,6 +11,8 @@ const AppContext = createContext();
 export const AppProvider = ({ children }) => {
   const [profile, setProfile] = useState(null);
   const [nightModeOn, setNightModeOn] = useState(false);
+  const [isPremium, setIsPremium] = useState(true);
+
 
   const [currentBook, setCurrentBook] = useState(null);
 
@@ -21,8 +23,6 @@ export const AppProvider = ({ children }) => {
         });
     }
   }, [profile]);
-
-  const [isPremium, setIsPremium] = useState(true);
 
   return (
     <AppContext.Provider value={{ profile, setProfile, isPremium, setIsPremium, nightModeOn, setNightModeOn,

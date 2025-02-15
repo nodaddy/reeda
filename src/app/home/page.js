@@ -68,7 +68,7 @@ const Home = () => {
   }, [profile]);
 
   useEffect(() => {
-    isUserPremium().then((result) => setIsPremium(result)).catch((err) => console.log(err));
+    isUserPremium().then((result) => setIsPremium(true)).catch((err) => console.log(err));
   }, []);
 
   useEffect(() => {
