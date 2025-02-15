@@ -144,7 +144,8 @@ export const Navbar = () => {
             />
             &nbsp;
             &nbsp;
-            <Button type="link" onClick={() => { window.location.reload(); }} style={{ marginTop: 5, padding: '0px' }}>
+            <Button type="link" onClick={() => { 
+              window.location.reload(); }} style={{ marginTop: 5, padding: '0px' }}>
               Save
             </Button>
           </div>
@@ -154,17 +155,11 @@ export const Navbar = () => {
   }}>Set Daily Goal ( Pages )</span>}
   trigger={'click'}
   >
-  {/* <Badge
-  offset={[0, -4]}
-  style={{
-    fontSize: '11px',
-    boxShadow: '0px',
-    color: priColor, 
-    backgroundColor: 'transparent',
-    boxShadow: '0px 0px 0px transparent'
-  }}
-  count={`${((getPagesReadToday() / (storage.getItem('daily-target') || 1))*100).toFixed(0)}%`} showZero> */}
-     <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+     <div style={{ display: "flex", alignItems: "center", gap: "10px" }}
+     onClick={() => {
+      logGAEvent('click_set_daily_goal');
+     }}
+     >
       <Progress
         type="circle"
         percent={(Math.min((getPagesReadToday()/(storage.getItem('daily-target') || 1)) * 100, 100)).toFixed(0)}

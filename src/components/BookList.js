@@ -33,6 +33,7 @@ const BookList = () => {
   const [selectedBookForSummary, setSelectedBookForSummary] = useState(null);
 
   const [loading, setLoading] = useState(false);
+  const [uploadingBook, setUploadingBook] = useState(false);
   const [height, setHeight] = useState(0);
 
   const [openPopOver, setOpenPopOver] = useState(false);
@@ -135,6 +136,7 @@ const BookList = () => {
       // route to premium page
       router.push('/premium');
     } else {
+      setUploadingBook(true);
       const newBook = { title: values.title, totalPages: values.totalPages,  author: values.author, cover: imageBase64};
       createbook(newBook).then(() => getBooks().then(async (res) => {
 
@@ -148,10 +150,11 @@ const BookList = () => {
 
         setBooks(res);
         setFilteredBooks(res);
+        setUploadingBook(false);
+        setIsModalVisible(false);
+        form.resetFields();
+        setImageBase64(null);
       }));
-      setIsModalVisible(false);
-      form.resetFields();
-      setImageBase64(null);
     }
   };
 
@@ -344,7 +347,10 @@ const BookList = () => {
                           borderRadius: '50%',
                         }} />
                     </Link> */}
-                    <Link 
+                    <Link
+                    onClick={() => {
+                      logGAEvent('click_read_book_icon_in_booklist');
+                    }}
                     style={{
                       textDecoration :'none',
                       marginBottom: '-6px'
@@ -549,7 +555,9 @@ const BookList = () => {
         <Form.Item>
           <Button disabled={!imageBase64} style={{
             backgroundColor: !imageBase64 ? '' : 'black'
-          }} type="primary" htmlType="submit" block>Add Book</Button>
+          }} type="primary" htmlType="submit" block>
+            {uploadingBook ? <Loader className='loader' size={20} /> : 'Add Book'}
+            </Button>
         </Form.Item>
         </Form>
       </Modal>
