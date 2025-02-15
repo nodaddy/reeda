@@ -5,11 +5,11 @@ import { Loader2 } from "lucide-react";
 const quotes = [
     "Scanning for key takeaways",
     "Creating in-page dictionary",
-    "Almost done",
-    "Almost done",
-    "Almost done",
-    "Almost done",
-    "Almost done",
+    "Almost done!",
+    "Almost done!",
+    "Almost done!",
+    "Almost done!",
+    "Almost done!",
 ];
 
 const UploadingScanLoader = () => {
@@ -18,7 +18,7 @@ const UploadingScanLoader = () => {
     useEffect(() => {
         const interval = setInterval(() => {
             setQuoteIndex((prevIndex) => (prevIndex + 1) % quotes.length);
-        }, 1500); // Change quote every 3 seconds
+        }, 1900); // Change quote every 3 seconds
 
         return () => clearInterval(interval);
     }, []);
