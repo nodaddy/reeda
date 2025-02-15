@@ -206,6 +206,7 @@ const BookList = () => {
             borderRadius: '6px'
 
         }}>My Books</span>
+        <sup>Collection of your physical books </sup>
         </BadgeAnt>
         {/* </BadgeAnt> */}
  
