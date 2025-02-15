@@ -14,7 +14,6 @@ import { priColor, priTextColor, secTextColor } from '@/configs/cssValues';
 import { BookCopy, BookOpen, CheckCircle, Clock, Facebook, HelpCircle, Info, Instagram, Pointer, Sparkles, Store, Twitter, X } from 'lucide-react';
 import { bookshelf, dailyGoal, dic, recap, scaninghands } from '@/assets';
 import Image from 'next/image';
-import requestNotificationPermission from '@/requestPermission';
 
 
 const { Title } = Typography;
@@ -144,18 +143,6 @@ const Home = () => {
       <SignInWithGoogle router={router} /> 
 </div>
       <div> 
-
-
-{/* 
-     <Title level={4} style={{ padding: '0px', color: priTextColor,
-        fontWeight: '300',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center'
-      }}>
-         &nbsp; Revolutionizing<br/> Reading Experiences <br/>
-          
-      </Title>  */}
 
       <div 
       style={{
