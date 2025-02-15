@@ -168,10 +168,10 @@ const Home = () => {
          <Library size={14} /> Bookshelf
         </span>
         <span style={tagStyle(Math.random() * 2)}>
-          <Hourglass size={14} /> Page Summary
+          <Hourglass size={14} /> Summarise
         </span>
         <span style={tagStyle(Math.random() * 2)}>
-          <Goal size={14} /> Goals Tracking
+          <Goal size={14} /> Track Progress
         </span>
         
         <span style={tagStyle(Math.random() * 2)}>
@@ -182,10 +182,7 @@ const Home = () => {
         <RefreshCcw size={14} /> Recap Previous Readings
         </span>
         <span style={tagStyle(Math.random() * 2)}>
-         <Bell size={14} /> Reminders
-        </span>
-        <span style={tagStyle(Math.random() * 2)}>
-          <Book size={14} /> In-page dictionary
+         <Bell size={14} /> Set Reminders
         </span>
       </div>
 
