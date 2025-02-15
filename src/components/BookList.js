@@ -368,7 +368,7 @@ const BookList = () => {
                             <span style={{padding: '0px'}}>
                                 <Popconfirm
                                 onCancel={() => setOpenPopOver(null)}
-                          placement='top'
+                          placement='topLeft'
                           title={ item.pagesRead === item.totalPages ? "Re-read this book?" : "Mark this book as completed?"}
                           onConfirm={async () => {
                             const book1 = await getBookByTitleAndUserId(item.title.trim());
