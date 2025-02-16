@@ -11,7 +11,7 @@ import { storage } from './utility';
 import { isUserPremium } from '@/payments/playstoreBilling';
 import { useAppContext } from '@/context/AppContext';
 import { priColor, priTextColor, secTextColor } from '@/configs/cssValues';
-import { Bell, Book, BookCopy, BookOpen, CheckCircle, Clock, Facebook, Goal, HelpCircle, Hourglass, Info, Instagram, LetterText, Library, Pointer, Popcorn, RefreshCcw, Sparkles, Store, Twitter, X } from 'lucide-react';
+import { Bell, Book, BookCopy, BookOpen, CheckCircle, Clock, Facebook, Goal, HelpCircle, Hourglass, Info, Instagram, LetterText, Library, Lightbulb, Pointer, Popcorn, RefreshCcw, Sparkles, Store, Twitter, X } from 'lucide-react';
 import { bookshelf, dailyGoal, dic, recap, scaninghands } from '@/assets';
 import Image from 'next/image';
 
@@ -182,7 +182,10 @@ const Home = () => {
         <RefreshCcw size={14} /> Recap Previous Readings
         </span>
         <span style={tagStyle(Math.random() * 2)}>
-         <Bell size={14} /> Set Reminders
+         <Bell size={14} /> Reminders
+        </span>
+        <span style={tagStyle(Math.random() * 2)}>
+         <Lightbulb size={14} /> Night Mode
         </span>
       </div>
 
