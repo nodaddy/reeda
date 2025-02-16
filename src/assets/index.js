@@ -4,6 +4,7 @@ import dic from './dic.png';
 import recap from './recap.png';
 import bookshelf from './bookshelf.png';
 import dailyGoal from './daily-goal.png';
+import uploadImages from './upload-images.svg';
 
 export {
     scaninghands,
@@ -11,5 +12,6 @@ export {
     dic,
     recap,
     bookshelf,
-    dailyGoal
+    dailyGoal,
+    uploadImages
 }

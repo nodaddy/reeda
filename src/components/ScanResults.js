@@ -15,6 +15,11 @@ import NightModeButton from "./NightModeButton";
 import { logGAEvent } from "@/firebase/googleAnalytics";
 import { toBlob } from "./imageUpload";
 import { secColor } from "@/configs/cssValues";
+import { uploadImages } from "@/assets";
+import NextImage from "next/image";
+import StackedImages from "./StackedImages";
+import BookStyleImages from "./StackedImages";
+import PagesDisplay from "./StackedImages";
 
 export default function ScanResults({ setBook, scans }) {
   // console.log(scans);
@@ -285,32 +290,37 @@ export default function ScanResults({ setBook, scans }) {
 <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "15px", padding: "10px" }}>
   
 {/* Grid Layout for Images + Capture Button */}
-<div style={{ 
-    display: "grid", 
-    gridTemplateColumns: "repeat(auto-fill, minmax(80px, 1fr))", 
-    gap: "10px", 
-    width: "100%", 
-    maxWidth: "300px", 
-    justifyContent: "center",
-    alignItems: "center"
-  }}>
-  
-  {images.map((src, index) => (
-    <img
-      key={index}
-      src={src}
-      alt={`Captured ${index}`}
-      style={{
-        width: "60px",
-        objectFit: "cover",
-        borderRadius: "8px",
-        border: "2px solid #ddd",
-      }}
-    />
-  ))}
-  
-  {/* Image Capture Button as the Last Grid Element */}
-  <label 
+{images.length > 0 && 
+
+<>
+<br/>
+<br/>
+<br/>
+<StackedImages images={images} loading={uploadingImage} />
+
+</>}
+
+
+
+{
+    images.length == 0 && (
+      <div align="center" style={{
+        width: '100%',
+        height: '43vh',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center'
+      }}>
+        <NextImage src={uploadImages}
+        style={{width: '60%'}}
+        />
+      </div>
+    )
+  }
+
+<br/>
+<br/>
+<label 
     htmlFor="file-upload"
     style={{
       position: 'absolute',
@@ -366,12 +376,6 @@ export default function ScanResults({ setBook, scans }) {
     
     )}
   </label>
-
-</div>
-
-<br/>
-<br/>
-
 {/* Merge Images Button */}
 {/* {<button 
   onClick={() => {
