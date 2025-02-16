@@ -26,6 +26,8 @@ export async function POST(req) {
     const body = await req.json();
     const { packageName, productId, purchaseToken } = body;
 
+    console.log('Body:', body);
+
     // Log request details
     console.log('Attempting verification for:', {
       packageName,
