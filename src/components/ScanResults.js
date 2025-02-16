@@ -39,8 +39,6 @@ export default function ScanResults({ setBook, scans }) {
 
   const [selectedSessionNumberOfPages, setSelectedSessionNumberOfPages] = useState(3);
 
-  const canvasRef = useRef(null);
-
   const handleCapture = (event) => {
     const file = event.target.files[0];
     if (file) {
@@ -49,35 +47,36 @@ export default function ScanResults({ setBook, scans }) {
     }
   };
 
-  const getMergedImageBlob = async () => {
-    const canvas = canvasRef.current;
-    const context = canvas.getContext('2d');
-    const imageElements = await Promise.all(
-      images.map((src) => {
-        return new Promise((resolve) => {
-          const img = new Image();
-          img.onload = () => resolve(img);
-          img.src = src;
-        });
-      })
-    );
-
-    // Assuming all images have the same dimensions
-    const width = imageElements[0].width;
-    const height = imageElements[0].height;
-    canvas.width = width;
-    canvas.height = height * imageElements.length;
-
-    imageElements.forEach((img, index) => {
-      context.drawImage(img, 0, height * index, width, height);
+  const getBlob = async (src) => {
+  
+    const offscreenCanvas = document.createElement("canvas");
+    const context = offscreenCanvas.getContext("2d");
+  
+    if (!context) {
+      console.error("Canvas context is not available!");
+      return null;
+    }
+  
+    const imageElement = await new Promise((resolve, reject) => {
+      const img = new Image();
+      img.onload = () => resolve(img);
+      img.onerror = reject;
+      img.src = src;
     });
-
-    return await new Promise((resolve) => {
-      canvas.toBlob((blob) => {
-        resolve(blob);
-      }, 'image/jpeg');
-    })
+  
+    // Set offscreen canvas size
+    offscreenCanvas.width = imageElement.width;
+    offscreenCanvas.height = imageElement.height;
+  
+    context.drawImage(imageElement, 0, 0);
+  
+    return new Promise((resolve) => {
+      offscreenCanvas.toBlob((blob) => resolve(blob), "image/jpeg");
+    });
   };
+  
+  
+  
 
 
   const onCropComplete = useCallback((_, croppedAreaPixels) => {
@@ -141,33 +140,55 @@ export default function ScanResults({ setBook, scans }) {
  
   const handleUpload = async () => {
     setUploadingImage(true);
-    const croppedFile = await getMergedImageBlob();
 
     let scanDataResponse = [{
       summary: '',
       simpleLang: ''
     }];
 
-    await Promise.all([
-      getPageSummaryFromImageStream(croppedFile, 5, (chunk) => {
-      // setShowCropper(false);
-    setUploadingImage(false);
+    for (const image of images) {
+      const croppedFile = await getBlob(image);
+    
+      if (!croppedFile) {
+        console.error("Failed to create blob for image:", image);
+        continue; // Skip this iteration if blob creation fails
+      }
+    
+      await Promise.all([
+        getPageSummaryFromImageStream(croppedFile, 5, (chunk) => {
+          setUploadingImage(false);
+    
+          // Ensure scanDataResponse[0] exists before modifying
+          if (!scanDataResponse[0]) {
+            scanDataResponse[0] = { summary: "", simpleLang: "" };
+          }
+          scanDataResponse[0].summary += chunk;
+    
+          setData((prev) => 
+            prev 
+              ? [{ ...prev[0], summary: prev[0].summary + chunk }] 
+              : [{ summary: chunk }]
+          );
+        }),
+    
+        getSimplifiedLanguageStream(croppedFile, (chunk) => {
+          setUploadingImage(false);
+    
+          // Ensure scanDataResponse[0] exists before modifying
+          if (!scanDataResponse[0]) {
+            scanDataResponse[0] = { summary: "", simpleLang: "" };
+          }
+          scanDataResponse[0].simpleLang += chunk;
+    
+          setData((prev) => 
+            prev 
+              ? [{ ...prev[0], simpleLang: prev[0].simpleLang + chunk }] 
+              : [{ simpleLang: chunk }]
+          );
+        }),
+      ]);
+    }
 
-      scanDataResponse = [{...scanDataResponse[0], summary: scanDataResponse[0].summary + chunk }];
-        setData((prev) => {
-          return prev ? [{ ...prev[0], summary: prev[0].summary + chunk }] : [{ summary: chunk }];
-        });
-      }),
-      getSimplifiedLanguageStream(croppedFile, (chunk) => {
-    // setShowCropper(false);
-    setUploadingImage(false);
-
-      scanDataResponse = [{...scanDataResponse[0], simpleLang: scanDataResponse[0].simpleLang + chunk }];
-      setData((prev) => {
-        return prev ? [{ ...prev[0], simpleLang: prev[0].simpleLang + chunk }] : [{ simpleLang: chunk }];
-        });
-      }),
-    ])
 
     const book = await getBookByTitleAndUserId(bookTitle);
     const updatedBook = await updateBookByUserIdAndTitle(
@@ -321,8 +342,8 @@ export default function ScanResults({ setBook, scans }) {
         type="circle"
         percent={(images.length / selectedSessionNumberOfPages) * 100}
         strokeColor={{
-          "0%": "black", // Start color (green)
-          "100%": "black", // End color (blue)
+          "0%": nightModeOn ? "white" : "black", // Start color (green)
+          "100%": nightModeOn ? "white" : "black", // End color (blue)
         }}
         showInfo={false}
         strokeWidth={12}
@@ -332,7 +353,7 @@ export default function ScanResults({ setBook, scans }) {
       {/* Plus Icon Positioned in Center */}
       <Plus 
         size={40} 
-        color="black"
+        color={nightModeOn ? "white" : "black"}
         style={{
           position: "absolute",
           top: "50%",
@@ -376,20 +397,6 @@ export default function ScanResults({ setBook, scans }) {
   
   : <> Add pages for the session </> } 
 </button>} */}
- 
-    <Progress
-      type="linear"
-      percent={((images.length / selectedSessionNumberOfPages) * 100).toFixed(0)}
-      showInfo={false}
-      style={{ width: "100%" }}
-      
-    />
-
-
-
-{/* do not delete don't know what it is for but it breaks things when deleted */}
-<canvas ref={canvasRef} style={{ display: "none" }}></canvas> 
-{/* yes this one */}
 
 </div>
 
@@ -423,7 +430,7 @@ export default function ScanResults({ setBook, scans }) {
                   logGAEvent('switch_between_takeaways_and_as_is');
                 }}
               >
-                Key Takeaways
+                Summary
               </Button>
               <Button
                 type={activeView === "vocab" ? "primary" : "default"}
@@ -440,7 +447,7 @@ export default function ScanResults({ setBook, scans }) {
                   logGAEvent('switch_between_takeaways_and_as_is');
                 }}
               >
-                As is
+                Full Text
               </Button>
 
               
@@ -487,7 +494,7 @@ export default function ScanResults({ setBook, scans }) {
                     />
                     </>
                    } okText="Start session" cancelText="Cancel">
-                  <RefreshCcw size={25} color="black" />
+                  <RefreshCcw size={25} color={nightModeOn ? "white" : "black"} />
                   </Popconfirm>
                   }
                 </label>
