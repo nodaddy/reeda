@@ -28,7 +28,7 @@ export async function initiatePurchaseFlow(itemIdsArray) {
                 });
     
                 if (!response.ok) {
-                    alert("verification failed");
+                    alert("Something went wrong! you will get a refund within 3 days!");
                     alert(JSON.stringify(response));
                 } else {
                     window.location.reload();

@@ -1,5 +1,4 @@
 import { google } from 'googleapis';
-import { applicationDefault } from 'google-auth-library';
 
 // Initialize auth with Firebase Admin credentials
 const auth = new google.auth.GoogleAuth({
@@ -25,8 +24,6 @@ export async function POST(req) {
 
     const body = await req.json();
     const { packageName, productId, purchaseToken } = body;
-
-    console.log('Body:', body);
 
     // Log request details
     console.log('Attempting verification for:', {
@@ -60,11 +57,23 @@ export async function POST(req) {
 
     console.log('Purchase verification successful:', purchase.data);
 
+    // Acknowledge the purchase to prevent automatic refund
+    if (!purchase.data.acknowledgementState) {
+      await androidPublisher.purchases.products.acknowledge({
+        packageName,
+        productId,
+        token: purchaseToken,
+      });
+      console.log('Purchase acknowledged successfully');
+    } else {
+      console.log('Purchase was already acknowledged');
+    }
+
     return Response.json({
       success: true,
       purchaseData: purchase.data,
+      acknowledged: true
     });
-
   } catch (error) {
     console.error('Google Play API Error:', {
       name: error.name,
@@ -74,8 +83,8 @@ export async function POST(req) {
     });
 
     return Response.json(
-      { 
-        error: 'Failed to verify purchase',
+      {
+        error: 'Failed to verify or acknowledge purchase',
         details: error.message
       },
       { status: 500 }
