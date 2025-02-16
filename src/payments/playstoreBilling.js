@@ -1,28 +1,43 @@
 export async function initiatePurchaseFlow(itemIdsArray) {
-    getDigitalGoodsService().then( async (service) => {
-       if(service) { 
-        try {
-            const details = await service.getDetails(itemIdsArray);
-            const itemId = details[0].itemId;
-            const request = new PaymentRequest([{
-                supportedMethods: 'https://play.google.com/billing',
-                data: { sku: itemId }
-            }]);
-            const paymentResponse = await request.show();
-            const { purchaseToken } = paymentResponse.details;
-            // alert(`purchaseToken: ${purchaseToken}`);
-            await paymentResponse.complete();
-            // alert('payment response.complete');
-
-            await service.acknowledge(purchaseToken, 'inapp');
-            // alert('acknowledged');
-            window.location.reload();
-        } catch (error) {
-            // alert(JSON.stringify(error) + "Kindly restart the app!");
-            window.location.reload();
-
-            console.error('Error during purchase flow:', error);
-        }}
+    getDigitalGoodsService().then(async (service) => {
+        if(service) { 
+            try {
+                const details = await service.getDetails(itemIdsArray);
+                const itemId = details[0].itemId;
+                const request = new PaymentRequest([{
+                    supportedMethods: 'https://play.google.com/billing',
+                    data: { sku: itemId }
+                }]);
+                const paymentResponse = await request.show();
+                const { purchaseToken } = paymentResponse.details;
+                
+                await paymentResponse.complete();
+    
+                // Send purchase token to your backend
+                const response = await fetch('api/verify-google-payment', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        packageName: 'app.vercel.reedaa.twa',
+                        purchaseToken: purchaseToken,
+                        productId: itemId,
+                        // Include any other necessary data
+                    })
+                });
+    
+                if (!response.ok) {
+                    alert("verification failed");
+                    alert(JSON.stringify(response));
+                } else {
+                    window.location.reload();
+                }
+            } catch (error) {
+                console.error('Error during purchase flow:', error);
+                window.location.reload();
+            }
+        }
     });
 }
 

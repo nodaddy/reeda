@@ -44,6 +44,27 @@ const Home = () => {
   }, []);
 
   useEffect(() => {
+
+    const i = async () => {
+      const response = await fetch('api/verify-google-payment', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            packageName: 'app.vercel.reedaa.twa',
+            purchaseToken: 'some-token',
+            productId: 'lifetime_access',
+            // Include any other necessary data
+        })
+    });
+
+    alert(JSON.stringify(response));
+  }
+  i();
+  }, []);
+
+  useEffect(() => {
     if (profile?.streak?.lastPageScanTimestamp) {
       const now = Date.now();
       const lastPageScanTimestamp = profile.streak.lastPageScanTimestamp;
@@ -68,7 +89,7 @@ const Home = () => {
   }, [profile]);
 
   useEffect(() => {
-    isUserPremium().then((result) => setIsPremium(true)).catch((err) => console.log(err));
+    isUserPremium().then((result) => setIsPremium(result)).catch((err) => console.log(err));
   }, []);
 
   useEffect(() => {
