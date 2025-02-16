@@ -11,21 +11,25 @@ import { priTextColor, secColor, secTextColor } from "@/configs/cssValues";
 import { useAppContext } from "@/context/AppContext";
 
 export default function ScanWithBookTitle() {
-  const [data, setData] = useState(null);
+  const { bookTitle } = useParams();
+  const title = decodeURIComponent(bookTitle);
+
+
+  const [data, setData] = useState({
+    bookTitle: title
+  });
   const [isModalOpen, setModalOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [book, setBook] = useState(null);
 
-  const { bookTitle } = useParams();
 
-  const title = decodeURIComponent(bookTitle);
 
   const { setCurrentBook, nightModeOn } = useAppContext();
 
   useEffect(() => {
     const loadData = async () => {
       await getLatestScanByBookTitleAndUserId(title).then((scan) => {
-        setData(scan);
+        if(scan) setData(scan);
         console.log(scan);
         setModalOpen(true);
       });
@@ -124,17 +128,16 @@ color: nightModeOn ? 'silver' : priTextColor
           </div>
         </div> :  <>
         
-        {data && <ScanResults
+        {<ScanResults
           setBook={setBook}
           scans={data} 
         />}
-        {!data && !loading && <>
+        {/* {!data && !loading && <>
           <br/>
         <br/>
         <br/>
         <br/>
-        {/* <div>Animation to show how to scan or simple scan process simple</div> */}
-        <ImageUpload bookTitle={title} setBook={setBook} setData={setData} setModalOpen={setModalOpen} /></>}
+        <ImageUpload bookTitle={title} setBook={setBook} setData={setData} setModalOpen={setModalOpen} /></>} */}
         </>
       }
       </>

@@ -1,23 +1,20 @@
 'use client';
 
-import { useState, useCallback, useEffect } from "react";
-import { Button, Tooltip, Modal } from "antd";
+import { useState, useCallback, useEffect, useRef } from "react";
+import { Button, Tooltip, Modal, Popconfirm, Progress, Input, Slider } from "antd";
 import OriginalTextWithTooltips, { FontSizeControl } from "./TextWithIntegratedDictionary";
-import { Camera, Hourglass, Loader, Plane, Plus, Pointer, WholeWord } from "lucide-react";
+import { Camera, Delete, Hourglass, Loader, PackagePlus, Plane, Plus, PlusCircle, PlusIcon, PlusSquare, Pointer, RefreshCcw, Rocket, Sparkles, WholeWord } from "lucide-react";
 import { getProfile, updateProfile } from "@/firebase/services/profileService";
 import { createScan, getLatestScanByBookTitleAndUserId } from "@/firebase/services/scanService";
 import { getBookByTitleAndUserId, updateBookByUserIdAndTitle } from "@/firebase/services/bookService";
-import Cropper from 'react-easy-crop';
 import { addCoinsPerScan, scanPageRatio, scanPageRation, streakMaintenanceIntervalInSeconds } from "@/configs/variables";
-import { priColor } from "@/configs/cssValues";
-import { storage } from "@/app/utility";
 import { getPageSummaryFromImage, getPageSummaryFromImageStream, getSimplifiedLanguage, getSimplifiedLanguageStream } from "@/openAI";
 import TextWithIntegratedDictionary from "./TextWithIntegratedDictionary";
 import { useAppContext } from "@/context/AppContext";
 import NightModeButton from "./NightModeButton";
-import UploadingScanLoader from "./UploadingScanLoader";
 import { logGAEvent } from "@/firebase/googleAnalytics";
 import { toBlob } from "./imageUpload";
+import { secColor } from "@/configs/cssValues";
 
 export default function ScanResults({ setBook, scans }) {
   // console.log(scans);
@@ -37,6 +34,50 @@ export default function ScanResults({ setBook, scans }) {
   const [uploadingImage, setUploadingImage] = useState(false);
 
   const { profile, setProfile, nightModeOn } = useAppContext();
+
+  const [images, setImages] = useState([]);
+
+  const [selectedSessionNumberOfPages, setSelectedSessionNumberOfPages] = useState(3);
+
+  const canvasRef = useRef(null);
+
+  const handleCapture = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const imageUrl = URL.createObjectURL(file);
+      setImages((prevImages) => [...prevImages, imageUrl]);
+    }
+  };
+
+  const getMergedImageBlob = async () => {
+    const canvas = canvasRef.current;
+    const context = canvas.getContext('2d');
+    const imageElements = await Promise.all(
+      images.map((src) => {
+        return new Promise((resolve) => {
+          const img = new Image();
+          img.onload = () => resolve(img);
+          img.src = src;
+        });
+      })
+    );
+
+    // Assuming all images have the same dimensions
+    const width = imageElements[0].width;
+    const height = imageElements[0].height;
+    canvas.width = width;
+    canvas.height = height * imageElements.length;
+
+    imageElements.forEach((img, index) => {
+      context.drawImage(img, 0, height * index, width, height);
+    });
+
+    return await new Promise((resolve) => {
+      canvas.toBlob((blob) => {
+        resolve(blob);
+      }, 'image/jpeg');
+    })
+  };
 
 
   const onCropComplete = useCallback((_, croppedAreaPixels) => {
@@ -89,10 +130,18 @@ export default function ScanResults({ setBook, scans }) {
   //     };
   //   });
   // };
+
+  useEffect(() => {
+    if (images.length == selectedSessionNumberOfPages) {
+      setTimeout(() => {
+      handleUpload();
+      }, 200)
+    }
+  }, [images]);
  
-  const handleUpload = async (imageSrc) => {
+  const handleUpload = async () => {
     setUploadingImage(true);
-    const croppedFile = await toBlob(imageSrc);
+    const croppedFile = await getMergedImageBlob();
 
     let scanDataResponse = [{
       summary: '',
@@ -164,13 +213,13 @@ export default function ScanResults({ setBook, scans }) {
       },
         }))
     }
-
-    setShowCropper(false);
+    setImages([]);
+    // setShowCropper(false);
   };
 
   return (
     <>
-      {data && (
+      {true && (
         <div
           style={{
             padding: '0px 11px',
@@ -195,7 +244,7 @@ export default function ScanResults({ setBook, scans }) {
 
           }}
         >
-          <div
+          {data && <div
             style={{
               maxWidth: "800px",
               padding: "5px 0px",
@@ -208,7 +257,143 @@ export default function ScanResults({ setBook, scans }) {
             ) : (
               <TextWithIntegratedDictionary fontSize={fontSize} setFontSize={setFontSize} text={data[0].simpleLang} />
             )}
-          </div>
+          </div>}
+
+          {!data && 
+
+<div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "15px", padding: "10px" }}>
+  
+{/* Grid Layout for Images + Capture Button */}
+<div style={{ 
+    display: "grid", 
+    gridTemplateColumns: "repeat(auto-fill, minmax(80px, 1fr))", 
+    gap: "10px", 
+    width: "100%", 
+    maxWidth: "300px", 
+    justifyContent: "center",
+    alignItems: "center"
+  }}>
+  
+  {images.map((src, index) => (
+    <img
+      key={index}
+      src={src}
+      alt={`Captured ${index}`}
+      style={{
+        width: "60px",
+        objectFit: "cover",
+        borderRadius: "8px",
+        border: "2px solid #ddd",
+      }}
+    />
+  ))}
+  
+  {/* Image Capture Button as the Last Grid Element */}
+  <label 
+    htmlFor="file-upload"
+    style={{
+      position: 'absolute',
+      left: '50%',
+      transform: 'translateX(-50%)',
+      bottom: '160px',
+      width: "80px",
+      borderRadius: "8px",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      cursor: "pointer",
+      // animation: "pulse 2s infinite",
+    }}
+  >
+    <input
+      id="file-upload"
+      type="file"
+      accept="image/*"
+      capture="camera" // Opens the camera directly
+      onChange={handleCapture}
+      style={{ display: "none" }}
+    />
+    {uploadingImage ? (
+      <Loader size={25} color="white" className="loader" />
+    ) : (
+      <div style={{ position: "relative", width: "80px", height: "80px" }}>
+      <Progress
+        type="circle"
+        percent={(images.length / selectedSessionNumberOfPages) * 100}
+        strokeColor={{
+          "0%": "black", // Start color (green)
+          "100%": "black", // End color (blue)
+        }}
+        showInfo={false}
+        strokeWidth={12}
+        style={{ width: "80px", height: "80px" }}
+      />
+      
+      {/* Plus Icon Positioned in Center */}
+      <Plus 
+        size={40} 
+        color="black"
+        style={{
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+          pointerEvents: "none", // Ensures clicks go through to Progress
+        }}
+      />
+    </div>
+    
+    )}
+  </label>
+
+</div>
+
+<br/>
+<br/>
+
+{/* Merge Images Button */}
+{/* {<button 
+  onClick={() => {
+    if(images.length > 0){
+      handleUpload()
+    } else {
+      alert("Please add at least one page before starting the session.")
+    }
+  }} 
+  style={{
+    padding: "10px 15px",
+    fontSize: "16px",
+    border: "none",
+    borderRadius: "5px",
+    backgroundColor: "transparent",
+    color: 'black',
+    cursor: "pointer",
+    transition: "background 0.2s",
+  }}
+>
+{ images.length > 0 ?
+<> <Sparkles />&nbsp;Start Session </>
+  
+  : <> Add pages for the session </> } 
+</button>} */}
+ 
+    <Progress
+      type="linear"
+      percent={((images.length / selectedSessionNumberOfPages) * 100).toFixed(0)}
+      showInfo={false}
+      style={{ width: "100%" }}
+      
+    />
+
+
+
+{/* do not delete don't know what it is for but it breaks things when deleted */}
+<canvas ref={canvasRef} style={{ display: "none" }}></canvas> 
+{/* yes this one */}
+
+</div>
+
+            }
 
           <div
             style={{
@@ -266,22 +451,12 @@ export default function ScanResults({ setBook, scans }) {
             <NightModeButton /> 
              <div>
                 {/* Hidden file input */}
-                <input
-                  id="file-upload"
-                  type="file"
-                  accept="image/*"
-                  capture="camera"  // This ensures the camera is opened directly
-                  onChange={handleFileChange}
-                  style={{ display: "none" }}
-                />
-                {/* Label to trigger the file input when clicked */}
+                 
                 <label
-                  htmlFor="file-upload"
                   style={{
                     height: "45px",
                     width: "45px",
                     borderRadius: "50%",
-                    backgroundColor: 'black',
                     display: "flex",
                     justifyContent: "center",
                     alignItems: "center",
@@ -289,7 +464,32 @@ export default function ScanResults({ setBook, scans }) {
                   }}
                 >
                   { uploadingImage ? <Loader size={25} color='white' className="loader" /> : 
-                  <Camera onClick={() => { logGAEvent('click_scan_more_pages_of_book'); }} size={25} color="white" />}
+                  <Popconfirm 
+                  title="New Session"
+                  icon={<></>}
+                  placement="topLeft"
+
+                  onConfirm={() => { logGAEvent('click_scan_more_pages_of_book'); setData(null); setImages([]); }}
+                   description={
+                    <>
+                    Select number of pages
+                    <br/>
+                    <Slider
+                      
+                      min={1}
+                      max={10}
+                      step={1}
+                      showInfo={true}
+                      value={selectedSessionNumberOfPages}
+                      onChange={(value) => setSelectedSessionNumberOfPages(value)}
+                      style={{ width: "100%" }}
+                      
+                    />
+                    </>
+                   } okText="Start session" cancelText="Cancel">
+                  <RefreshCcw size={25} color="black" />
+                  </Popconfirm>
+                  }
                 </label>
               </div> 
           </div>
