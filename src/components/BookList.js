@@ -169,7 +169,7 @@ const BookList = () => {
     ref={ref}
     style={{ 
     padding: '0px 19px 0px 19px',
-    width: '91%',
+    width: '90%',
     marginTop: '5px',
     maxHeight: height,
     margin: 'auto',

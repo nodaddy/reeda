@@ -17,6 +17,7 @@ import { useAppContext } from "@/context/AppContext";
 import NightModeButton from "./NightModeButton";
 import UploadingScanLoader from "./UploadingScanLoader";
 import { logGAEvent } from "@/firebase/googleAnalytics";
+import { toBlob } from "./imageUpload";
 
 export default function ScanResults({ setBook, scans }) {
   // console.log(scans);
@@ -52,43 +53,47 @@ export default function ScanResults({ setBook, scans }) {
     const reader = new FileReader();
     
     reader.onload = () => {
-      setImageSrc(reader.result);
-      setShowCropper(true);
+      // setImageSrc(reader.result);
+      setData([{
+        summary: '',
+        simpleLang: ''
+      }])
+      handleUpload(reader.result);
+      // setShowCropper(true);
     };
 
     reader.readAsDataURL(file);
   };
 
-  const getCroppedImage = (imageSrc, crop) => {
-    return new Promise((resolve) => {
-      const image = new Image();
-      image.src = imageSrc;
-      image.onload = () => {
-        const canvas = document.createElement('canvas');
-        canvas.width = crop.width;
-        canvas.height = crop.height;
-        const ctx = canvas.getContext('2d');
-        ctx.drawImage(
-          image,
-          crop.x,
-          crop.y,
-          crop.width,
-          crop.height,
-          0,
-          0,
-          crop.width,
-          crop.height
-        );
-        canvas.toBlob((blob) => resolve(blob), 'image/jpeg');
-      };
-    });
-  };
+  // const getCroppedImage = (imageSrc, crop) => {
+  //   return new Promise((resolve) => {
+  //     const image = new Image();
+  //     image.src = imageSrc;
+  //     image.onload = () => {
+  //       const canvas = document.createElement('canvas');
+  //       canvas.width = crop.width;
+  //       canvas.height = crop.height;
+  //       const ctx = canvas.getContext('2d');
+  //       ctx.drawImage(
+  //         image,
+  //         crop.x,
+  //         crop.y,
+  //         crop.width,
+  //         crop.height,
+  //         0,
+  //         0,
+  //         crop.width,
+  //         crop.height
+  //       );
+  //       canvas.toBlob((blob) => resolve(blob), 'image/jpeg');
+  //     };
+  //   });
+  // };
  
-  const handleUpload = async () => {
+  const handleUpload = async (imageSrc) => {
     setUploadingImage(true);
-    const croppedFile = await getCroppedImage(imageSrc, croppedAreaPixels);
+    const croppedFile = await toBlob(imageSrc);
 
-    
     let scanDataResponse = [{
       summary: '',
       simpleLang: ''
@@ -96,14 +101,18 @@ export default function ScanResults({ setBook, scans }) {
 
     await Promise.all([
       getPageSummaryFromImageStream(croppedFile, 5, (chunk) => {
-      setShowCropper(false);
+      // setShowCropper(false);
+    setUploadingImage(false);
+
       scanDataResponse = [{...scanDataResponse[0], summary: scanDataResponse[0].summary + chunk }];
         setData((prev) => {
           return prev ? [{ ...prev[0], summary: prev[0].summary + chunk }] : [{ summary: chunk }];
         });
       }),
       getSimplifiedLanguageStream(croppedFile, (chunk) => {
-    setShowCropper(false);
+    // setShowCropper(false);
+    setUploadingImage(false);
+
       scanDataResponse = [{...scanDataResponse[0], simpleLang: scanDataResponse[0].simpleLang + chunk }];
       setData((prev) => {
         return prev ? [{ ...prev[0], simpleLang: prev[0].simpleLang + chunk }] : [{ simpleLang: chunk }];
@@ -156,7 +165,6 @@ export default function ScanResults({ setBook, scans }) {
         }))
     }
 
-    setUploadingImage(false);
     setShowCropper(false);
   };
 
@@ -165,17 +173,17 @@ export default function ScanResults({ setBook, scans }) {
       {data && (
         <div
           style={{
-            padding: '0px 20px',
+            padding: '0px 11px',
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
             overflow: 'scroll',
-            width: '82%',
+            width: '95%',
             margin: 'auto',
             marginTop: '17px',
             borderTop: '0px',
             borderRadius: '10px',
-            border: '1px solid silver',
+            // border: '1px solid silver',
             backgroundColor: nightModeOn ? 'black' : 'white',
             height: 'calc(100vh - 249px)', // This can be used if you want to explicitly set height too
             // padding: "25px",
@@ -190,7 +198,7 @@ export default function ScanResults({ setBook, scans }) {
           <div
             style={{
               maxWidth: "800px",
-              padding: "15px 0px",
+              padding: "5px 0px",
               transition: "all 0.5s ease-in-out",
               overflowY: "auto",
             }}
@@ -280,7 +288,8 @@ export default function ScanResults({ setBook, scans }) {
                     cursor: "pointer",
                   }}
                 >
-                  <Camera onClick={() => { logGAEvent('click_scan_more_pages_of_book'); }} size={25} color="white" />
+                  { uploadingImage ? <Loader size={25} color='white' className="loader" /> : 
+                  <Camera onClick={() => { logGAEvent('click_scan_more_pages_of_book'); }} size={25} color="white" />}
                 </label>
               </div> 
           </div>
@@ -288,7 +297,7 @@ export default function ScanResults({ setBook, scans }) {
       )}
 
       {/* Modal for cropping */}
-      <Modal
+      {/* <Modal
         title="Crop and Upload Image"
         style={{ padding: "30px", borderRadius: "20px" }}
         footer={[
@@ -324,7 +333,7 @@ export default function ScanResults({ setBook, scans }) {
             /> 
           </div>}
         </div>
-      </Modal>
+      </Modal> */}
     </>
   );
 }

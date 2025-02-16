@@ -2,11 +2,9 @@
 import { useState, useCallback } from "react";
 import { Camera, Loader } from "lucide-react";
 import styles from './ImageUpload.module.css';
-import Cropper from 'react-easy-crop';
 import { getProfile, updateProfile } from "@/firebase/services/profileService";
 import { createScan } from "@/firebase/services/scanService";
 import { getBookByTitleAndUserId, updateBookByUserIdAndTitle } from "@/firebase/services/bookService";
-import { Button, Modal } from "antd";
 import { addCoinsPerScan, scanPageRatio, streakMaintenanceIntervalInSeconds } from "@/configs/variables";
 import { storage } from "@/app/utility";
 import { getPageSummaryFromImage, getPageSummaryFromImageStream, getSimplifiedLanguage, getSimplifiedLanguageStream } from "@/openAI";
@@ -14,14 +12,17 @@ import { useAppContext } from "@/context/AppContext";
 import { flag } from "@/assets";
 import NextImage from "next/image";
 import { secTextColor } from "@/configs/cssValues";
-import UploadingScanLoader from "./UploadingScanLoader";
 import { logGAEvent } from "@/firebase/googleAnalytics";
+
+export const toBlob = async (imageSrc) => {
+  const response = await fetch(imageSrc);
+  return response.blob();
+};
 
 export default function ImageUpload({ setBook, bookTitle, setData, setModalOpen }) {
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
-  const [imageSrc, setImageSrc] = useState(null);
   const [showCropper, setShowCropper] = useState(false);
 
   const [uploadingImage, setUploadingImage] = useState(false);
@@ -37,46 +38,17 @@ export default function ImageUpload({ setBook, bookTitle, setData, setModalOpen 
     if (file) {
       const reader = new FileReader();
       reader.onload = () => {
-        setImageSrc(reader.result);
-        setShowCropper(true);
+        // setShowCropper(true);
+        handleUpload(reader.result);
       };
       reader.readAsDataURL(file);
     } else {
     }
   };
 
-  const getCroppedImage = (imageSrc, crop) => {
-    return new Promise((resolve) => {
-      const image = new Image();
-      image.src = imageSrc;
-      image.onload = () => {
-        const canvas = document.createElement('canvas');
-        canvas.width = crop.width;
-        canvas.height = crop.height;
-        const ctx = canvas.getContext('2d');
-        ctx.drawImage(
-          image,
-          crop.x,
-          crop.y,
-          crop.width,
-          crop.height,
-          0,
-          0,
-          crop.width,
-          crop.height
-        );
-        canvas.toBlob((blob) => {
-          resolve(blob);
-        }, 'image/jpeg');
-      };
-      image.onerror = () => {
-      };
-    });
-  };
-
-  const handleUpload = async () => {
+  const handleUpload = async (imageSrc) => {
     setUploadingImage(true);
-    const croppedFile = await getCroppedImage(imageSrc, croppedAreaPixels);
+    const croppedFile = await toBlob(imageSrc);
 
     let scanDataResponse = [{
       summary: '',
@@ -148,42 +120,6 @@ export default function ImageUpload({ setBook, bookTitle, setData, setModalOpen 
 
   return (
     <div align="center">
-      <Modal
-        title="Crop and Upload Image"
-        style={{ padding: "30px", borderRadius: "20px" }}
-        open={showCropper}
-        footer={[
-          <Button key="back" onClick={() => setShowCropper(false)}>
-            Cancel
-          </Button>,
-          <Button key="submit" style={{backgroundColor: 'black'}} type="primary" onClick={() => { 
-            if (!uploadingImage) { handleUpload(); } }}>
-            {uploadingImage ? <Loader size={10} className="loader" /> : "Upload"}
-          </Button>,
-        ]}
-        onCancel={() => {
-          setShowCropper(false);
-        }}
-        onClose={() => {
-          setShowCropper(false);
-        }}
-      >
-        <div>
-          {uploadingImage ? <div style={{ height: '50vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-            <UploadingScanLoader />
-          </div> : <div>
-            <Cropper
-              image={imageSrc}
-              crop={crop}
-              zoom={zoom}
-              onCropChange={setCrop}
-              aspect={scanPageRatio}
-              onZoomChange={setZoom}
-              onCropComplete={onCropComplete}
-            />
-          </div>}
-        </div>
-      </Modal> 
       {!showCropper && <span>
         <span style={{
           fontFamily: "'Inter', sans-serif",
@@ -209,7 +145,7 @@ export default function ImageUpload({ setBook, bookTitle, setData, setModalOpen 
             className={styles.fileInput}
           />
           <label htmlFor="file-upload" className={styles.fileInputLabel}>
-            <Camera onClick={() => { logGAEvent('click_scan_first_page_of_book') }} size={32} color="white" />
+            { uploadingImage ? <Loader size={32} color='white' className="loader" /> : <Camera onClick={() => { logGAEvent('click_scan_first_page_of_book') }} size={32} color="white" />}
           </label>
         </div>
       </span>}

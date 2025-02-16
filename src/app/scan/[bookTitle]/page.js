@@ -20,7 +20,7 @@ export default function ScanWithBookTitle() {
 
   const title = decodeURIComponent(bookTitle);
 
-  const { setCurrentBook } = useAppContext();
+  const { setCurrentBook, nightModeOn } = useAppContext();
 
   useEffect(() => {
     const loadData = async () => {
@@ -49,6 +49,17 @@ export default function ScanWithBookTitle() {
     };
     
   }, []);
+
+  useEffect(() => {
+    // Apply theme to root html element
+    document.documentElement.style.backgroundColor = nightModeOn ? 'black' : 'white';
+    document.documentElement.style.color = nightModeOn ? 'white' : 'black';
+
+    return () => {
+      document.documentElement.style.backgroundColor = 'transparent';
+      document.documentElement.style.color = priTextColor;
+    }
+  }, [nightModeOn]);
 
   return (
     <div>
@@ -86,7 +97,7 @@ export default function ScanWithBookTitle() {
       style={{
         display: 'flex',
         alignItems: 'center',textDecoration :'none',
-color: priTextColor
+color: nightModeOn ? 'silver' : priTextColor
       }}
       > <MoveLeft size={19} /> &nbsp; Back
       </Link> 
