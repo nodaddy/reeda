@@ -164,11 +164,14 @@ const Home = () => {
       padding: '30px 0px',
       fontFamily: "'Inter', sans-serif",
       marginLeft: '-38px'}}>
+        &nbsp;
+        &nbsp;
+        &nbsp;
         <span style={tagStyle(Math.random() * 2)}>
-         <Library size={14} /> Bookshelf
+         <Library size={14} />Create Bookshelf
         </span>
         <span style={tagStyle(Math.random() * 2)}>
-          <Hourglass size={14} /> Summarise
+          <Hourglass size={14} /> Summarize
         </span>
         <span style={tagStyle(Math.random() * 2)}>
           <Goal size={14} /> Track Progress
