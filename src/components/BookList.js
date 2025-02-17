@@ -160,7 +160,10 @@ const BookList = () => {
   const handleDeleteBook = (bookId) => {
     deleteBook(bookId).then(() => {
       message.success('Book deleted successfully!');
-      getBooks().then(setBooks);
+      getBooks().then((res) => {
+        setBooks(res);
+        setFilteredBooks(res);
+      });
     }).catch(() => message.error('Failed to delete the book.'));
   };
 
