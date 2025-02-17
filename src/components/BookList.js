@@ -381,7 +381,7 @@ const BookList = () => {
                                 // onOpenChange={setVisible}
                               >
                                 <MoreVertical 
-                                  size={20} 
+                                  size={17} 
                                   onClick={() => {
                                     setOpenPopOver(item.title == openPopOver ? null : item.title);
                                     logGAEvent('click_more_options_on_book_card');
@@ -428,7 +428,7 @@ const BookList = () => {
                     <div style={{ 
                       
                       padding: '0px 7px',
-                      fontSize: '14px', color: 'white', overflow: 'hidden', whiteSpace: 'wrap'}}>
+                      fontSize: '13px', color: 'white', overflow: 'hidden', whiteSpace: 'wrap'}}>
                     {/* <BookMarked size={20} color={'gray'} />&nbsp; */}
                     {item.title.toUpperCase()}
                     </div>
