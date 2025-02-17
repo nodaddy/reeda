@@ -17,6 +17,7 @@ const CameraUpload = ({ handleImage, forBookCover }) => {
       <input
         type="file"
         accept="image/*"
+        capture={forBookCover ? null : "environment"} // Opens back camera directly
         style={{ display: "none" }}
         ref={fileInputRef}
         onChange={(e) => {
