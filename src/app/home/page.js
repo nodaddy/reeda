@@ -22,7 +22,6 @@ import Link from 'next/link';
 const { Title } = Typography;
 
 const Home = () => {
-  alert('home');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 

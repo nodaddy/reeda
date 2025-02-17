@@ -21,6 +21,7 @@ const CameraUpload = ({ handleImage }) => {
         style={{ display: "none" }}
         ref={fileInputRef}
         onChange={(e) => {
+          e.preventDefault();
             handleImage(e.target.files[0]);
         }}
       />
