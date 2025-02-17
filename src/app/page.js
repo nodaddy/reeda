@@ -11,7 +11,7 @@ import { storage } from './utility';
 import { isUserPremium } from '@/payments/playstoreBilling';
 import { useAppContext } from '@/context/AppContext';
 import { priColor, priTextColor, secTextColor } from '@/configs/cssValues';
-import { Bell, Book, BookCopy, BookOpen, CheckCircle, Clock, Facebook, Goal, HelpCircle, Hourglass, Info, Instagram, LetterText, Library, Lightbulb, Pointer, Popcorn, RefreshCcw, Sparkles, Store, Twitter, X } from 'lucide-react';
+import { Bell, Book, BookCopy, BookOpen, CheckCircle, Clock, Dot, Facebook, Goal, HelpCircle, Hourglass, Info, Instagram, LetterText, Library, Lightbulb, Pointer, Popcorn, RefreshCcw, Sparkles, Store, Twitter, X } from 'lucide-react';
 import { bookshelf, dailyGoal, dic, recap, scaninghands } from '@/assets';
 import Image from 'next/image';
 
@@ -131,11 +131,27 @@ const Home = () => {
       display: 'flex',
       
       }}>
-           <div align="center" style={{width: '100vw'}}> 
+           <div align="center" style={{width: '100vw',  display :'flex', alignItems: 'center', justifyContent: 'center'}}> 
            {/* <Sparkles size={30} style={{color: 'white'}} /> */}
-            Revolutionizing<br/> Reading Experiences </div>
+          Scan <Dot /> Read <Dot /> Repeat </div>
            
         </Title>    
+<div style={{
+  width: '100vw',
+  marginLeft: '-38px',
+  height: '100%',
+  background: 'url("https://images.pexels.com/photos/8694262/pexels-photo-8694262.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2")',
+  backgroundPosition: 'center',
+}}>
+       <div style={{
+        width: '100%',
+        height: '100%',
+        background: 'linear-gradient(transparent, rgb(0,0,0,0.3), rgb(0,0,0,0.4), rgb(0,0,0,0.5),rgb(0,0,0,0.6),rgb(0,0,0,0.8), black, black, black)',
+        backgroundSize: 'contain',
+       }}>
+
+       </div>
+        </div>
         {/* <Title level={5} style={{textAlign: 'center', marginBottom: '0px', marginTop :'0px', marginLeft: '-38px',
         width: '100vw', 
         backgroundColor: '#909090',
@@ -216,7 +232,7 @@ const Home = () => {
       <br/>
       <br/>
       <div style={{width: '100vw', position: 'absolute', bottom: '0px', marginLeft: '-38px', padding: '20px 0px', 
-      backgroundColor: 'black', color: 'white',
+      backgroundColor: 'transparent', color: 'white',
     display: 'flex',
     justifyContent: 'space-around',
     alignItems: 'center'
