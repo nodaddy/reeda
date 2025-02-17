@@ -505,7 +505,7 @@ const BookList = () => {
             <Input type='number' placeholder="Number of pages e.g 348" />
           </Form.Item>
           <Form.Item label="Book Cover Photo (optional)">
-          <CameraUpload handleImage={handleImageUpload} />
+          <CameraUpload forBookCover={true} handleImage={handleImageUpload} />
           {/* {imageBase64 && <p>Image uploaded successfully!</p>} */}
         </Form.Item>
         <Form.Item>

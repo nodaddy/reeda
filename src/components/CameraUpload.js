@@ -2,7 +2,7 @@ import { useRef } from "react";
 import { Button } from "antd";
 import { Camera } from "lucide-react";
 
-const CameraUpload = ({ handleImage }) => {
+const CameraUpload = ({ handleImage, forBookCover }) => {
   const fileInputRef = useRef(null);
 
   const openCamera = () => {
@@ -17,7 +17,7 @@ const CameraUpload = ({ handleImage }) => {
       <input
         type="file"
         accept="image/*"
-        capture="environment" // Opens back camera directly
+        capture={forBookCover ? "environment" : null} // Opens back camera directly
         style={{ display: "none" }}
         ref={fileInputRef}
         onChange={(e) => {
