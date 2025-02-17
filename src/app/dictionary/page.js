@@ -83,7 +83,7 @@ const Dictionary = ({incomingWords}) => {
               style={{ borderRadius: '10px', boxShadow: !incomingWords && '0 4px 12px rgba(0,0,0,0.1)', width: !incomingWords ? '90%' : '100%', margin: 'auto', border: '0px'}} 
             >
               {!incomingWords && <Title level={4} style={{ color: '#1890ff', marginTop: '0px' }}>{word}</Title>}
-              <div style={{padding: incomingWords && '40px 0px'}}><Text style={{ fontSize: '16px', lineHeight: '1.6' }}>{meaning}</Text></div>
+              <div style={{padding: incomingWords && '25px 0px 35px 0px'}}><Text style={{ fontSize: '16px', lineHeight: '1.6' }}>{meaning}</Text></div>
               {!incomingWords && <>
       <br/>
       <br/>

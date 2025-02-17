@@ -24,6 +24,8 @@ const BookList = () => {
   const [filteredBooks, setFilteredBooks] = useState([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [form] = Form.useForm();
+
+  const [processingImageUplaod, setProcessingImageUplaod] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
 
   const [loadingRecap, setLoadingRecap] = useState(false);
@@ -49,6 +51,7 @@ const BookList = () => {
   const [imageBase64, setImageBase64] = useState(null);
   
   const handleImageUpload = (file) => {
+    setProcessingImageUplaod(true);
     new Compressor(file, {
       quality: 0.1, // Compress image to 10%
       success(result) {
@@ -56,6 +59,7 @@ const BookList = () => {
         reader.readAsDataURL(result);
         reader.onloadend = () => {
           setImageBase64(reader.result);
+    setProcessingImageUplaod(false);
         };
       },
       error(err) {
@@ -136,7 +140,9 @@ const BookList = () => {
       router.push('/premium');
     } else {
       setUploadingBook(true);
-      const newBook = { title: values.title, totalPages: values.totalPages,  author: values.author, cover: imageBase64};
+      const newBook = { title: values.title, totalPages: values.totalPages, 
+         author: values.author ? values.author : '', 
+         cover: imageBase64};
       createbook(newBook).then(() => getBooks().then(async (res) => {
 
         const profile = await getProfile(JSON.parse(storage.getItem('user')).email);
@@ -208,7 +214,7 @@ const BookList = () => {
             color: priTextColor,
             borderRadius: '6px'
 
-        }}>My Books</span>
+        }}>My Bookshelf</span>
        
         </BadgeAnt>
         <div style={{height: '5px'}}></div>
@@ -492,19 +498,19 @@ const BookList = () => {
           <Form.Item name="title" label="Book Title" rules={[{ required: true, message: 'Please enter the book title' }]}>
             <Input placeholder="Enter book title" />
           </Form.Item>
-          <Form.Item name="author" label="Author" rules={[{ required: true, message: 'Please enter the author' }]}>
+            {/* <Form.Item name="author" label="Author (optional)" rules={[{ required: false, message: 'Please enter the author' }]}>
             <Input placeholder="Enter author name" />
-          </Form.Item>
+          </Form.Item> */}
           <Form.Item name="totalPages" label="Total number of pages" rules={[{ required: true, message: 'Please enter the total number of pages' }]}>
             <Input type='number' placeholder="Number of pages e.g 348" />
           </Form.Item>
-          <Form.Item label="Upload Book Cover Photo">
+          <Form.Item label="Book Cover Photo (optional)">
           <CameraUpload handleImage={handleImageUpload} />
           {/* {imageBase64 && <p>Image uploaded successfully!</p>} */}
         </Form.Item>
         <Form.Item>
-          <Button disabled={!imageBase64} style={{
-            backgroundColor: !imageBase64 ? '' : 'black'
+          <Button disabled={processingImageUplaod} style={{
+            backgroundColor: 'black'
           }} type="primary" htmlType="submit" block>
             {uploadingBook ? <Loader className='loader' size={20} /> : 'Add Book'}
             </Button>

@@ -3,7 +3,7 @@
 import { useState, useCallback, useEffect, useRef } from "react";
 import { Button, Tooltip, Modal, Popconfirm, Progress, Input, Slider, Checkbox, Tag, Popover, FloatButton } from "antd";
 import OriginalTextWithTooltips, { FontSizeControl } from "./TextWithIntegratedDictionary";
-import { Camera, Delete, Hourglass, Loader, Minus, PackagePlus, Plane, Plus, PlusCircle, PlusIcon, PlusSquare, Pointer, RefreshCcw, Rocket, Settings, Sparkles, WholeWord } from "lucide-react";
+import { Camera, Delete, Dot, Hourglass, Info, LetterText, Loader, Minus, Moon, PackagePlus, Plane, Plus, PlusCircle, PlusIcon, PlusSquare, Pointer, RefreshCcw, Rocket, Settings, Sparkles, WholeWord } from "lucide-react";
 import { getProfile, updateProfile } from "@/firebase/services/profileService";
 import { createScan, getLatestScanByBookTitleAndUserId } from "@/firebase/services/scanService";
 import { getBookByTitleAndUserId, updateBookByUserIdAndTitle } from "@/firebase/services/bookService";
@@ -14,7 +14,7 @@ import { useAppContext } from "@/context/AppContext";
 import NightModeButton from "./NightModeButton";
 import { logGAEvent } from "@/firebase/googleAnalytics";
 import { toBlob } from "./imageUpload";
-import { priTextColor, secColor } from "@/configs/cssValues";
+import { priColor, priTextColor, secColor } from "@/configs/cssValues";
 import { uploadImages } from "@/assets";
 import NextImage from "next/image";
 import StackedImages from "./StackedImages";
@@ -326,6 +326,9 @@ export default function ScanResults({ setBook, scans }) {
 <br/>
 <br/>
 <br/>
+<br/>
+<br/>
+<br/>
 {images.length == 0 &&     <div style={{
       margin: 'auto',
       padding: '20px 30px',
@@ -347,13 +350,11 @@ export default function ScanResults({ setBook, scans }) {
           fontWeight: '400',
           color: textColor,
           letterSpacing: '0.2px'
-        }}>Session Settings</span>
+        }}>New Reading Session</span>
       </div>
       
       <div style={{
-        borderBottom: '1px solid rgba(0, 0, 0, 0.06)',
-        paddingBottom: '10px',
-        marginBottom: '10px'
+        // borderBottom: '1px solid rgba(0, 0, 0, 0.06)',
       }}>
         <div style={{
           display: 'flex',
@@ -423,16 +424,16 @@ export default function ScanResults({ setBook, scans }) {
         </div>
       </div>
       
-      <div style={{ marginTop: '20px' }}>
-        <span style={{
+      <div style={{  marginTop: '23px',}}>
+        {/* <span style={{
           display: 'block',
           fontSize: '15px',
           fontWeight: '500',
           color: textColor,
           marginBottom: '12px'
-        }}>Result Format</span>
+        }}>Result Format</span> */}
         
-        <div style={{ display: 'flex', alignItems: 'center' }}>
+        <div style={{ display: 'flex', alignItems: 'center', marginBottom: '11px' }}>
           <label style={{
             display: 'flex',
             alignItems: 'center',
@@ -657,7 +658,8 @@ export default function ScanResults({ setBook, scans }) {
             <FontSizeControl fontSize={fontSize} setFontSize={setFontSize} />
 
             <NightModeButton /> 
-             <div>
+
+            <div>
                 {/* Hidden file input */}
                  
                 <label
@@ -693,6 +695,20 @@ export default function ScanResults({ setBook, scans }) {
                   }
                 </label>
               </div> 
+
+            <Popover
+              content={
+              <div style={{padding: '30px', backgroundColor: 'aliceblue'}}>
+                - Tap on any word to see the meaning (On-page dictionary)
+                <br/>
+                - Change the font size by usnig the &nbsp; <LetterText />&nbsp; button
+                <br/>
+               - Toggle night mode by using the&nbsp; <Moon />&nbsp; button
+              </div>
+             }>
+              <Info color={priColor} />
+            </Popover>
+             
           </div>
         </div>
       )}

@@ -115,7 +115,7 @@ export const Navbar = () => {
             <Badge
               count={profile?.coins || ' '}
               showZero
-              offset={[-10, 10]}
+              offset={[-10, 9]}
               style={{
                 backgroundColor: 'goldenrod',
                 color: "white",
