@@ -163,3 +163,7 @@
     margin-top: 1rem;
   }
 }
+
+#navbar-span-target-popover .ant-popover-open {
+  z-index: 999999 !important;
+}

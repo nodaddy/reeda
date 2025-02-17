@@ -18,7 +18,7 @@ const UploadingScanLoader = () => {
     useEffect(() => {
         const interval = setInterval(() => {
             setQuoteIndex((prevIndex) => (prevIndex + 1) % quotes.length);
-        }, 1200); // Change quote every 3 seconds
+        }, 800); // Change quote every 0.8 seconds
 
         return () => clearInterval(interval);
     }, []);

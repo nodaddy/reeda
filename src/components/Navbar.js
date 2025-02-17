@@ -20,6 +20,8 @@ export const Navbar = () => {
 
   const router = useRouter();
 
+  const [showTargetPopover, setShowTargetPopover] = useState(false);
+
   const pathName = usePathname();
 
   useEffect(() => {
@@ -129,6 +131,7 @@ export const Navbar = () => {
 {
   storage.getItem("user") &&
   <Popover
+  open={currentBook ? false : true && showTargetPopover}
   placement="bottomLeft"
   content={
     <div>
@@ -158,6 +161,7 @@ export const Navbar = () => {
      <div style={{ display: "flex", alignItems: "center", gap: "10px", marginRight: currentBook ? '20px' : '14px'
  }}
      onClick={() => {
+      setShowTargetPopover(!showTargetPopover);
       logGAEvent('click_set_daily_goal');
      }}
      >

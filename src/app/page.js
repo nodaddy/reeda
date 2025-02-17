@@ -131,7 +131,7 @@ const Home = () => {
       display: 'flex',
       
       }}>
-           <div align="center" style={{width: '100vw',  display :'flex', alignItems: 'center', justifyContent: 'center', fontWeight: '200'}}> 
+           <div align="center" style={{width: '100vw',  display :'flex', alignItems: 'center', justifyContent: 'center', fontWeight: '300'}}> 
            {/* <Sparkles size={30} style={{color: 'white'}} /> */}
           Scan <Dot /> Read <Dot /> Repeat </div>
            
