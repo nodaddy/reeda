@@ -437,7 +437,7 @@ const BookList = () => {
                     </span>
 
                     <Progress
-                      percent={Math.min(item.pagesRead ? ((item.pagesRead / (item.totalPages || 100)) * 100 + 4) : 3, 100)}
+                      percent={Math.min(item.pagesRead ? ((item.pagesRead / (item.totalPages || 100)) * 100 + 4).toFixed(0) : 1, 100)}
                       size="large"
                       strokeWidth={10}
                       style={{ marginTop: '3px', width: '25vw', marginBottom: '-90px' }}
