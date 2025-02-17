@@ -12,8 +12,8 @@ import { isUserPremium } from '@/payments/playstoreBilling';
 import { useAppContext } from '@/context/AppContext';
 import { priColor, priTextColor, secTextColor } from '@/configs/cssValues';
 import { Bell, Book, BookCopy, BookOpen, CheckCircle, Clock, Dot, Facebook, Goal, HelpCircle, Hourglass, Info, Instagram, LetterText, Library, Lightbulb, Pointer, Popcorn, RefreshCcw, Sparkles, Store, Twitter, X } from 'lucide-react';
-import { bookshelf, dailyGoal, dic, recap, scaninghands } from '@/assets';
 import Image from 'next/image';
+import FeatureCarousel from '@/components/FeaturedCarousel';
 
 
 const { Title } = Typography;
@@ -131,27 +131,12 @@ const Home = () => {
       display: 'flex',
       
       }}>
-           <div align="center" style={{width: '100vw',  display :'flex', alignItems: 'center', justifyContent: 'center'}}> 
+           <div align="center" style={{width: '100vw',  display :'flex', alignItems: 'center', justifyContent: 'center', fontWeight: '200'}}> 
            {/* <Sparkles size={30} style={{color: 'white'}} /> */}
           Scan <Dot /> Read <Dot /> Repeat </div>
            
         </Title>    
-<div style={{
-  width: '100vw',
-  marginLeft: '-38px',
-  height: '100%',
-  background: 'url("https://images.pexels.com/photos/8694262/pexels-photo-8694262.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2")',
-  backgroundPosition: 'center',
-}}>
-       <div style={{
-        width: '100%',
-        height: '100%',
-        background: 'linear-gradient(transparent, rgb(0,0,0,0.3), rgb(0,0,0,0.4), rgb(0,0,0,0.5),rgb(0,0,0,0.6),rgb(0,0,0,0.8), black, black, black)',
-        backgroundSize: 'contain',
-       }}>
-
-       </div>
-        </div>
+ 
         {/* <Title level={5} style={{textAlign: 'center', marginBottom: '0px', marginTop :'0px', marginLeft: '-38px',
         width: '100vw', 
         backgroundColor: '#909090',
@@ -169,70 +154,21 @@ const Home = () => {
         <div align="left">
       <SignInWithGoogle router={router} /> 
 </div>
-      <div> 
-
-
-
-
-
-      <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '14px', 
-      flexWrap: 'wrap', width: '100vw', 
-      padding: '30px 0px',
-      fontFamily: "'Inter', sans-serif",
-      marginLeft: '-38px'}}>
-        <span style={tagStyle(Math.random() * 2)}>
-         <Library size={14} />Create Bookshelf
-        </span>
-        <span style={tagStyle(Math.random() * 2)}>
-          <Hourglass size={14} /> Summarize
-        </span>
-        <span style={tagStyle(Math.random() * 2)}>
-          <Goal size={14} /> Track Progress
-        </span>
-        
-        <span style={tagStyle(Math.random() * 2)}>
-          <LetterText size={14} /> Build Vocabulary
-        </span>
-      
-        <span style={tagStyle(Math.random() * 2)}>
-        <RefreshCcw size={14} /> Recap Previous Readings
-        </span>
-        <span style={tagStyle(Math.random() * 2)}>
-         <Bell size={14} /> Reminders
-        </span>
-        <span style={tagStyle(Math.random() * 2)}>
-         <Lightbulb size={14} /> Night Mode
-        </span>
-      </div>
-
-
-
-
  
 
 
-
-    
-
-
-      
-
-   
-{/* 
-      <Image src={scaninghands} alt=" " style={{
-        width: '100vw',
-        bottom: '0px',
-        left: '0px',
-        height: 'auto',
-      }} /> */}
-
-        </div>
       </div> 
-      <br/>
-      <br/>
-      <br/>
+       <div style={{
+        height: '60vh',
+        display: 'flex',
+        alignItems: 'center'
+       }}>
+<FeatureCarousel />
+
+       </div>
+
       <div style={{width: '100vw', position: 'absolute', bottom: '0px', marginLeft: '-38px', padding: '20px 0px', 
-      backgroundColor: 'transparent', color: 'white',
+      color: priTextColor,
     display: 'flex',
     justifyContent: 'space-around',
     alignItems: 'center'
@@ -241,7 +177,7 @@ const Home = () => {
         
 
         <span>
-          <Instagram /> &nbsp; <Twitter /> &nbsp; <Facebook />
+          <Instagram /> &nbsp; <Twitter />&nbsp; <Facebook />
         </span>
       </div>
     </div>
