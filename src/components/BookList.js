@@ -20,6 +20,7 @@ import { sum } from 'firebase/firestore';
 import { logGAEvent } from '@/firebase/googleAnalytics';
 
 const BookList = () => {
+  alert('ok');
   const [books, setBooks] = useState(null);
   const [filteredBooks, setFilteredBooks] = useState([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -488,7 +489,11 @@ const BookList = () => {
     style={{zIndex: '999999'}}
     >
        <br/>
-        <Form form={form} layout="vertical" onFinish={handleAddBook}>
+        <Form form={form} layout="vertical" onFinish={(event) => {
+    if (event) event.preventDefault(); // Prevent form reload
+    console.log("Form submitted");
+    // Your existing logic for handling book addition
+}}>
           <Form.Item name="title" label="Book Title" rules={[{ required: true, message: 'Please enter the book title' }]}>
             <Input placeholder="Enter book title" />
           </Form.Item>
@@ -503,7 +508,11 @@ const BookList = () => {
           {/* {imageBase64 && <p>Image uploaded successfully!</p>} */}
         </Form.Item>
         <Form.Item>
-          <Button disabled={!imageBase64} style={{
+          <Button disabled={!imageBase64}
+          onClick={() => {
+            handleAddBook();
+          }}
+          style={{
             backgroundColor: !imageBase64 ? '' : 'black'
           }} type="primary" htmlType="submit" block>
             {uploadingBook ? <Loader className='loader' size={20} /> : 'Add Book'}
