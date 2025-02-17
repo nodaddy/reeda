@@ -2,7 +2,7 @@
 
 import { BookOpen, Coins, File, FileDiff, List, LucideTarget, MessageCircle, MessageCircleCodeIcon, Rocket, Target, X } from "lucide-react";
 import Link from "next/link";
-import { Badge, Button, Input, Popover, Progress, Tooltip } from "antd";
+import { Badge, Button, Input, Popover, Progress} from "antd";
 import { useEffect, useState } from "react";
 import { getPagesReadToday, storage } from "@/app/utility";
 import { getProfile } from "@/firebase/services/profileService";
@@ -171,7 +171,7 @@ export const Navbar = () => {
         }}
         format={() => getPagesReadToday() == storage.getItem('daily-target') ? null : `${getPagesReadToday()}`}
         // format={() => } // Hide percentage text inside
-        width={27} // Adjust size
+        width={28} // Adjust size
       />
     </div>
       

@@ -12,6 +12,11 @@ export const AppProvider = ({ children }) => {
   const [profile, setProfile] = useState(null);
   const [nightModeOn, setNightModeOn] = useState(false);
   const [isPremium, setIsPremium] = useState(true);
+  const [summaryOrFullText, setSummaryOrFullText] = useState("summary");
+  const [showingSummaryOrFullText, setShowingSummaryOrFullText] = useState(null);
+  const [selectedSessionNumberOfPages, setSelectedSessionNumberOfPages] = useState(1);
+
+
 
 
   const [currentBook, setCurrentBook] = useState(null);
@@ -27,7 +32,10 @@ export const AppProvider = ({ children }) => {
   return (
     <AppContext.Provider value={{ profile, setProfile, isPremium, setIsPremium, nightModeOn, setNightModeOn,
     currentBook,
-    setCurrentBook
+    setCurrentBook,
+    summaryOrFullText, setSummaryOrFullText,
+    selectedSessionNumberOfPages, setSelectedSessionNumberOfPages,
+    showingSummaryOrFullText, setShowingSummaryOrFullText
     }}>
       {children}
     </AppContext.Provider>

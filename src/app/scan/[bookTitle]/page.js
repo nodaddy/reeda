@@ -9,6 +9,7 @@ import { Book, BookOpen, Loader, MoveLeft } from "lucide-react";
 import Link from "next/link";
 import { priTextColor, secColor, secTextColor } from "@/configs/cssValues";
 import { useAppContext } from "@/context/AppContext";
+import { Tag } from "antd";
 
 export default function ScanWithBookTitle() {
   const { bookTitle } = useParams();
@@ -24,12 +25,19 @@ export default function ScanWithBookTitle() {
 
 
 
-  const { setCurrentBook, nightModeOn } = useAppContext();
+  const { setCurrentBook, nightModeOn, showingSummaryOrFullText, setShowingSummaryOrFullText } = useAppContext();
 
   useEffect(() => {
     const loadData = async () => {
       await getLatestScanByBookTitleAndUserId(title).then((scan) => {
-        if(scan) setData(scan);
+        if(scan) {
+          setData(scan);
+          if(scan.data[0].summary == ''){
+            setShowingSummaryOrFullText('fulltext');
+          } else {
+            setShowingSummaryOrFullText('summary');
+          }
+        }
         console.log(scan);
         setModalOpen(true);
       });
@@ -103,7 +111,7 @@ export default function ScanWithBookTitle() {
         alignItems: 'center',textDecoration :'none',
 color: nightModeOn ? 'silver' : priTextColor
       }}
-      > <MoveLeft size={19} /> &nbsp; Back
+      > <MoveLeft size={19} /> &nbsp; Home
       </Link> 
       
         
@@ -119,6 +127,7 @@ color: nightModeOn ? 'silver' : priTextColor
       }}>
         <span>&nbsp;&nbsp; {title.toUpperCase()}</span>
       </p> */}
+      {showingSummaryOrFullText && <Tag>{showingSummaryOrFullText != 'summary' ? 'Full Text' : 'Summary'}</Tag>}
 </div>
 
       {

@@ -247,7 +247,7 @@ const BookList = () => {
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(1, 1fr)', // Ensures exactly 2 items per row
+            gridTemplateColumns: 'repeat(3, 1fr)', // Ensures exactly 2 items per row
             marginTop: '13px',
             width: '100%', // Ensures the grid takes full width
             zIndex: '1'
@@ -262,121 +262,23 @@ const BookList = () => {
                     borderRadius: '13px', 
                     //padding: '0px 20px',
                    //boxShadow: '0 0px 8px rgba(0, 0, 0, 0.06)',
-                    margin: '0px auto 12px auto',
-                    border: '0px',
-                    width: '98%' }}
-                    bodyStyle={{ padding: '10px 0px' }}
+                    margin: '0px auto 22px auto',
+                    width: 'fit-content',
+                    
+                    border: '0px' }}
+                    bodyStyle={{
+                      padding: '5px',
+                      width: 'fit-content',
+                    }}
                   >
 
                     <div style={{
-                      display: 'flex',
-                      justifyContent: 'space-between', 
-                      width: '100%',
-                      alignItems: 'flex-end'
+                       position: 'relative',
+                       width: '25vw',
+                       borderRadius: '8px'
                     }}>
 
-
-                    <img src={item.cover} style={{
-                      width: '47px',
-                      backgroundColor: '#f5f5f5',
-                      height: '62px',
-                      borderRadius: '3px',  
-                      marginRight: '15px',
-                      transform: 'translateY(-3px)',
-                      objectFit: 'cover',
-                      // border: '1px solid silver'
-                    }} />
-                     <div style={{
-                      width: '155px'
-                    }}>
-                    <div style={{ fontSize: '15px', color: '#333', overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis'}}>
-                    {/* <BookMarked size={20} color={'gray'} />&nbsp; */}
-                    {item.title.toUpperCase()}
-                    </div>
-                    <span style={{ color: '#666', fontSize: '12px', display: 'block', overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}>
-                      {item.author}
-                    </span>
-
-                    <Progress
-                      percent={Math.min(item.pagesRead ? ((item.pagesRead / (item.totalPages || 100)) * 100 + 4) : 3, 100)}
-                      size="small"
-                      showInfo={false}
-                      strokeWidth={5}
-                      style={{ marginTop: '3px' }}
-                    />
-
-                    {/* Delete Button */}
-                    {/* <Popconfirm
-                      title="Are you sure to delete this book?"
-                      onConfirm={() => handleDeleteBook(item.id)}
-                      okText="Yes"
-                      cancelText="No"
-                    >
-                      <Button 
-                        type="text" 
-                        icon={<div style={{ color: 'red', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#f4d9d9', borderRadius: '999px 0px 0px 999px', padding: '4px'}}>Remove</div>} 
-                        style={{ position: 'absolute', top: '-26px', right: '-4px'}} 
-                        onClick={(e) => e.stopPropagation()} 
-                      />
-                    </Popconfirm> */}
-                    </div>
-                    {/* a vertical divider */}
-                    <div style={{
-                      width: '1px',
-                      height: '100%',
-                      backgroundColor: '#ccc',
-                      margin: '0 10px',
-                      display: 'inline-block'
-                    }}></div>
-
-                    <div style={{
-                      color: secTextColor,
-                      fontSize :'14px',
-                      display: 'flex',
-                      alignItems: 'flex-end',
-                      flexDirection: 'column',
-                    }}>
-                    
-                      {/* {item.pagesRead} reads */}
-
-                      <span style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'flex-end',
-                        gap: '12px'
-                      }}>
-
-                    {/* <Link href={'/scan/'+item.title}>
-
-                      <Text 
-                        size={19}
-                        style={{
-                          color: priTextColor,
-                          // border: '1px solid '+ defaultBorderColor,
-                          borderRadius: '50%',
-                        }} />
-                    </Link> */}
-                    <Link
-                    onClick={() => {
-                      logGAEvent('click_read_book_icon_in_booklist');
-                    }}
-                    style={{
-                      textDecoration :'none',
-                      marginBottom: '-6px'
-                    }}
-                    href={'/scan/'+item.title}>
-                    <BookOpen
-                        size={25}
-                        style={{
-                          color: priColor,
-                          borderRadius: '4px',
-                          backgroundColor: 'transparent',
-                          padding: '5px 5px 4px 5px'
-                        }} />
-                  </Link>
-
-                  
-                    <Popover
+                <Popover
                     open={openPopOver == item.title}
                     onOpenChange={(open) => setOpenPopOver(open ? item.title : null)}
                           content={
@@ -440,6 +342,7 @@ const BookList = () => {
                             display: 'flex',
                             alignItems: 'center',
                             gap: '10px',
+                            marginBottom: '10px'
                           }}
                           onClick={() => {
                             setOpenPopOver(null);
@@ -454,6 +357,21 @@ const BookList = () => {
                           <span>Quick Recap</span>
                           </span>
 
+                          <span style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '10px',
+                          }}
+                          onClick={() => {
+                            handleDeleteBook(item.id);
+                          }}
+                          >
+                          <Delete
+                            size={20}
+                          /> 
+                          <span>Remove</span>
+                          </span>
+
 
                                   </span>
                                 } 
@@ -463,53 +381,71 @@ const BookList = () => {
                                 // onOpenChange={setVisible}
                               >
                                 <MoreVertical 
-                                  size={25} 
+                                  size={20} 
                                   onClick={() => {
                                     setOpenPopOver(item.title == openPopOver ? null : item.title);
                                     logGAEvent('click_more_options_on_book_card');
                                   }}
-                                  style={{ marginRight: "-18px", cursor: "pointer", color: item.title == openPopOver ? priColor  : ''}} 
+                                  style={{ 
+                                    position: 'absolute',
+                                    top: '8px',
+                                    right: '8px',
+                                    cursor: "pointer", 
+                                    zIndex: '1',
+                                    color: 'black',
+                                    backgroundColor: 'silver',
+                                    borderRadius: '5px'
+                                  }} 
                                 />
                               </Popover>
-                                
-                                <br/>
 
-                      </span>
-                   
+
+                    <img src={item.cover} style={{
+                      width: '25vw',
+                      backgroundColor: '#f5f5f5',
+                      height: '38vw',
+                      borderRadius: '6px',  
+                      objectFit: 'cover',
+                      // border: '1px solid silver'
+                    }} />
+
+                     <Link href={'/scan/'+item.title} style={{
+                      width: '25vw',
+                      height: '100%',
+                      position: 'absolute',
+                      bottom:'0px',
+                      display: 'flex',
+                      alignItems: 'flex-end',
+                      borderRadius: '6px',  
+                      zIndex: '0',
+                      left: '0px',
+                      background: 'linear-gradient(transparent, rgb(0,0,0,0.5), rgb(0,0,0,0.9) )'
+                    }}
+                    
+                    >
+                      <span style={{
+                      }}>
+                    <div style={{ 
+                      
+                      padding: '0px 7px',
+                      fontSize: '14px', color: 'white', overflow: 'hidden', whiteSpace: 'wrap'}}>
+                    {/* <BookMarked size={20} color={'gray'} />&nbsp; */}
+                    {item.title.toUpperCase()}
                     </div>
+                    <span style={{ padding: '0px 9px', marginBottom: '4px', color: 'silver', fontSize: '12px', display: 'block', overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}>
+                      {item.author}
+                    </span>
+
+                    <Progress
+                      percent={Math.min(item.pagesRead ? ((item.pagesRead / (item.totalPages || 100)) * 100 + 4) : 3, 100)}
+                      size="large"
+                      strokeWidth={10}
+                      style={{ marginTop: '3px', width: '25vw', marginBottom: '-90px' }}
+                    />
+                    </span>
+                    </Link>
                     </div>
                   </Card>
-
-
-                  {/* Back Side */}
-                  {/* <Card
-                  style={{
-                    backfaceVisibility: 'hidden',
-                    transform: 'rotateY(180deg)',
-                    border: '0px',
-                    backgroundColor: 'grey',
-                    height: '90px',
-                  }}
-                >
-                    <div style={{
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        position: 'absolute',
-                        top: '0px',
-                        height: '100%',
-                        left: '0px'
-                    }}>
-                  <Link href={'/scan/'+item.title}> <Button type="ghost" style={{ color: 'white' }} onClick={() => alert('Recap')}><span>Recap</span></Button>
-                 </Link>
-
-                  <Link href={'/scan/'+item.title}> <Button type="ghost" style={{ color: 'white' }}><span>Read</span></Button>
-                  </Link>
-                
-                    </div>
-                </Card>  */}
-                
-                {/* <Divider style={{ margin: '10px 0px' }} /> */}
             </div>)
           )}
         </div> 
@@ -545,7 +481,9 @@ const BookList = () => {
         )
 }
 
-      <Modal title="Add New Book" centered open={isModalVisible} onCancel={handleCancel} footer={null} width={'80vw'}>
+      <Modal title="Add New Book" centered open={isModalVisible} onCancel={handleCancel} footer={null} width={'80vw'}
+    style={{zIndex: '999999'}}
+    >
        <br/>
         <Form form={form} layout="vertical" onFinish={handleAddBook}>
           <Form.Item name="title" label="Book Title" rules={[{ required: true, message: 'Please enter the book title' }]}>

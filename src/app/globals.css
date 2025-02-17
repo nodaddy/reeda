@@ -7,11 +7,10 @@
     scrollbar-width: 0px !important;
   }
 
-
- .ant-progress-inner {
-  height: inherit !important;
-  width: inherit !important;
- }
+  #progress-upload .ant-progress-inner {
+    height: inherit !important;
+    width: inherit !important;
+}
 
 /* styles/globals.css */
 * {
