@@ -68,9 +68,9 @@ export const Navbar = () => {
         logGAEvent('click_logo_navbar')
       }}
       href="/">
-        <h3 style={{ marginLeft: "20px", fontWeight: "bold" }}> <BookOpen style={{
+        <h3 style={{ marginLeft: "20px", fontWeight: "bold", whiteSpace: 'nowrap' }}> <BookOpen style={{
           marginBottom: '-6px'
-        }} /> &nbsp;{currentBook ? currentBook.title.substring(0, 16) + (currentBook.title.length > 16 ? '...' : '') : 'Reeda'}
+        }} /> &nbsp;{currentBook ? currentBook.title.substring(0, 16) + (currentBook.title.length > 10 ? '...' : '') : 'Reeda'}
         <br/>   
       {
       isPremium  && !currentBook? <span style={{
