@@ -3,8 +3,8 @@ import { motion } from "framer-motion";
 import { Loader2 } from "lucide-react";
 
 const quotes = [
-    "Scanning for key takeaways",
-    "Creating in-page dictionary",
+    "Let's go!",
+    "Adding dictionary",
     "Almost done!",
     "Almost done!",
     "Almost done!",
@@ -18,7 +18,7 @@ const UploadingScanLoader = () => {
     useEffect(() => {
         const interval = setInterval(() => {
             setQuoteIndex((prevIndex) => (prevIndex + 1) % quotes.length);
-        }, 1900); // Change quote every 3 seconds
+        }, 1200); // Change quote every 3 seconds
 
         return () => clearInterval(interval);
     }, []);
@@ -30,8 +30,8 @@ const UploadingScanLoader = () => {
             alignItems: "center", 
             justifyContent: "center", 
             minHeight: "240px", 
-            padding: "24px", 
-            width:'80%',
+            padding: "10px", 
+            width:'100%',
             margin: 'auto',
             // background: "linear-gradient(to bottom right, #f0f0f0, #d1d1d1)",
             // boxShadow: "0px 10px 30px rgba(0,0,0,0.1)",
@@ -72,7 +72,7 @@ const UploadingScanLoader = () => {
                     padding: "0 16px" 
                 }}
             >
-                "{quotes[quoteIndex]}"
+                {quotes[quoteIndex]}
             </motion.p>
         </div>
     );

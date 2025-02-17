@@ -33,6 +33,7 @@ const Home = () => {
   const tagStyle = (delay) => ({
     display: 'flex',
     alignItems: 'center',
+    display: 'none',
     gap: '6px',
     padding: '8px 17px',
     backgroundColor: 'black',
@@ -40,7 +41,6 @@ const Home = () => {
     color: 'white',
     fontWeight: '400',
     fontSize: '12px',
-    animation: `wiggle 2s ease-in-out ${delay}s infinite`,
   });
   
 
@@ -136,7 +136,7 @@ const Home = () => {
             Revolutionizing<br/> Reading Experiences </div>
            
         </Title>    
-        <Title level={5} style={{textAlign: 'center', marginBottom: '0px', marginTop :'0px', marginLeft: '-38px',
+        {/* <Title level={5} style={{textAlign: 'center', marginBottom: '0px', marginTop :'0px', marginLeft: '-38px',
         width: '100vw', 
         backgroundColor: '#909090',
         color: 'white', 
@@ -146,9 +146,9 @@ const Home = () => {
       
       }}>
            <div align="center" style={{width: '100vw'}}>
-            &nbsp; One page at a time  </div>
+            &nbsp; Read books just  </div>
            
-        </Title>   
+        </Title>    */}
 
         <div align="left">
       <SignInWithGoogle router={router} /> 
@@ -192,256 +192,11 @@ const Home = () => {
 
 
 
-
-      <div 
-      style={{
-        width: '100vw',
-        marginLeft: '-40px',
-      }}
-      >
-
-
-
-
-
-
+ 
 
 
 
     
-<div style={{
-        display: 'flex',
-        justifyContent: 'space-around',
-        padding: '55px 5px',
-        backgroundColor: 'aliceblue'
-      }}>
-
-
-<div align="center"
-style={{height: 'auto', display: 'flex', alignItems: 'center', flexDirection: 'column', justifyContent: 'center'}}
->
-      <Title level={4} style={{ paddingLeft: '10px', color: priTextColor,
-        fontWeight: '300',
-      display: 'flex',
-      alignItems: 'center',
-      }}>
-         Set goals &nbsp; 
-         <Popover 
-        placement='topLeft'
-        title="Set a Daily Reading Goal"
-        content={
-          <div style={{display: 'flex', flexDirection: 'column'}}>
-            <span style={{display: 'flex', alignItems: 'center'}}>
-              <Clock size={20} /> &nbsp; Need to read with an aim?
-            </span>
-            <span style={{display: 'flex', alignItems: 'center'}}>
-              <CheckCircle size={20} /> &nbsp; Set daily target for reading
-            </span>
-            {/* <span style={{display: 'flex', alignItems: 'center'}}>
-              <HelpCircle size={20} /> &nbsp; 
-            </span> */}
-          </div>
-        }
-        >
-         <Info style={{color: priColor ,
-         transform: 'translate(-3px, 2px)',
-        }} size={18} />
-         </Popover>
-        </Title>
-</div>
-
-
-
-<Image src={dailyGoal} alt=" " style={{
-        width: '55%',
-        height: 'auto',
-      }} />
-
-      </div>
-
-
-
-<br/>
-<br/>
-
-
-<div style={{
-        display: 'flex',
-       
-        justifyContent: 'space-around',
-      }}>
-<Image src={bookshelf} alt=" " style={{
-        width: '50%',
-        height: 'auto',
-      }} />
-
-<div align="center"
-style={{height: 'auto', display: 'flex', alignItems: 'center', flexDirection: 'column', justifyContent: 'center'}}
->
-<Title level={4} style={{ paddingRight: '10px', color: priTextColor,
-        fontWeight: '300',
-      display: 'flex',
-      alignItems: 'flex-end',
-      }}>
-         Digital
-         <br/>
-         Bookshelf&nbsp; 
-         <Popover 
-        placement='topRight'
-        title="In-Page Dictionary"
-        content={
-          <div style={{display: 'flex', flexDirection: 'column'}}>
-            <span style={{display: 'flex', alignItems: 'center'}}>
-              <BookCopy size={20} /> &nbsp; Add multiple books
-            </span>
-            <span style={{display: 'flex', alignItems: 'center'}}>
-              <CheckCircle size={20} /> &nbsp; Track Progress
-            </span>
-            {/* <span style={{display: 'flex', alignItems: 'center'}}>
-              <HelpCircle size={20} /> &nbsp; 
-            </span> */}
-          </div>
-        }
-        >
-         <Info style={{color: priColor,
-          transform: 'translateY(-4px)',
-        
-        }} size={18} />
-        </Popover>
-        </Title>
-</div>
-
-      </div>
-
-
-
-
-      <br/>
-      <br/>
-
-
-
-
-
-      
-
-
-<div style={{
-        display: 'flex',
-        justifyContent: 'space-around',
-        padding: '45px 5px',
-        backgroundColor: 'aliceblue'
-      }}>
-
-
-<div align="center"
-style={{height: 'auto', display: 'flex', alignItems: 'center', flexDirection: 'column', justifyContent: 'center'}}
->
-      <Title level={4} style={{ paddingLeft: '10px', color: priTextColor,
-        fontWeight: '300',
-      display: 'flex',
-      alignItems: 'center',
-      }}>
-         Recap &nbsp; 
-         <Popover 
-        placement='topLeft'
-        title="Recap"
-        content={
-          <div style={{display: 'flex', flexDirection: 'column'}}>
-            <span style={{display: 'flex', alignItems: 'center'}}>
-              <Clock size={20} /> &nbsp; Picking a book after a break?
-            </span>
-            <span style={{display: 'flex', alignItems: 'center'}}>
-              <CheckCircle size={20} /> &nbsp; Get recap of what you've read thus far
-            </span>
-            {/* <span style={{display: 'flex', alignItems: 'center'}}>
-              <HelpCircle size={20} /> &nbsp; 
-            </span> */}
-          </div>
-        }
-        >
-         <Info style={{color: priColor ,
-         transform: 'translate(-3px, 2px)',
-        }} size={18} />
-         </Popover>
-        </Title>
-</div>
-
-
-
-<Image src={recap} alt=" " style={{
-        width: '50%',
-        height: 'auto',
-      }} />
-
-      </div>
-  
-
-
-      
-      <br/>
-      <br/>
-      <br/>
-
-
-
-
-
-<div style={{
-        display: 'flex',
-        justifyContent: 'space-around',
-      }}>
-
-
- <Image src={dic} alt=" " style={{
-        width: '50%',
-        height: 'auto',
-      }} />
-
-
-<div align="center"
-style={{height: 'auto', display: 'flex', alignItems: 'center', flexDirection: 'column', justifyContent: 'center'}}
->
-      <Title level={4} style={{ paddingRight: '10px', color: priTextColor,
-        fontWeight: '300',
-      display: 'flex',
-      alignItems: 'flex-end',
-      }}>
-         In-Page 
-         <br/>
-         Dictionary&nbsp; 
-         <Popover 
-        placement='topRight'
-        title="In-Page Dictionary"
-        content={
-          <div style={{display: 'flex', flexDirection: 'column'}}>
-            <span style={{display: 'flex', alignItems: 'center'}}>
-              <Pointer size={20} /> &nbsp; Tap on words for meanings
-            </span>
-            <span style={{display: 'flex', alignItems: 'center'}}>
-              <CheckCircle size={20} /> &nbsp; AI Powered context
-            </span>
-            {/* <span style={{display: 'flex', alignItems: 'center'}}>
-              <HelpCircle size={20} /> &nbsp; 
-            </span> */}
-          </div>
-        }
-        >
-         <Info style={{color: priColor,
-          transform: 'translateY(-3px)',
-        
-        }} size={18} />
-        </Popover>
-        </Title>
-</div>
-
-
-
-      </div>
-
-
-
-      </div>
 
 
       
@@ -460,7 +215,7 @@ style={{height: 'auto', display: 'flex', alignItems: 'center', flexDirection: 'c
       <br/>
       <br/>
       <br/>
-      <div style={{width: '100vw', marginLeft: '-38px', padding: '20px 0px', 
+      <div style={{width: '100vw', position: 'absolute', bottom: '0px', marginLeft: '-38px', padding: '20px 0px', 
       backgroundColor: 'black', color: 'white',
     display: 'flex',
     justifyContent: 'space-around',

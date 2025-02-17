@@ -1,6 +1,8 @@
 "use client";
 import { motion, AnimatePresence } from "framer-motion";
+import { Loader } from "lucide-react";
 import { useState } from "react";
+import UploadingScanLoader from "./UploadingScanLoader";
 
 const StackedImages = ({ images, loading }) => {
   const [expanded, setExpanded] = useState(null);
@@ -18,26 +20,15 @@ const StackedImages = ({ images, loading }) => {
         alignItems: "center",
       }}
     >
-      <AnimatePresence>
+      { loading ? <UploadingScanLoader /> : <AnimatePresence>
         {images.map((src, index) => (
           <motion.img
             key={index}
+            
             src={src}
             alt={`Captured ${index}`}
             initial={{ y: index * 10, rotate: index % 2 === 0 ? -5 : 5, opacity: 0 }}
-            animate={loading ? {
-              scale: [1, 1.2, 0.8, 1.1, 1],
-              rotate: [0, 10, -10, 5, 0],
-              filter: [
-                "blur(0px)", 
-                "blur(3px)", 
-                "brightness(1.5) saturate(1.2)", 
-                "drop-shadow(0px 0px 10px rgba(255,255,255,0.8))", 
-                "blur(0px)"
-              ],
-              opacity: [1, 0.8, 1, 0.9, 1],
-              transition: { duration: 2, repeat: Infinity, ease: "easeInOut" },
-            } : { y: index * 15, opacity: 1 }}
+            animate={ { y: index * 15, opacity: 1 }}
             whileTap={{ scale: 1.1 }}
             drag="y"
             dragConstraints={{ top: -50, bottom: 50 }}
@@ -55,7 +46,7 @@ const StackedImages = ({ images, loading }) => {
             onClick={() => setExpanded(expanded === index ? null : index)}
           />
         ))}
-      </AnimatePresence>
+      </AnimatePresence>}
     </div>
   );
 };

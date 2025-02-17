@@ -30,7 +30,7 @@ export default function ScanResults({ setBook, scans }) {
   const [activeView, setActiveView] = useState("summary");
   const [data, setData] = useState(null);
 
-  const [fontSize, setFontSize] = useState(14); // Default font size
+  const [fontSize, setFontSize] = useState(15); // Default font size
   
   // States for cropper
   const [crop, setCrop] = useState({ x: 0, y: 0 });

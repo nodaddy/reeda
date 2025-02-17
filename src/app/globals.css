@@ -131,14 +131,7 @@
   
 
 
-  /* styles.css */
-@keyframes wiggle {
-  0% { transform: rotate(0deg) translateX(0); }
-  25% { transform: rotate(0deg) translateX(2px); }
-  50% { transform: rotate(0deg) translateX(0); }
-  75% { transform: rotate(0deg) translateX(-2px); }
-  100% { transform: rotate(0deg) translateX(0); }
-}
+ 
 
 
 @keyframes pulse {
