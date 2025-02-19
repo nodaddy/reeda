@@ -253,8 +253,15 @@ const BookList = () => {
           Collection of your physical books </sup> */}
         
        </div>
+       <div>
+       <Bookmark color={priColor} />
+       &nbsp;
+       &nbsp;
  
- <MoreHorizontal />
+ <MoreVertical style={{
+  marginRight: '-10px'
+ }} />
+ </div>
        
         </div>
               {/* <h5 style={{ fontSize: '20px', display: 'flex', alignItems: 'center', fontWeight: '400', color: '#555555', marginBottom: '15px', paddingBottom: '10px' }}>
