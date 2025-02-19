@@ -35,8 +35,8 @@ async function searchBooks({
     queryString = `${field}:${query}`;
   }
 
-  // Build URL with search parameters
-  let url = `${API_BASE_URL}?q=${encodeURIComponent(queryString)}`;
+  // Build URL with search parameters also append api key
+  let url = `${API_BASE_URL}?q=${encodeURIComponent(queryString)}&key=${process.env.NEXT_PUBLIC_GOOGLE_BOOKS_API_KEY}`;
   
   // Add optional parameters
   url += `&maxResults=${maxResults}`;

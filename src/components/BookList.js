@@ -602,7 +602,7 @@ const BookList = () => {
         style={{
           padding: '10px 13px',
           borderRadius: '999px',
-          boxShadow: '0 0px 3px rgba(0, 118, 255, 0.4)',
+          border: '1px solid #ccc',
         }} onClick={() => handleSearchGoogleBooks(searchQueryGoogleBooks)} loading={loadingGoogleBooks} />}
           
         </div>
@@ -634,8 +634,16 @@ const BookList = () => {
             width: '100%'
           }}>
             <List.Item.Meta
-              avatar={<Avatar shape='square' src={item.volumeInfo.imageLinks?.thumbnail} />}
-             
+              avatar={<Avatar
+                onClick={() => {
+                  handleAddBook({ 
+                    title: item.volumeInfo.title,
+                    author: item.volumeInfo.authors?.join(", "), 
+                    totalPages: item.volumeInfo.pageCount || 1,
+                    cover: item.volumeInfo.imageLinks?.thumbnail
+                  });
+                }}
+                shape='square' src={item.volumeInfo.imageLinks?.thumbnail} />}
               description={<div
                 onClick={() => {
                   handleAddBook({ 
