@@ -11,12 +11,13 @@ import StreakCard from '@/components/StreakCard';
 import { storage } from '@/app/utility';
 import { isUserPremium } from '@/payments/playstoreBilling';
 import { useAppContext } from '@/context/AppContext';
-import { BookCopy, BookOpen, Info, Lightbulb, TriangleRight } from 'lucide-react';
+import { BookCopy, BookOpen, ClipboardList, Info, Lightbulb, Sparkles, TriangleRight } from 'lucide-react';
 import { scaninghands } from '@/assets';
 import Image from 'next/image';
 import { streakMaintenanceIntervalInSeconds } from '@/configs/variables';
 import Link from 'next/link';
 import { searchByTitle } from '@/googleBooks';
+import { priColor } from '@/configs/cssValues';
 
 
 const { Title } = Typography;
@@ -29,6 +30,19 @@ const Home = () => {
 
   // differnece in seconds
   const [lastPageScanDifference, setLastPageScanDifference] = useState(0);
+
+  const featureCardStyle = {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: priColor,
+    color: 'white',
+    width: '43vw',
+    borderRadius: '10px',
+    fontFamily: "'Inter', sans-serif",
+    borderRadius: '5px',
+    padding: '30px 0px'
+  }
 
   useEffect(()=>{
     searchByTitle('harry potter').then((res) => {
@@ -101,7 +115,7 @@ const Home = () => {
       overflow: 'auto',
     }}>
       <StreakCard isPremium={false} streak={profile?.streak} isActive={lastPageScanDifference < streakMaintenanceIntervalInSeconds*2} /> 
-      {!isPremium && <Alert style={{
+      {/* {!isPremium && <Alert style={{
         border: '0px',
         padding: '15px 20px',
         width: '93%',
@@ -111,10 +125,48 @@ const Home = () => {
       Using free version,
       you can add upto 1 book! 
       Click <Link href="/premium">here</Link> to unlock Reeda premium.
-      </>} type="warning" />}
-     {isPremium && <Divider />}
-     {!isPremium && <br/>}
-     <br/>
+      </>} type="warning" />} */}
+       <div style={{
+        display: 'flex',
+        marginBottom: '30px',
+         gridTemplateColumns: 'repeat(2, 1fr)', 
+         justifyContent: 'space-around'
+       }}>
+          <div style={featureCardStyle}>
+
+          <div
+          align="center"
+          style={{
+            fontWeight: '400'
+          }}>
+          <ClipboardList style={{
+            marginBottom: '16px',
+          }} size={40} />
+
+          <br/>
+
+           <span>Wishlist (TBR)</span>
+           </div>
+        </div>
+
+        <div style={featureCardStyle}>
+          <div 
+          align="center"
+          style={{
+    fontWeight: '400',
+          }}>
+            <Sparkles style={{
+              marginBottom: '16px'
+            }} size={40} />
+
+            <br/>
+            
+            <span>AI Scan</span>
+            
+            </div>
+        </div>
+
+       </div>
       <BookList />
       {/* <ContinueReading /> */}
     </div>

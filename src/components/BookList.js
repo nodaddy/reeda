@@ -23,7 +23,6 @@ import { searchByTitle } from '@/googleBooks';
 import Loading from './Loading';
 
 const BookList = () => {
-  const [books, setBooks] = useState(null);
   const [filteredBooks, setFilteredBooks] = useState([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [form] = Form.useForm();
@@ -70,7 +69,7 @@ const BookList = () => {
 
   const [summaryTillNow, setSummaryTillNow] = useState(null);
   
-  const { isPremium } = useAppContext();
+  const { isPremium , books, setBooks } = useAppContext();
 
   const router = useRouter();
 

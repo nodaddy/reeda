@@ -10,6 +10,7 @@ const AppContext = createContext();
 // 2️⃣ Create Provider Component
 export const AppProvider = ({ children }) => {
   const [profile, setProfile] = useState(null);
+  const [books, setBooks] = useState(null);
   const [nightModeOn, setNightModeOn] = useState(false);
   const [isPremium, setIsPremium] = useState(true);
   const [summaryOrFullText, setSummaryOrFullText] = useState("summary");
@@ -35,7 +36,8 @@ export const AppProvider = ({ children }) => {
     setCurrentBook,
     summaryOrFullText, setSummaryOrFullText,
     selectedSessionNumberOfPages, setSelectedSessionNumberOfPages,
-    showingSummaryOrFullText, setShowingSummaryOrFullText
+    showingSummaryOrFullText, setShowingSummaryOrFullText,
+    books, setBooks
     }}>
       {children}
     </AppContext.Provider>
