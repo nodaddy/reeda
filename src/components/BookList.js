@@ -299,7 +299,7 @@ const BookList = () => {
             display: 'grid',
             gridTemplateColumns: 'repeat(4, 1fr)', // Ensures exactly 4 items per row
             // marginTop: '13px',
-            width: '93%',
+            width: '96%',
             margin: 'auto',
             zIndex: '1'
           }}>
