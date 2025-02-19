@@ -11,7 +11,7 @@ import { storage } from './utility';
 import { isUserPremium } from '@/payments/playstoreBilling';
 import { useAppContext } from '@/context/AppContext';
 import { priColor, priTextColor, secTextColor } from '@/configs/cssValues';
-import { Bell, Book, BookCopy, BookOpen, CheckCircle, Clock, Dot, Facebook, Goal, HelpCircle, Hourglass, Info, Instagram, LetterText, Library, Lightbulb, Pointer, Popcorn, RefreshCcw, Sparkles, Store, Twitter, X } from 'lucide-react';
+import { Bell, Book, BookCopy, BookOpen, Bookmark, CheckCircle, Clock, Dot, Facebook, Goal, HelpCircle, Hourglass, Info, Instagram, LetterText, Library, Lightbulb, Pointer, Popcorn, RefreshCcw, Sparkles, Store, Twitter, X } from 'lucide-react';
 import Image from 'next/image';
 import FeatureCarousel from '@/components/FeaturedCarousel';
 
@@ -111,7 +111,7 @@ const Home = () => {
       display: 'flex',
       alignItems: 'flex-end',
       }}>
-        <BookOpen size={32} style={{marginBottom: '2px'}} /> &nbsp;Reeda
+        <Bookmark size={32} style={{marginBottom: '2px'}} /> &nbsp;Reeda
         
         </Title>
         <div align="left" style={{
@@ -119,7 +119,7 @@ const Home = () => {
           marginTop: '-15px',
           marginLeft: '3px',
           color: secTextColor
-        }}>The Reading Assistant</div>
+        }}>Smart Bookmarks</div>
         <Title level={3} style={{textAlign: 'center', marginTop: '38px', marginBottom: '0px', marginLeft: '-38px',
         width: '100vw', backgroundColor: priColor,
         color: 'white', 
@@ -133,7 +133,8 @@ const Home = () => {
       }}>
            <div align="center" style={{width: '100vw',  display :'flex', alignItems: 'center', justifyContent: 'center', fontWeight: '300'}}> 
            {/* <Sparkles size={30} style={{color: 'white'}} /> */}
-          Scan <Dot /> Read <Dot /> Repeat </div>
+           Read <Dot /> Reeda <Dot /> Repeat
+           </div>
            
         </Title>    
  

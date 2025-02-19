@@ -13,8 +13,13 @@ import {
 const FeatureCarousel = () => {
   const features = [
     {
-        title: "Reading Sessions",
-        description: "Scan your pages to start a reading session",
+        title: "Manage bookmarks",
+        description: "Update bookmarks after your reading session",
+        icon: <Sparkles size={48} />,
+    },
+    {
+        title: "Track reading session summaries",
+        description: "Add summary of your reading session",
         icon: <Sparkles size={48} />,
     },
     {
