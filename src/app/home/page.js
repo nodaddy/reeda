@@ -159,7 +159,7 @@ const Home = () => {
         <div style={{
           ...featureCardStyle
         }}>
-          <Pointer color='purple' size={15} />&nbsp;&nbsp;
+          <Sparkles color='purple' size={15} />&nbsp;&nbsp;
               <span>  Deep Read</span>  
         </div>
 </div>

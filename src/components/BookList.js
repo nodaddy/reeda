@@ -239,7 +239,7 @@ const BookList = () => {
             fontWeight: '300',
             margin: '0px',
             fontSize: '18px', 
-            padding: '5px 3px',
+            padding: '5px',
             color: priTextColor,
             borderRadius: '6px'
 

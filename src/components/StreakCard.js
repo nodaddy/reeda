@@ -102,7 +102,7 @@ if (currentHour >= 5 && currentHour < 12) {
      <Card
      bodyStyle={{
     
-    padding: '20px'
+    padding: '24px 17px'
     //  background: isPremium ? 'linear-gradient(135deg, #B08D01, goldenrod, gold,  whitesmoke)' : "linear-gradient(155deg,  silver,  whitesmoke)", // Gold, platinum, and light metallic gradient
     }}
      style={{
