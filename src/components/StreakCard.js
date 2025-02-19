@@ -118,7 +118,6 @@ if (currentHour >= 5 && currentHour < 12) {
        backgroundSize: '200% 200%',
       //  animation: 'shine 3s ease-in-out infinite', // Shine animation for glaring effect
        marginTop: '18px',
-       marginBottom: '13px',
       //  boxShadow: '0 4px 15px rgba(0, 0, 0, 0.2)', // Stronger shadow for depth
      }}
    >

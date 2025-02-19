@@ -4,14 +4,14 @@
 import { useEffect, useState } from 'react';
 import SignInWithGoogle from '@/components/SignInWithGoogle';
 import { useRouter } from 'next/navigation';
-import { Alert, Divider, Typography } from 'antd';
+import { Alert, Badge, Divider, Popover, Tag, Typography } from 'antd';
 import BookList from '@/components/BookList';
 import { getProfile, updateProfile } from '@/firebase/services/profileService';
 import StreakCard from '@/components/StreakCard';
 import { storage } from '@/app/utility';
 import { isUserPremium } from '@/payments/playstoreBilling';
 import { useAppContext } from '@/context/AppContext';
-import { BookCopy, BookOpen, ClipboardList, Info, Lightbulb, Sparkles, TriangleRight } from 'lucide-react';
+import { Bolt, BookCopy, BookOpen, Brain, Camera, ClipboardList, Info, Lightbulb, Play, PlayCircle, Pointer, ShoppingBag, Sparkles, TriangleRight, Zap } from 'lucide-react';
 import { scaninghands } from '@/assets';
 import Image from 'next/image';
 import { streakMaintenanceIntervalInSeconds } from '@/configs/variables';
@@ -26,7 +26,7 @@ const Home = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const { profile, setProfile, isPremium, setIsPremium } = useAppContext();
+  const { profile, setProfile, isPremium, setIsPremium, summaryOrFullText, setSummaryOrFullText } = useAppContext();
 
   // differnece in seconds
   const [lastPageScanDifference, setLastPageScanDifference] = useState(0);
@@ -35,13 +35,13 @@ const Home = () => {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: priColor,
-    color: 'white',
-    width: '43vw',
-    borderRadius: '10px',
     fontFamily: "'Inter', sans-serif",
-    borderRadius: '5px',
-    padding: '30px 0px'
+    color: priColor,
+    backgroundColor: 'white',
+    padding: '7px 20px',
+    width: '-webkit-fill-available',
+    borderRadius: '6px',
+    fontSize: '15px'
   }
 
   useEffect(()=>{
@@ -126,47 +126,45 @@ const Home = () => {
       you can add upto 1 book! 
       Click <Link href="/premium">here</Link> to unlock Reeda premium.
       </>} type="warning" />} */}
-       <div style={{
+      <div style={{
+        borderRadius :'12px',
+        backgroundColor: priColor,
+        padding: '20px',
+        width: '87%',
+        margin: 'auto',
+        fontFamily: "'Inter', sans-serif"
+      }}>      
+         <span style={{
+          color: 'white',
+          display: 'flex',
+          alignItems: 'center',
+          fontWeight: '400'
+         }}>
+         Scan and Read with <Tag style={{ borderRadius: '50%', border: '0px', marginLeft: '4px' }}>AI</Tag>
+         </span>
+<br/>
+         <div style={{
         display: 'flex',
-        marginBottom: '30px',
-         gridTemplateColumns: 'repeat(2, 1fr)', 
-         justifyContent: 'space-around'
+        alignItems: 'center',
+        // justifyContent: 'center',
+        gap: '15px'
        }}>
-          <div style={featureCardStyle}>
+  
 
-          <div
-          align="center"
-          style={{
-            fontWeight: '400'
-          }}>
-          <ClipboardList style={{
-            marginBottom: '16px',
-          }} size={40} />
-
-          <br/>
-
-           <span>Wishlist (TBR)</span>
-           </div>
+        <div style={{...featureCardStyle}}> 
+        <Zap color='orange' size={16}/>&nbsp;&nbsp;
+          <span>  Skim Read</span> 
         </div>
 
-        <div style={featureCardStyle}>
-          <div 
-          align="center"
-          style={{
-    fontWeight: '400',
-          }}>
-            <Sparkles style={{
-              marginBottom: '16px'
-            }} size={40} />
-
-            <br/>
-            
-            <span>AI Scan</span>
-            
-            </div>
+        <div style={{
+          ...featureCardStyle
+        }}>
+          <Pointer color='purple' size={15} />&nbsp;&nbsp;
+              <span>  Deep Read</span>  
         </div>
-
+</div>
        </div>
+<br/>
       <BookList />
       {/* <ContinueReading /> */}
     </div>

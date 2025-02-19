@@ -209,7 +209,6 @@ const BookList = () => {
     style={{ 
     padding: '0px 19px 0px 19px',
     width: '90%',
-    marginTop: '5px',
     maxHeight: height,
     margin: 'auto',
     position: 'relative',
@@ -248,10 +247,10 @@ const BookList = () => {
        
         </BadgeAnt>
         <div style={{height: '5px'}}></div>
-        <sup style={{fontFamily: "'Inter', sans-serif", fontSize: '14px', color: secTextColor, paddingLeft: '2px', 
+        {/* <sup style={{fontFamily: "'Inter', sans-serif", fontSize: '14px', color: secTextColor, paddingLeft: '2px', 
         
       }}>
-          Collection of your physical books </sup>
+          Collection of your physical books </sup> */}
         
        </div>
  
