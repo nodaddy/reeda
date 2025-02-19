@@ -1,6 +1,6 @@
 "use client"
 
-import { BookOpen, Coins, File, FileDiff, List, LucideTarget, MessageCircle, MessageCircleCodeIcon, Rocket, Target, X } from "lucide-react";
+import { BookOpen, Bookmark, Coins, File, FileDiff, List, LucideTarget, MessageCircle, MessageCircleCodeIcon, Rocket, Target, X } from "lucide-react";
 import Link from "next/link";
 import { Badge, Button, Input, Popover, Progress} from "antd";
 import { useEffect, useState } from "react";
@@ -70,9 +70,9 @@ export const Navbar = () => {
         logGAEvent('click_logo_navbar')
       }}
       href="/">
-        <h3 style={{ marginLeft: "20px", fontWeight: "bold", whiteSpace: 'nowrap' }}> <BookOpen style={{
-          marginBottom: '-6px'
-        }} /> &nbsp;{currentBook ? currentBook.title.substring(0, 16) + (currentBook.title.length > 10 ? '...' : '') : 'Reeda'}
+        <h3 style={{ marginLeft: "20px", fontWeight: "bold", whiteSpace: 'nowrap' }}> <Bookmark style={{
+          marginBottom: '-7px'
+        }} />&nbsp;{currentBook ? currentBook.title.substring(0, 16) + (currentBook.title.length > 10 ? '...' : '') : 'Reeda'}
         <br/>   
       {
       isPremium  && !currentBook? <span style={{

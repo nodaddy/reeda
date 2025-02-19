@@ -28,7 +28,7 @@ const ScanRead = () => {
           borderRadius: "12px",
           backgroundColor: priColor,
           padding: "20px",
-          width: "85%",
+          width: "82%",
           margin: "auto",
           fontFamily: "'Inter', sans-serif",
         }}
