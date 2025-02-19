@@ -18,6 +18,7 @@ import { streakMaintenanceIntervalInSeconds } from '@/configs/variables';
 import Link from 'next/link';
 import { searchByTitle } from '@/googleBooks';
 import { priColor } from '@/configs/cssValues';
+import ScanRead from '@/components/ScanRead';
 
 
 const { Title } = Typography;
@@ -29,20 +30,7 @@ const Home = () => {
   const { profile, setProfile, isPremium, setIsPremium, summaryOrFullText, setSummaryOrFullText } = useAppContext();
 
   // differnece in seconds
-  const [lastPageScanDifference, setLastPageScanDifference] = useState(0);
-
-  const featureCardStyle = {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    fontFamily: "'Inter', sans-serif",
-    color: priColor,
-    backgroundColor: 'white',
-    padding: '7px 20px',
-    width: '-webkit-fill-available',
-    borderRadius: '6px',
-    fontSize: '15px'
-  }
+  const [lastPageScanDifference, setLastPageScanDifference] = useState(0)
 
   useEffect(()=>{
     searchByTitle('harry potter').then((res) => {
@@ -126,44 +114,7 @@ const Home = () => {
       you can add upto 1 book! 
       Click <Link href="/premium">here</Link> to unlock Reeda premium.
       </>} type="warning" />} */}
-      <div style={{
-        borderRadius :'12px',
-        backgroundColor: priColor,
-        padding: '20px',
-        width: '85%',
-        margin: 'auto',
-        fontFamily: "'Inter', sans-serif"
-      }}>      
-         <span style={{
-          color: 'white',
-          display: 'flex',
-          alignItems: 'center',
-          fontWeight: '400'
-         }}>
-         Scan and Read with <Tag style={{ borderRadius: '50%', border: '0px', marginLeft: '4px' }}>AI</Tag>
-         </span>
-<br/>
-         <div style={{
-        display: 'flex',
-        alignItems: 'center',
-        // justifyContent: 'center',
-        gap: '17px'
-       }}>
-  
-
-        <div style={{...featureCardStyle}}> 
-        <Zap color='orange' size={16}/>&nbsp;&nbsp;
-          <span>  Skim Read</span> 
-        </div>
-
-        <div style={{
-          ...featureCardStyle
-        }}>
-          <Sparkles color='purple' size={15} />&nbsp;&nbsp;
-              <span>  Deep Read</span>  
-        </div>
-</div>
-       </div>
+     <ScanRead />
 <br/>
       <BookList />
       {/* <ContinueReading /> */}
