@@ -2,7 +2,7 @@ import { storage } from '@/app/utility';
 import { priColor, priTextColor, secColor, secTextColor } from '@/configs/cssValues';
 import { Card, Button, Modal, Tooltip, Spin, Popover } from 'antd';
 import { time } from 'framer-motion';
-import { Flame, Clock, Loader, GraduationCap, HelpCircle, Bookmark } from 'lucide-react';
+import { Flame, Clock, Loader, GraduationCap, HelpCircle, Bookmark, Star } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { Sun, Moon } from 'lucide-react';
 
@@ -123,9 +123,8 @@ if (currentHour >= 5 && currentHour < 12) {
    >
         <div style={{
           display: 'flex',
-          alignItems: 'flex-start',
+          alignItems: 'flex-end',
           justifyContent: 'space-between',
-          alignItems: 'flex-start'
         }}>
         { <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }}>
           <div style={{ textAlign: 'left'}}> 
@@ -143,16 +142,17 @@ if (currentHour >= 5 && currentHour < 12) {
       alignItems: 'center',
       fontWeight: '300'
     }}> 
-    {/* <Icon size={23} style={{ marginRight: '10px' }} />   */}
+    <Icon size={23} style={{ marginRight: '10px' }} />  
     {greeting}
     </sub>
     <div style={{
-      marginTop: '-3px',
+      marginTop: '0px',
       fontSize: '16px',
       fontWeight: '300'
     }}>
       {/* <Icon size={23} style={{ marginRight: '10px', opacity: '0' }} /> */}
       {JSON.parse(storage.getItem('user'))?.displayName.split(" ").slice(0, 2).join(" ")}
+ 
       </div>
       </span>
   </div> 

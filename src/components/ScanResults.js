@@ -149,11 +149,6 @@ export default function ScanResults({ setBook, scans }) {
   const handleUpload = async () => {
     setUploadingImage(true);
 
-    let scanDataResponse = [{
-      summary: '',
-      simpleLang: ''
-    }];
-
     for (const image of images) {
       const croppedFile = await getBlob(image);
     
@@ -166,12 +161,6 @@ export default function ScanResults({ setBook, scans }) {
         await getPageSummaryFromImageStream(croppedFile, 5, (chunk) => {
           setUploadingImage(false);
           setShowingSummaryOrFullText('summary');
-          // Ensure scanDataResponse[0] exists before modifying
-          if (!scanDataResponse[0]) {
-            scanDataResponse[0] = { summary: "", simpleLang: "" };
-          }
-          scanDataResponse[0].summary += chunk;
-    
           setData((prev) => 
             prev 
               ? [{ ...prev[0], summary: prev[0].summary + chunk }] 
@@ -182,13 +171,6 @@ export default function ScanResults({ setBook, scans }) {
         await getSimplifiedLanguageStream(croppedFile, (chunk) => {
           setUploadingImage(false);
           setShowingSummaryOrFullText('fulltext');
-    
-          // Ensure scanDataResponse[0] exists before modifying
-          if (!scanDataResponse[0]) {
-            scanDataResponse[0] = { summary: "", simpleLang: "" };
-          }
-          scanDataResponse[0].simpleLang += chunk;
-    
           setData((prev) => 
             prev 
               ? [{ ...prev[0], simpleLang: prev[0].simpleLang + chunk }] 
@@ -197,54 +179,7 @@ export default function ScanResults({ setBook, scans }) {
         });
       }
     }
-
-
-    const book = await getBookByTitleAndUserId(bookTitle);
-    const updatedBook = await updateBookByUserIdAndTitle(
-        { ...book, pagesRead: book?.pagesRead ? book?.pagesRead + 1 : 1 },
-        bookTitle
-    );
-    
-    setBook(updatedBook);
-    await createScan({ bookTitle, data: scanDataResponse });
-
-
-    // const profile = await getProfile(JSON.parse(storage.getItem('user')).email);
-    const timeDifferenceInSeconds = (Date.now() - profile?.streak.lastPageScanTimestamp) / 1000;
-    // alert(timeDifferenceInSeconds);
-    if (timeDifferenceInSeconds > streakMaintenanceIntervalInSeconds && timeDifferenceInSeconds < streakMaintenanceIntervalInSeconds * 2) { // < 48 hours & > 24 hours
-      setProfile(await updateProfile(profile.userId, {
-        ...profile,
-        coins: (profile?.coins || 0) + addCoinsPerScan,
-        streak: {
-            ...profile.streak,
-            days: (profile.streak?.days || 0) + 1,
-            lastPageScanTimestamp: Date.now(),
-        },
-        }))
-    } else if(timeDifferenceInSeconds > streakMaintenanceIntervalInSeconds * 2) {
-      setProfile(await updateProfile(profile.userId, {
-        ...profile,
-        coins: (profile?.coins || 0) + addCoinsPerScan,
-        streak: {
-          ...profile.streak,
-          longestStreak: Math.max(profile.streak.longestStreak || 0, profile.streak?.days || 0),
-          days: 1,
-          lastPageScanTimestamp: Date.now(),
-      },
-        }))
-    } else {
-      setProfile(await updateProfile(profile.userId, {
-        ...profile,
-        coins: (profile?.coins || 0) + addCoinsPerScan,
-        streak: {
-          ...profile.streak,
-          lastPageScanTimestamp: Date.now(),
-      },
-        }))
-    }
     setImages([]);
-    // setShowCropper(false);
   };
 
   return (

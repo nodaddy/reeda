@@ -5,6 +5,7 @@ import recap from './recap.png';
 import bookshelf from './bookshelf.png';
 import dailyGoal from './daily-goal.png';
 import uploadImages from './upload-images.svg';
+import readBook from './readBook.gif';
 
 export {
     scaninghands,
@@ -13,5 +14,6 @@ export {
     recap,
     bookshelf,
     dailyGoal,
-    uploadImages
+    uploadImages,
+    readBook
 }

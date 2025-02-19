@@ -219,7 +219,7 @@ const BookList = () => {
     }}>
       <div style={{
         position: 'sticky',
-        width: '96%',
+        width: '97%',
         top: '0px',
         zIndex: '2',
         paddingLeft: '4px',
@@ -227,10 +227,15 @@ const BookList = () => {
         backgroundColor: 'white'
         // backgroundColor: '#fafafa',
       }}>
-        <div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '15px', 
-            paddingTop: '18px',
-      
-      }}>
+        <div style={
+          {display:"flex",
+          alignItems:"center",
+          background: 'rgba(74, 74, 255, 0.1)',
+          justifyContent:"space-between",
+          gap:"15px",
+          padding:"10px 20px 5px 20px",
+          borderRadius:"10px"}
+      }>
         <div>
        {/* <BadgeAnt count={books?.length} showZero={false} color={secColor} offset={[5, 3]} > */}
         <BadgeAnt count={books?.length} showZero={true} color={secColor}  offset={[4, -3]}>
@@ -466,16 +471,18 @@ const BookList = () => {
                               } */}
 
 
-                    <img src={item.cover} style={{
-                      width: '19vw',
-                      height: '29vw',
-                      marginBottom: '5px',
-                      // borderRadius: '6px',  
-                      // filter: item.pagesRead === item.totalPages ? 'grayscale(100%)' : 'greyscale(0%)',
-                      objectFit: 'cover',
-                      // border: '1px solid silver'
-                    }} />
-
+<img 
+  src={item.cover} 
+  style={{
+    width: '19vw',
+    height: '29vw',
+    marginBottom: '5px',
+    objectFit: 'cover',
+    borderRadius: '8px',  // Optional: Slight rounding for a premium look
+    boxShadow: '0px 3px 10px rgba(74, 74, 255, 0.3)', // Soft shadow
+    transition: 'transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out', // Smooth hover effect
+  }} 
+/>
                      <Link href={'/scan/'+item.title} style={{
                       width: '19vw',
                       position: 'absolute',
