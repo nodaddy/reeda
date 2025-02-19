@@ -130,7 +130,7 @@ const Home = () => {
         borderRadius :'12px',
         backgroundColor: priColor,
         padding: '20px',
-        width: '87%',
+        width: '85%',
         margin: 'auto',
         fontFamily: "'Inter', sans-serif"
       }}>      
@@ -147,7 +147,7 @@ const Home = () => {
         display: 'flex',
         alignItems: 'center',
         // justifyContent: 'center',
-        gap: '15px'
+        gap: '17px'
        }}>
   
 

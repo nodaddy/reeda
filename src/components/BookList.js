@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import { List, Card, Button, Title, Modal, Form, Input, Progress, Badge as BadgeAnt, message, Typography, Empty, Divider, Upload, Popconfirm, Popover, Alert } from 'antd';
-import { BookOpen, BookPlus, Bookmark, Camera, CheckCircle2, Delete, History, LetterText, Loader, MoreVertical, MoveRight, Play, PlayCircle, PlusCircle, RefreshCcw, Search, SearchIcon, Text, Trash2, UploadIcon } from 'lucide-react';
+import { BookOpen, BookPlus, Bookmark, Camera, CheckCircle2, Delete, History, LetterText, Loader, MoreHorizontal, MoreVertical, MoveRight, Play, PlayCircle, PlusCircle, RefreshCcw, Search, SearchIcon, Text, Trash2, UploadIcon } from 'lucide-react';
 import { defaultBorderColor, priColor, priTextColor, secColor, secTextColor } from '@/configs/cssValues';
 import { motion } from 'framer-motion';
 import { createbook, getBooks, deleteBook, getBookByTitleAndUserId, updateBookByUserIdAndTitle} from '@/firebase/services/bookService';
@@ -207,8 +207,7 @@ const BookList = () => {
     <div 
     ref={ref}
     style={{ 
-    padding: '0px 19px 0px 19px',
-    width: '90%',
+    width: '96%',
     maxHeight: height,
     margin: 'auto',
     position: 'relative',
@@ -220,10 +219,11 @@ const BookList = () => {
     }}>
       <div style={{
         position: 'sticky',
-        width: '100%',
+        width: '96%',
         top: '0px',
         zIndex: '2',
         paddingLeft: '4px',
+        marginBottom: '10px',
         backgroundColor: 'white'
         // backgroundColor: '#fafafa',
       }}>
@@ -254,13 +254,13 @@ const BookList = () => {
         
        </div>
  
+ <MoreHorizontal />
        
         </div>
               {/* <h5 style={{ fontSize: '20px', display: 'flex', alignItems: 'center', fontWeight: '400', color: '#555555', marginBottom: '15px', paddingBottom: '10px' }}>
                 My Bookshelf &nbsp;
               </h5> */}
-        <br/>
-        <div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
+        {/* <div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
         <Input.Search
                   placeholder=" Search your collection"
                   value={searchQuery}
@@ -277,17 +277,15 @@ const BookList = () => {
          }} />
          </>}
 
+        </div> */}
         </div>
-        </div>
-<br/>
       {filteredBooks && (
         <div>
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(4, 1fr)', // Ensures exactly 2 items per row
+            gridTemplateColumns: 'repeat(4, 1fr)', // Ensures exactly 4 items per row
             // marginTop: '13px',
-            width: '100%', // Ensures the grid takes full width
             zIndex: '1'
           }}>
           {filteredBooks?.sort((a,b) => a.title.localeCompare(b.title)).map(item => (
@@ -313,7 +311,7 @@ const BookList = () => {
 
                     <div style={{
                        position: 'relative',
-                       width: '18vw',
+                       width: '19vw',
                     // border: '1px solid '+defaultBorderColor,
 
                       //  borderRadius: '3px',
@@ -462,8 +460,9 @@ const BookList = () => {
 
 
                     <img src={item.cover} style={{
-                      width: '18vw',
-                      height: '28vw',
+                      width: '19vw',
+                      height: '29vw',
+                      marginBottom: '5px',
                       // borderRadius: '6px',  
                       // filter: item.pagesRead === item.totalPages ? 'grayscale(100%)' : 'greyscale(0%)',
                       objectFit: 'cover',
@@ -471,7 +470,7 @@ const BookList = () => {
                     }} />
 
                      <Link href={'/scan/'+item.title} style={{
-                      width: '18vw',
+                      width: '19vw',
                       position: 'absolute',
                       bottom: '0px',
                       display: 'flex',
