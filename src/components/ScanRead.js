@@ -41,13 +41,15 @@ const ScanRead = () => {
             fontWeight: "400",
           }}
         >
-           Need help with the text? &nbsp;
+          AI Assist &nbsp;
           <Popover
-            overlayStyle={{width: '75%'}}
+           placement="topRight"
+            overlayStyle={{width: '56%'}}
             content={
               <div style={{padding: '5px'}}>
-                <b>Assist your reading sessions with AI:</b><br/>
-                 Scan pages | Get summary | In-page contextual dictionary
+                 - Scan pages <br/>
+                 - Get summary (AI) <br/> 
+                 - In-page dictionary (AI)<br/>
               </div>
           }>
             <Info size={18} />
@@ -64,7 +66,7 @@ const ScanRead = () => {
           <Link href={`scan/${bookTitleForAdHocAISession}`} style={{ ...featureCardStyle, textDecoration: 'none' }}>
             <Zap color="orange" size={16} />
             &nbsp;&nbsp;
-            <span> Reeda AI Assistant</span>
+            <span> Scan pages</span>
             &nbsp;
             &nbsp;
             <MoveRight />

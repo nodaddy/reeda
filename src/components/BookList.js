@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import { List, Card, Button, Title, Modal, Form, Input, Progress, Badge as BadgeAnt, message, Typography, Empty, Divider, Upload, Popconfirm, Popover, Alert } from 'antd';
-import { BookOpen, BookPlus, Bookmark, Camera, CheckCircle2, Delete, History, LetterText, Loader, MoreHorizontal, MoreVertical, MoveRight, Play, PlayCircle, PlusCircle, RefreshCcw, Search, SearchIcon, Text, Trash2, UploadIcon } from 'lucide-react';
+import { BookOpen, BookPlus, Bookmark, Camera, CheckCircle2, Delete, History, LetterText, Loader, MoreHorizontal, MoreVertical, MoveRight, Play, PlayCircle, PlusCircle, RefreshCcw, Search, SearchIcon, Share, Share2, Text, Trash2, UploadIcon } from 'lucide-react';
 import { defaultBorderColor, priColor, priTextColor, secColor, secTextColor } from '@/configs/cssValues';
 import { motion } from 'framer-motion';
 import { createbook, getBooks, deleteBook, getBookByTitleAndUserId, updateBookByUserIdAndTitle} from '@/firebase/services/bookService';
@@ -219,10 +219,10 @@ const BookList = () => {
     }}>
       <div style={{
         position: 'sticky',
-        width: '97%',
+        width: '96%',
+        margin: 'auto',
         top: '0px',
         zIndex: '2',
-        paddingLeft: '4px',
         marginBottom: '10px',
         backgroundColor: 'white'
         // backgroundColor: '#fafafa',
@@ -238,19 +238,20 @@ const BookList = () => {
       }>
         <div>
        {/* <BadgeAnt count={books?.length} showZero={false} color={secColor} offset={[5, 3]} > */}
-        <BadgeAnt count={books?.length} showZero={true} color={secColor}  offset={[4, -3]}>
+        {/* <BadgeAnt count={books?.length} showZero={true} color={secColor}  offset={[4, -3]}> */}
         <span style={{
             
             fontWeight: '300',
             margin: '0px',
             fontSize: '18px', 
-            padding: '5px',
+            padding: '5px 0px',
             color: priTextColor,
-            borderRadius: '6px'
+            borderRadius: '6px',
+            fontFamily: "'Inter', sans-serif",
 
-        }}>My Bookshelf</span>
+        }}> My Bookshelf</span>
        
-        </BadgeAnt>
+        {/* </BadgeAnt> */}
         <div style={{height: '5px'}}></div>
         {/* <sup style={{fontFamily: "'Inter', sans-serif", fontSize: '14px', color: secTextColor, paddingLeft: '2px', 
         
@@ -298,6 +299,8 @@ const BookList = () => {
             display: 'grid',
             gridTemplateColumns: 'repeat(4, 1fr)', // Ensures exactly 4 items per row
             // marginTop: '13px',
+            width: '93%',
+            margin: 'auto',
             zIndex: '1'
           }}>
           {filteredBooks?.sort((a,b) => a.title.localeCompare(b.title)).map(item => (
@@ -440,13 +443,14 @@ const BookList = () => {
                                   }}
                                   style={{ 
                                     position: 'absolute',
-                                    top: '8px',
-                                    right: '8px',
+                                    top: '5px',
+                                    right: '5px',
+                                    width: '15px',
                                     cursor: "pointer", 
                                     zIndex: '1',
                                     color: 'black',
-                                    backgroundColor: 'silver',
-                                    borderRadius: '5px'
+                                    backgroundColor: 'white',
+                                    borderRadius: '4px'
                                   }} 
                                 />
                               </Popover>
@@ -478,8 +482,8 @@ const BookList = () => {
     height: '29vw',
     marginBottom: '5px',
     objectFit: 'cover',
-    borderRadius: '8px',  // Optional: Slight rounding for a premium look
-    boxShadow: '0px 3px 10px rgba(74, 74, 255, 0.3)', // Soft shadow
+    borderRadius: '5px',  // Optional: Slight rounding for a premium look
+    boxShadow: '0px 2px 10px rgba(0, 0, 0, 0.2)', // Soft shadow
     transition: 'transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out', // Smooth hover effect
   }} 
 />
