@@ -737,7 +737,7 @@ export default function ScanResults({ setBook, scans }) {
       >
         <div>
         {uploadingImage ? <div style={{ height: '50vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-            <UploadingScanLoader />
+            <Loading />
           </div>:<div> 
             <Cropper
               image={imageSrc}

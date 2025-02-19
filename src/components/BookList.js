@@ -2,8 +2,8 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import { List, Card, Button, Title, Modal, Form, Input, Progress, Badge as BadgeAnt, message, Typography, Empty, Divider, Upload, Popconfirm, Popover, Alert } from 'antd';
-import { BookOpen, BookPlus, Camera, CheckCircle2, Delete, History, LetterText, Loader, MoreVertical, MoveRight, Play, PlayCircle, PlusCircle, RefreshCcw, Search, Text, Trash2, UploadIcon } from 'lucide-react';
-import { priColor, priTextColor, secColor, secTextColor } from '@/configs/cssValues';
+import { BookOpen, BookPlus, Bookmark, Camera, CheckCircle2, Delete, History, LetterText, Loader, MoreVertical, MoveRight, Play, PlayCircle, PlusCircle, RefreshCcw, Search, SearchIcon, Text, Trash2, UploadIcon } from 'lucide-react';
+import { defaultBorderColor, priColor, priTextColor, secColor, secTextColor } from '@/configs/cssValues';
 import { motion } from 'framer-motion';
 import { createbook, getBooks, deleteBook, getBookByTitleAndUserId, updateBookByUserIdAndTitle} from '@/firebase/services/bookService';
 import Link from 'next/link';
@@ -18,12 +18,40 @@ import { getLatestScansbyBookTitle } from '@/firebase/services/scanService';
 import { getSummaryFromText, getSummaryFromTextStream } from '@/openAI';
 import { sum } from 'firebase/firestore';
 import { logGAEvent } from '@/firebase/googleAnalytics';
+import {    Avatar } from "antd";
+import { searchByTitle } from '@/googleBooks';
+import Loading from './Loading';
 
 const BookList = () => {
   const [books, setBooks] = useState(null);
   const [filteredBooks, setFilteredBooks] = useState([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [form] = Form.useForm();
+
+
+
+
+  const [searchQueryGoogleBooks, setSearchQueryGoogleBooks] = useState("");
+  const [searchResultsGoogleBooks, setSearchResultsGoogleBooks] = useState([]);
+  const [loadingGoogleBooks, setLoadingGoogleBooks] = useState(false);
+
+  const handleSearchGoogleBooks = async (value) => {
+    setSearchQueryGoogleBooks(value);
+    if (!value) {
+      setSearchResultsGoogleBooks([]);
+      return;
+    }
+    setLoadingGoogleBooks(true);
+    try {
+      const results = await searchByTitle(value);
+      setSearchResultsGoogleBooks(results.items);
+    } catch (error) {
+      console.error("Error fetching books:", error);
+    }
+    setLoadingGoogleBooks(false);
+  };
+
+
 
   const [processingImageUplaod, setProcessingImageUplaod] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -142,7 +170,7 @@ const BookList = () => {
       setUploadingBook(true);
       const newBook = { title: values.title, totalPages: values.totalPages, 
          author: values.author ? values.author : '', 
-         cover: imageBase64};
+         cover: values.cover};
       createbook(newBook).then(() => getBooks().then(async (res) => {
 
         const profile = await getProfile(JSON.parse(storage.getItem('user')).email);
@@ -159,6 +187,9 @@ const BookList = () => {
         setIsModalVisible(false);
         form.resetFields();
         setImageBase64(null);
+        setSearchQueryGoogleBooks(null);
+        setSearchResultsGoogleBooks([]);
+        message.success('Book added successfully!');
       }));
     }
   };
@@ -256,8 +287,8 @@ const BookList = () => {
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(3, 1fr)', // Ensures exactly 2 items per row
-            marginTop: '13px',
+            gridTemplateColumns: 'repeat(4, 1fr)', // Ensures exactly 2 items per row
+            // marginTop: '13px',
             width: '100%', // Ensures the grid takes full width
             zIndex: '1'
           }}>
@@ -268,11 +299,12 @@ const BookList = () => {
                   {/* Front Side */}
                   <Card
                     style={{ backfaceVisibility: 'hidden',
-                    borderRadius: '13px', 
+                     
                     //padding: '0px 20px',
                    //boxShadow: '0 0px 8px rgba(0, 0, 0, 0.06)',
-                    margin: '0px auto 22px auto',
+                    margin: '0px auto 0px auto',
                     width: 'fit-content',
+
                     
                     border: '0px' }}
                     bodyStyle={{
@@ -283,8 +315,11 @@ const BookList = () => {
 
                     <div style={{
                        position: 'relative',
-                       width: '25vw',
-                       borderRadius: '8px'
+                       width: '18vw',
+                    // border: '1px solid '+defaultBorderColor,
+
+                      //  borderRadius: '3px',
+
                     }}>
 
                 <Popover
@@ -408,50 +443,71 @@ const BookList = () => {
                                 />
                               </Popover>
 
+                              {/* {
+                                item.pagesRead !== item.totalPages &&  <Bookmark
+                                size={17} 
+                                onClick={() => {
+                                  setOpenPopOver(item.title == openPopOver ? null : item.title);
+                                  logGAEvent('click_more_options_on_book_card');
+                                }}
+                                style={{ 
+                                  position: 'absolute',
+                                  top: '0px',
+                                  left: '8px',
+                                  cursor: "pointer", 
+                                  zIndex: '1',
+                                  color: 'green',
+                                  borderRadius: '5px'
+                                }} 
+                              />
+                              } */}
+
 
                     <img src={item.cover} style={{
-                      width: '25vw',
-                      backgroundColor: '#f5f5f5',
-                      height: '38vw',
-                      borderRadius: '6px',  
+                      width: '18vw',
+                      height: '28vw',
+                      // borderRadius: '6px',  
+                      // filter: item.pagesRead === item.totalPages ? 'grayscale(100%)' : 'greyscale(0%)',
                       objectFit: 'cover',
                       // border: '1px solid silver'
                     }} />
 
                      <Link href={'/scan/'+item.title} style={{
-                      width: '25vw',
-                      height: '100%',
+                      width: '18vw',
                       position: 'absolute',
-                      bottom:'0px',
+                      bottom: '0px',
                       display: 'flex',
                       alignItems: 'flex-end',
-                      borderRadius: '6px',  
+                      // borderRadius: '6px',  
                       zIndex: '0',
                       left: '0px',
-                      background: 'linear-gradient(transparent, rgb(0,0,0,0.5), rgb(0,0,0,0.9) )'
+                      background: item.cover && item.cover != '' ? `url(${item.cover})` : 'linear-gradient(transparent, rgb(0,0,0,0.5), rgb(0,0,0,0.9) )'
                     }}
                     
                     >
-                      <span style={{
+                    {!item.cover || item.cover == '' && <span style={{
                       }}>
-                    <div style={{ 
-                      
-                      padding: '0px 7px',
-                      fontSize: '13px', color: 'white', overflow: 'hidden', whiteSpace: 'wrap'}}>
+                    <div style={{
+                      padding: '0px 6px',
+                      width: '19vw',
+                      fontSize: '10px', color: 'white', overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}>
                     {/* <BookMarked size={20} color={'gray'} />&nbsp; */}
                     {item.title.toUpperCase()}
                     </div>
-                    <span style={{ padding: '0px 9px', marginBottom: '4px', color: 'silver', fontSize: '12px', display: 'block', overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}>
+                    <span style={{width: '60%', padding: '0px 6px', marginBottom: '4px', color: 'silver', fontSize: '12px', display: 'block', overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}>
                       {item.author}
                     </span>
-
-                    <Progress
-                      percent={Math.min(item.pagesRead ? ((item.pagesRead / (item.totalPages || 100)) * 100 + 4).toFixed(0) : 1, 100)}
+                   
+                    
+                    </span>}
+                    {/* <Progress
+                      percent={Math.min(item.pagesRead ? ((item.pagesRead / (item.totalPages || 100)) * 100 + 4).toFixed(0) : 6, 100)}
                       size="large"
-                      strokeWidth={8}
-                      style={{ marginTop: '3px', width: '25vw', marginBottom: '-90px' }}
-                    />
-                    </span>
+                      showInfo={false}
+                      
+                      strokeWidth={7}
+                      style={{ marginTop: '3px', width: '19vw', marginTop: '0px' }}
+                    /> */}
                     </Link>
                     </div>
                   </Card>
@@ -490,23 +546,22 @@ const BookList = () => {
         )
 }
 
-      <Modal title="Add New Book" centered open={isModalVisible} onCancel={handleCancel} footer={null} width={'80vw'}
+      {/* <Modal title="Add New Book" centered open={isModalVisible} onCancel={handleCancel} footer={null} width={'80vw'}
     style={{zIndex: '999999'}}
     >
        <br/>
         <Form form={form} layout="vertical" onFinish={handleAddBook}>
           <Form.Item name="title" label="Book Title" rules={[{ required: true, message: 'Please enter the book title' }]}>
             <Input placeholder="Enter book title" />
-          </Form.Item>
+          </Form.Item> */}
             {/* <Form.Item name="author" label="Author (optional)" rules={[{ required: false, message: 'Please enter the author' }]}>
             <Input placeholder="Enter author name" />
           </Form.Item> */}
-          <Form.Item name="totalPages" label="Total number of pages" rules={[{ required: true, message: 'Please enter the total number of pages' }]}>
+          {/* <Form.Item name="totalPages" label="Total number of pages" rules={[{ required: true, message: 'Please enter the total number of pages' }]}>
             <Input type='number' placeholder="Number of pages e.g 348" />
           </Form.Item>
           <Form.Item label="Book Cover Photo (optional)">
           <CameraUpload forBookCover={true} handleImage={handleImageUpload} />
-          {/* {imageBase64 && <p>Image uploaded successfully!</p>} */}
         </Form.Item>
         <Form.Item>
           <Button disabled={processingImageUplaod} style={{
@@ -516,7 +571,96 @@ const BookList = () => {
             </Button>
         </Form.Item>
         </Form>
-      </Modal>
+      </Modal> */}
+
+      <Modal
+      title="Search books to add"
+      centered
+      open={isModalVisible}
+      onCancel={()=>{setIsModalVisible(false)}}
+      footer={null}
+      width={"86vw"}
+      style={{ zIndex: "999999" }}
+    >
+      <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        marginTop: '20px'
+      }}>
+      <Input
+          placeholder="Search..."
+          size="large"
+          value={searchQueryGoogleBooks}
+          onChange={(e) => setSearchQueryGoogleBooks(e.target.value)}
+          style={{width: '75%'}}
+        />
+        {loadingGoogleBooks ? <Loader className='loader' /> : 
+        
+        <SearchIcon
+        size={18}
+        style={{
+          padding: '10px 13px',
+          borderRadius: '999px',
+          boxShadow: '0 0px 3px rgba(0, 118, 255, 0.4)',
+        }} onClick={() => handleSearchGoogleBooks(searchQueryGoogleBooks)} loading={loadingGoogleBooks} />}
+          
+        </div>
+      <div style={{
+        maxHeight: '40vh',
+        overflowY: 'scroll',
+        // scrollbarWidth: 'thin',
+        width: '100%',
+        marginTop: '10px',
+        padding: '0px 10px'
+      }}>
+        {uploadingBook ? <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          height: '40vh'
+        }}
+        >
+          <Loading messages={[
+            "Adding book",
+            "Almost there"
+          ]} />
+          </div> : <List
+        itemLayout="horizontal"
+        dataSource={searchResultsGoogleBooks}
+        renderItem={(item) => (
+           <List.Item style={{
+            width: '100%'
+          }}>
+            <List.Item.Meta
+              avatar={<Avatar shape='square' src={item.volumeInfo.imageLinks?.thumbnail} />}
+             
+              description={<div
+                onClick={() => {
+                  handleAddBook({ 
+                    title: item.volumeInfo.title,
+                    author: item.volumeInfo.authors?.join(", "), 
+                    totalPages: item.volumeInfo.pageCount || 1,
+                    cover: item.volumeInfo.imageLinks?.thumbnail
+                  });
+                }}
+                style={{
+                lineHeight: 'normal'
+              }}><div
+              style={{
+                textDecoration: 'none',
+                color: priTextColor
+              }}>{item.volumeInfo.title}</div>
+              <sup>by {item.volumeInfo.authors?.join(", ")}</sup>
+              </div>}
+              
+            />
+          </List.Item>
+        )}
+      />}
+      </div>
+    </Modal>
 
 
       {/* book summary show till now modal */}

@@ -11,12 +11,12 @@ import StreakCard from '@/components/StreakCard';
 import { storage } from '@/app/utility';
 import { isUserPremium } from '@/payments/playstoreBilling';
 import { useAppContext } from '@/context/AppContext';
-import { priTextColor } from '@/configs/cssValues';
 import { BookCopy, BookOpen, Info, Lightbulb, TriangleRight } from 'lucide-react';
 import { scaninghands } from '@/assets';
 import Image from 'next/image';
 import { streakMaintenanceIntervalInSeconds } from '@/configs/variables';
 import Link from 'next/link';
+import { searchByTitle } from '@/googleBooks';
 
 
 const { Title } = Typography;
@@ -31,6 +31,9 @@ const Home = () => {
   const [lastPageScanDifference, setLastPageScanDifference] = useState(0);
 
   useEffect(()=>{
+    searchByTitle('harry potter').then((res) => {
+      console.log(res);
+    });
     if(typeof navigator !== "undefined") {
       if("serviceWorker" in navigator) {
         navigator.serviceWorker

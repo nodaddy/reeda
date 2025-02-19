@@ -2,23 +2,13 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Loader2 } from "lucide-react";
 
-const quotes = [
-    "Let's go!",
-    "Adding dictionary",
-    "Almost done!",
-    "Almost done!",
-    "Almost done!",
-    "Almost done!",
-    "Almost done!",
-];
-
-const UploadingScanLoader = () => {
+const Loading = ({messages}) => {
     const [quoteIndex, setQuoteIndex] = useState(0);
 
     useEffect(() => {
         const interval = setInterval(() => {
-            setQuoteIndex((prevIndex) => (prevIndex + 1) % quotes.length);
-        }, 800); // Change quote every 0.8 seconds
+            setQuoteIndex((prevIndex) => (prevIndex + 1) % messages.length);
+        }, 1400); // Change quote every 0.8 seconds
 
         return () => clearInterval(interval);
     }, []);
@@ -72,10 +62,10 @@ const UploadingScanLoader = () => {
                     padding: "0 16px" 
                 }}
             >
-                {quotes[quoteIndex]}
+                {messages[quoteIndex]}
             </motion.p>
         </div>
     );
 };
 
-export default UploadingScanLoader;
+export default Loading;

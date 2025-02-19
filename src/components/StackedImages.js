@@ -2,7 +2,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { Loader } from "lucide-react";
 import { useState } from "react";
-import UploadingScanLoader from "./UploadingScanLoader";
+import Loading from "./Loading";
 
 const StackedImages = ({ images, loading }) => {
   const [expanded, setExpanded] = useState(null);
@@ -20,7 +20,15 @@ const StackedImages = ({ images, loading }) => {
         alignItems: "center",
       }}
     >
-      { loading ? <UploadingScanLoader /> : <AnimatePresence>
+      { loading ? <Loading messages={[
+    "Let's go!",
+    "Adding dictionary",
+    "Almost done!",
+    "Almost done!",
+    "Almost done!",
+    "Almost done!",
+    "Almost done!",
+]} /> : <AnimatePresence>
         {images.map((src, index) => (
           <motion.img
             key={index}
