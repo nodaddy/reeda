@@ -165,7 +165,6 @@ const Home = () => {
         <br />
         <ContinueReadingCard />
         <br />
-        <br />
 
         <div
           style={{

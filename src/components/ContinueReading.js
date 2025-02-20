@@ -48,10 +48,10 @@ const ContinueReadingCard = () => {
         boxShadow: "0px 3px 10px rgba(0,0,0,0.2)",
         borderRadius: "14px 14px 14px 56px",
         padding: "20px 30px 50px 30px",
+        margin: "24px auto",
         color: priTextColor,
         fontFamily: "'Inter', sans-serif",
         position: "relative",
-        margin: "auto",
         borderTop: "4px solid " + bookmarkColour,
       }}
     >
