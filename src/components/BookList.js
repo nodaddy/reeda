@@ -359,6 +359,7 @@ const BookList = () => {
             margin: "auto",
             overflowX: "scroll",
             marginTop: "5px",
+            gap: "12px",
             borderRadius: "10px",
             padding: "5px 1px",
             zIndex: "1",
@@ -647,13 +648,11 @@ const BookList = () => {
 
       <Modal
         title="Search a book!"
-        centered
         open={isModalVisible}
         onCancel={() => {
           setIsModalVisible(false);
         }}
         footer={null}
-        width={"86vw"}
         style={{ zIndex: "999999" }}
       >
         <div
@@ -670,8 +669,22 @@ const BookList = () => {
             type="search"
             value={searchQueryGoogleBooks}
             onChange={(e) => setSearchQueryGoogleBooks(e.target.value)}
+            style={{ width: "-webkit-fill-available" }}
           />
-          {loadingGoogleBooks ? <Loader className="loader" /> : null}
+          {loadingGoogleBooks ? (
+            <Loader className="loader" />
+          ) : (
+            <SearchIcon
+              size={23}
+              style={{
+                padding: "10px 13px",
+                borderRadius: "999px",
+                marginLeft: "15px",
+              }}
+              onClick={() => handleSearchGoogleBooks(searchQueryGoogleBooks)}
+              loading={loadingGoogleBooks}
+            />
+          )}
         </div>
         <div
           style={{
@@ -696,6 +709,20 @@ const BookList = () => {
             </div>
           ) : (
             <List
+              locale={{
+                emptyText: (
+                  <div style={{ textAlign: "center" }}>
+                    <img
+                      src={
+                        "https://media0.giphy.com/media/TdiKel6pexKml8vLIJ/giphy.webp?cid=ecf05e47uom5m5c8qqf5ojb1ntbzund8uadlqttg2ortfblj&ep=v1_gifs_search&rid=giphy.webp&ct=g"
+                      }
+                      alt="No results found"
+                      style={{ width: "140px", margin: "20px 0px" }}
+                    />
+                    <p>No results found</p>
+                  </div>
+                ),
+              }}
               itemLayout="horizontal"
               dataSource={searchResultsGoogleBooks}
               renderItem={(item) => (

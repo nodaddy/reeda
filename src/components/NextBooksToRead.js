@@ -69,18 +69,15 @@ const NextBooksToRead = () => {
                   style={{
                     maxHeight: "20vh",
                     overflowY: "scroll",
+                    display: "grid",
+                    // grid repeat
+                    gridTemplateColumns: "repeat(5, 1fr)",
+                    gap: "7px",
                   }}
                 >
                   {books?.map((book) => {
                     return (
-                      <div
-                        style={{
-                          display: "grid",
-                          // grid repeat
-                          gridTemplateColumns: "repeat(5, 1fr)",
-                          gap: "5px",
-                        }}
-                      >
+                      <div>
                         <img
                           onClick={async () => {
                             await updateBookByUserIdAndTitle(
