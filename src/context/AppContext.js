@@ -1,6 +1,7 @@
 "use client";
 
 import { storage } from "@/app/utility";
+import { priColor } from "@/configs/cssValues";
 import { getProfile } from "@/firebase/services/profileService";
 import { createContext, useState, useContext, useEffect } from "react";
 
@@ -14,6 +15,7 @@ export const AppProvider = ({ children }) => {
   const [nightModeOn, setNightModeOn] = useState(false);
   const [isPremium, setIsPremium] = useState(true);
   const [summaryOrFullText, setSummaryOrFullText] = useState("summary");
+  const [bookmarkColour, setBookmarkColour] = useState("orange");
   const [showingSummaryOrFullText, setShowingSummaryOrFullText] =
     useState(null);
   const [selectedSessionNumberOfPages, setSelectedSessionNumberOfPages] =
@@ -54,6 +56,8 @@ export const AppProvider = ({ children }) => {
         setSlideIn,
         slideInContent,
         setSlideInContent,
+        bookmarkColour,
+        setBookmarkColour,
       }}
     >
       {children}

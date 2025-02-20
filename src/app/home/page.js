@@ -38,6 +38,7 @@ import ScanRead from "@/components/ScanRead";
 import BottomNav from "@/components/Menu";
 import NextBooksToRead from "@/components/NextBooksToRead";
 import WishList from "@/components/WishList";
+import ContinueReadingCard from "@/components/ContinueReading";
 
 const { Title } = Typography;
 
@@ -160,7 +161,12 @@ const Home = () => {
       you can add upto 1 book! 
       Click <Link href="/premium">here</Link> to unlock Reeda premium.
       </>} type="warning" />} */}
-        {/* <ScanRead /> */}
+        <br />
+        <br />
+        <ContinueReadingCard />
+        <br />
+        <br />
+
         <div
           style={{
             padding: "25px",
