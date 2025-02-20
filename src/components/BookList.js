@@ -12,10 +12,6 @@ import {
   Progress,
   Badge as BadgeAnt,
   message,
-  Typography,
-  Empty,
-  Divider,
-  Upload,
   Popconfirm,
   Popover,
   Alert,
@@ -35,6 +31,7 @@ import {
   MoveRight,
   Play,
   PlayCircle,
+  Plus,
   PlusCircle,
   RefreshCcw,
   Search,
@@ -350,72 +347,154 @@ const BookList = () => {
 
         </div> */}
       </div>
-      {filteredBooks && filteredBooks.length > 0 && (
+
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          flexWrap: "nowrap",
+          whiteSpace: "nowrap", // Prevents content from wrapping
+          width: "100%",
+          gap: "15px",
+          margin: "auto",
+          overflowX: "scroll",
+          marginTop: "5px",
+          gap: "12px",
+          borderRadius: "10px",
+          padding: "5px 1px",
+          zIndex: "1",
+        }}
+      >
         <div
+          onClick={() => {
+            showModal(true);
+          }}
           style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(700, 1fr)", // Ensures exactly 4 items per row
-            // marginTop: '13px',
-            margin: "auto",
-            overflowX: "scroll",
-            marginTop: "5px",
-            gap: "12px",
-            borderRadius: "10px",
-            padding: "5px 1px",
-            zIndex: "1",
+            width: "17vw",
+            height: "26vw",
+            borderRadius: "7px",
+            border: "1px dashed grey",
+            flex: "0 0 auto",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
           }}
         >
-          {filteredBooks
-            ?.sort((a, b) => a.title.localeCompare(b.title))
-            .map((item) => (
-              <div style={{}}>
-                {/* Front Side */}
-                <Card
-                  style={{
-                    backfaceVisibility: "hidden",
-                    margin: "0px auto 0px auto",
-                    width: "fit-content",
+          <Plus size={35} color={"grey"} />
+        </div>
+        {filteredBooks &&
+          filteredBooks.filter((b) => !b.wishlist).length == 0 && (
+            <>
+              <div
+                style={{
+                  width: "17vw",
+                  height: "26vw",
+                  borderRadius: "7px",
+                  border: "1px dashed silver",
+                  display: "flex",
+                  flex: "0 0 auto",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              ></div>
 
-                    border: "0px",
-                  }}
-                  bodyStyle={{
-                    padding: "0px",
-                    width: "fit-content",
+              <div
+                style={{
+                  width: "17vw",
+                  height: "26vw",
+                  borderRadius: "7px",
+                  flex: "0 0 auto",
+                  border: "1px dashed silver",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              ></div>
+
+              <div
+                style={{
+                  width: "17vw",
+                  height: "26vw",
+                  borderRadius: "7px",
+                  border: "1px dashed silver",
+                  display: "flex",
+                  flex: "0 0 auto",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              ></div>
+
+              <div
+                style={{
+                  width: "17vw",
+                  height: "26vw",
+                  borderRadius: "7px",
+                  border: "1px dashed silver",
+                  flex: "0 0 auto",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              ></div>
+            </>
+          )}
+        {filteredBooks
+          ?.sort((a, b) => a.title.localeCompare(b.title))
+          .map((item) => (
+            <div
+              style={{
+                flex: "0 0 auto",
+              }}
+            >
+              {/* Front Side */}
+              <Card
+                style={{
+                  backfaceVisibility: "hidden",
+                  margin: "0px auto 0px auto",
+                  width: "fit-content",
+
+                  border: "0px",
+                }}
+                bodyStyle={{
+                  padding: "0px",
+                  width: "fit-content",
+                }}
+              >
+                <div
+                  style={{
+                    position: "relative",
+                    width: "17vw",
                   }}
                 >
-                  <div
-                    style={{
-                      position: "relative",
-                      width: "17vw",
-                    }}
-                  >
-                    <Popover
-                      open={openPopOver == item.title}
-                      onOpenChange={(open) =>
-                        setOpenPopOver(open ? item.title : null)
-                      }
-                      content={
-                        <span style={{ padding: "0px" }}>
-                          <Popconfirm
-                            onCancel={() => setOpenPopOver(null)}
-                            placement="topLeft"
-                            title={
-                              item.pagesRead === item.totalPages
-                                ? "Re-read this book?"
-                                : "Mark this book as completed?"
-                            }
-                            onConfirm={async () => {
-                              const book1 = await getBookByTitleAndUserId(
-                                item.title.trim()
+                  <Popover
+                    open={openPopOver == item.title}
+                    onOpenChange={(open) =>
+                      setOpenPopOver(open ? item.title : null)
+                    }
+                    content={
+                      <span style={{ padding: "0px" }}>
+                        <Popconfirm
+                          onCancel={() => setOpenPopOver(null)}
+                          placement="topLeft"
+                          title={
+                            item.pagesRead === item.totalPages
+                              ? "Re-read this book?"
+                              : "Mark this book as completed?"
+                          }
+                          onConfirm={async () => {
+                            const book1 = await getBookByTitleAndUserId(
+                              item.title.trim()
+                            );
+                            if (book1?.pagesRead !== item.totalPages) {
+                              await updateBookByUserIdAndTitle(
+                                { ...book1, pagesRead: item.totalPages },
+                                book1.title
                               );
-                              if (book1?.pagesRead !== item.totalPages) {
-                                await updateBookByUserIdAndTitle(
-                                  { ...book1, pagesRead: item.totalPages },
-                                  book1.title
-                                );
-                                // message.success('Book marked as completed!');
-                                // update in filtered books
-                                const filtered = filteredBooks.map((book) => {
+                              // message.success('Book marked as completed!');
+                              // update in filtered books
+                              const filtered = filteredBooks
+                                .filter((book) => !book.wishlist)
+                                .map((book) => {
                                   if (book.title === item.title) {
                                     return {
                                       ...book,
@@ -424,53 +503,30 @@ const BookList = () => {
                                   }
                                   return book;
                                 });
-                                setFilteredBooks(filtered);
-                                setOpenPopOver(null);
-                              } else if (book1?.pagesRead == item.totalPages) {
-                                await updateBookByUserIdAndTitle(
-                                  { ...book1, pagesRead: 0 },
-                                  book1.title
-                                );
-                                // message.success('Book marked as completed!');
-                                // update in filtered books
-                                const filtered = filteredBooks.map((book) => {
+                              setFilteredBooks(filtered);
+                              setOpenPopOver(null);
+                            } else if (book1?.pagesRead == item.totalPages) {
+                              await updateBookByUserIdAndTitle(
+                                { ...book1, pagesRead: 0 },
+                                book1.title
+                              );
+                              // message.success('Book marked as completed!');
+                              // update in filtered books
+                              const filtered = filteredBooks
+                                .filter((book) => !book.wishlist)
+                                .map((book) => {
                                   if (book.title === item.title) {
                                     return { ...book, pagesRead: 0 };
                                   }
                                   return book;
                                 });
-                                setFilteredBooks(filtered);
-                                setOpenPopOver(null);
-                              }
-                            }}
-                            okText="Yes"
-                            cancelText="No"
-                          >
-                            <span
-                              style={{
-                                display: "flex",
-                                alignItems: "center",
-                                gap: "10px",
-                                marginBottom: "10px",
-                              }}
-                            >
-                              <CheckCircle2
-                                size={20}
-                                style={{
-                                  color:
-                                    item.pagesRead === item.totalPages
-                                      ? "#0a0"
-                                      : "#666",
-                                  cursor: "pointer",
-                                  marginRight: "-2px",
-                                }}
-                              />
-                              {item.pagesRead === item.totalPages
-                                ? "Re-read"
-                                : "Mark Completed"}
-                            </span>
-                          </Popconfirm>
-
+                              setFilteredBooks(filtered);
+                              setOpenPopOver(null);
+                            }
+                          }}
+                          okText="Yes"
+                          cancelText="No"
+                        >
                           <span
                             style={{
                               display: "flex",
@@ -478,61 +534,86 @@ const BookList = () => {
                               gap: "10px",
                               marginBottom: "10px",
                             }}
-                            onClick={() => {
-                              setOpenPopOver(null);
-                              setShowBookSummaryTillNowModal(true);
-                              setSelectedBookForSummary(item);
-                              getRecap(item);
-                            }}
                           >
-                            <History size={20} />
-                            <span>Quick Recap</span>
+                            <CheckCircle2
+                              size={20}
+                              style={{
+                                color:
+                                  item.pagesRead === item.totalPages
+                                    ? "#0a0"
+                                    : "#666",
+                                cursor: "pointer",
+                                marginRight: "-2px",
+                              }}
+                            />
+                            {item.pagesRead === item.totalPages
+                              ? "Re-read"
+                              : "Mark Completed"}
                           </span>
+                        </Popconfirm>
 
-                          <span
-                            style={{
-                              display: "flex",
-                              alignItems: "center",
-                              gap: "10px",
-                            }}
-                            onClick={() => {
-                              handleDeleteBook(item.id);
-                            }}
-                          >
-                            <Delete size={20} />
-                            <span>Remove</span>
-                          </span>
+                        <span
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "10px",
+                            marginBottom: "10px",
+                          }}
+                          onClick={() => {
+                            setOpenPopOver(null);
+                            setShowBookSummaryTillNowModal(true);
+                            setSelectedBookForSummary(item);
+                            getRecap(item);
+                          }}
+                        >
+                          <History size={20} />
+                          <span>Quick Recap</span>
                         </span>
-                      }
-                      trigger="click"
-                      placement="topRight"
-                      // open={visible}
-                      // onOpenChange={setVisible}
-                    >
-                      <MoreVertical
-                        size={17}
-                        onClick={() => {
-                          setOpenPopOver(
-                            item.title == openPopOver ? null : item.title
-                          );
-                          logGAEvent("click_more_options_on_book_card");
-                        }}
-                        style={{
-                          display: "none",
-                          position: "absolute",
-                          top: "5px",
-                          right: "5px",
-                          width: "15px",
-                          cursor: "pointer",
-                          zIndex: "1",
-                          color: "black",
-                          backgroundColor: "white",
-                          borderRadius: "4px",
-                        }}
-                      />
-                    </Popover>
 
-                    {/* {
+                        <span
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "10px",
+                          }}
+                          onClick={() => {
+                            handleDeleteBook(item.id);
+                          }}
+                        >
+                          <Delete size={20} />
+                          <span>Remove</span>
+                        </span>
+                      </span>
+                    }
+                    trigger="click"
+                    placement="topRight"
+                    // open={visible}
+                    // onOpenChange={setVisible}
+                  >
+                    <MoreVertical
+                      size={17}
+                      onClick={() => {
+                        setOpenPopOver(
+                          item.title == openPopOver ? null : item.title
+                        );
+                        logGAEvent("click_more_options_on_book_card");
+                      }}
+                      style={{
+                        display: "none",
+                        position: "absolute",
+                        top: "5px",
+                        right: "5px",
+                        width: "15px",
+                        cursor: "pointer",
+                        zIndex: "1",
+                        color: "black",
+                        backgroundColor: "white",
+                        borderRadius: "4px",
+                      }}
+                    />
+                  </Popover>
+
+                  {/* {
                                 item.pagesRead !== item.totalPages &&  <Bookmark
                                 size={17} 
                                 onClick={() => {
@@ -551,59 +632,24 @@ const BookList = () => {
                               />
                               } */}
 
-                    <img
-                      src={item.cover}
-                      style={{
-                        width: "17vw",
-                        height: "26vw",
-                        objectFit: "cover",
-                        borderRadius: "7px", // Optional: Slight rounding for a premium look
-                        boxShadow: "0px 2px 10px rgba(0, 0, 0, 0.2)", // Soft shadow
-                        transition:
-                          "transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out", // Smooth hover effect
-                      }}
-                    />
-                  </div>
-                </Card>
-              </div>
-            ))}
-        </div>
-      )}
-
-      {(!filteredBooks || filteredBooks.length === 0) && !loading && (
-        <div
-          style={{
-            height: "160px",
-            display: "flex",
-            flexDirection: "column",
-            borderRadius: "10px",
-            backgroundColor: "lavender",
-            justifyContent: "center",
-            alignItems: "center",
-            color: secTextColor,
-            fontFamily: "'Inter', sans-serif",
-          }}
-        >
-          <BookPlus
-            size={40}
-            color={secColor}
-            style={{ cursor: "pointer" }}
-            onClick={() => {
-              showModal(true);
-              logGAEvent("click_add_book_icon");
-            }}
-          />
-          <br />
-          <span
-            onClick={() => {
-              showModal(true);
-              logGAEvent("click_add_book_icon");
-            }}
-          >
-            Add a book
-          </span>
-        </div>
-      )}
+                  <img
+                    src={item.cover}
+                    style={{
+                      width: "17vw",
+                      height: "26vw",
+                      objectFit: "cover",
+                      flex: "0 0 auto",
+                      borderRadius: "7px", // Optional: Slight rounding for a premium look
+                      boxShadow: "0px 2px 10px rgba(0, 0, 0, 0.2)", // Soft shadow
+                      transition:
+                        "transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out", // Smooth hover effect
+                    }}
+                  />
+                </div>
+              </Card>
+            </div>
+          ))}
+      </div>
 
       {loading && (
         <div

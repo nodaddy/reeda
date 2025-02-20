@@ -6,10 +6,13 @@ import { bookIconCircleCss } from "./WishList";
 import { Popover } from "antd";
 import { useAppContext } from "@/context/AppContext";
 import { useState } from "react";
-import { updateBookByUserIdAndTitle } from "@/firebase/services/bookService";
+import {
+  getBooks,
+  updateBookByUserIdAndTitle,
+} from "@/firebase/services/bookService";
 
 const NextBooksToRead = () => {
-  const { books } = useAppContext();
+  const { books, setBooks } = useAppContext();
   const [openPopToSelectBook, setOpenPopToSelectBook] = useState(false);
   return (
     <>
@@ -44,7 +47,9 @@ const NextBooksToRead = () => {
             display: "flex",
             alignItems: "center",
             flexWrap: "nowrap",
-            overflowX: "auto",
+            overflowX: "auto", // Enables horizontal scrolling
+            whiteSpace: "nowrap", // Prevents content from wrapping
+            width: "100%",
             gap: "15px",
           }}
         >
@@ -86,6 +91,8 @@ const NextBooksToRead = () => {
                               },
                               book.title
                             );
+                            const updatedBooks = await getBooks();
+                            setBooks(updatedBooks);
                             setOpenPopToSelectBook(false);
                           }}
                           src={book.cover}
@@ -104,12 +111,23 @@ const NextBooksToRead = () => {
               onClick={() => setOpenPopToSelectBook(true)}
               style={{
                 ...bookIconCircleCss,
-                border: "1px dashed #ccc",
+                border: "1px dashed grey",
               }}
             >
-              <Plus />
+              <Plus color="grey" />
             </span>
           </Popover>
+
+          {books?.filter((book) => book.nextToRead).length === 0 &&
+            [1, 1, 1, 1].map((a) => (
+              <span
+                onClick={() => setOpenPopToSelectBook(true)}
+                style={{
+                  ...bookIconCircleCss,
+                  border: "1px dashed silver",
+                }}
+              ></span>
+            ))}
 
           {books
             ?.filter((book) => book.nextToRead)

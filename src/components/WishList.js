@@ -1,4 +1,5 @@
 import { priTextColor } from "@/configs/cssValues";
+import { useAppContext } from "@/context/AppContext";
 
 import { Plus } from "lucide-react";
 
@@ -6,6 +7,7 @@ export const bookIconCircleCss = {
   height: "70px",
   display: "inline-block",
   width: "70px",
+  flex: "0 0 auto",
   borderRadius: "50%",
   display: "flex",
   alignItems: "center",
@@ -13,6 +15,7 @@ export const bookIconCircleCss = {
 };
 
 const WishList = () => {
+  const { books } = useAppContext();
   return (
     <>
       <div
@@ -46,17 +49,31 @@ const WishList = () => {
             display: "flex",
             alignItems: "center",
             flexWrap: "nowrap",
-            overflowX: "auto",
-          }}
-        ></div>
-        <span
-          style={{
-            ...bookIconCircleCss,
-            border: "1px dashed #ccc",
+            overflowX: "auto", // Enables horizontal scrolling
+            whiteSpace: "nowrap", // Prevents content from wrapping
+            width: "100%",
+            gap: "15px",
           }}
         >
-          <Plus />
-        </span>
+          <span
+            style={{
+              ...bookIconCircleCss,
+              border: "1px dashed grey",
+            }}
+          >
+            <Plus color="grey" />
+          </span>
+
+          {books?.filter((book) => book.wishlist).length === 0 &&
+            [1, 1, 1, 1].map((a) => (
+              <span
+                style={{
+                  ...bookIconCircleCss,
+                  border: "1px dashed silver",
+                }}
+              ></span>
+            ))}
+        </div>
       </div>
     </>
   );

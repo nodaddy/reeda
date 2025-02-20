@@ -9,13 +9,8 @@ import { Card, Button, Modal, Tooltip, Spin, Popover } from "antd";
 import { time } from "framer-motion";
 import {
   Flame,
-  Clock,
-  Loader,
-  GraduationCap,
   HelpCircle,
   Bookmark,
-  Star,
-  MoreVertical,
   List,
   X,
   MessageCircleCodeIcon,
