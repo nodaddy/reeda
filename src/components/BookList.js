@@ -308,22 +308,6 @@ const BookList = () => {
       }}>
           Collection of your physical books </sup> */}
           </div>
-          <div>
-            <PlusCircle
-              size={30}
-              onClick={() => {
-                showModal(true);
-              }}
-              color={priColor}
-            />
-            &nbsp; &nbsp;
-            <MoreVertical
-              size={30}
-              style={{
-                marginRight: "-10px",
-              }}
-            />
-          </div>
         </div>
         {/* <h5 style={{ fontSize: '20px', display: 'flex', alignItems: 'center', fontWeight: '400', color: '#555555', marginBottom: '15px', paddingBottom: '10px' }}>
                 My Bookshelf &nbsp;
