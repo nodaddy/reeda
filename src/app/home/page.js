@@ -1,26 +1,43 @@
-"use client"
+"use client";
 
 // src/app/signin/page.tsx
-import { useEffect, useState } from 'react';
-import SignInWithGoogle from '@/components/SignInWithGoogle';
-import { useRouter } from 'next/navigation';
-import { Alert, Badge, Card, Divider, Popover, Tag, Typography } from 'antd';
-import BookList from '@/components/BookList';
-import { getProfile, updateProfile } from '@/firebase/services/profileService';
-import StreakCard from '@/components/StreakCard';
-import { storage } from '@/app/utility';
-import { isUserPremium } from '@/payments/playstoreBilling';
-import { useAppContext } from '@/context/AppContext';
-import { Bolt, BookCopy, BookOpen, Brain, Camera, ClipboardList, Info, Lightbulb, Play, PlayCircle, Pointer, ShoppingBag, Sparkles, TriangleRight, Zap } from 'lucide-react';
-import { scaninghands } from '@/assets';
-import Image from 'next/image';
-import { streakMaintenanceIntervalInSeconds } from '@/configs/variables';
-import Link from 'next/link';
-import { searchByTitle } from '@/googleBooks';
-import { priColor, priTextColor } from '@/configs/cssValues';
-import ScanRead from '@/components/ScanRead';
-import BottomNav from '@/components/Menu';
-
+import { useEffect, useState } from "react";
+import SignInWithGoogle from "@/components/SignInWithGoogle";
+import { useRouter } from "next/navigation";
+import { Alert, Badge, Card, Divider, Popover, Tag, Typography } from "antd";
+import BookList from "@/components/BookList";
+import { getProfile, updateProfile } from "@/firebase/services/profileService";
+import StreakCard from "@/components/StreakCard";
+import { storage } from "@/app/utility";
+import { isUserPremium } from "@/payments/playstoreBilling";
+import { useAppContext } from "@/context/AppContext";
+import {
+  Bolt,
+  BookCopy,
+  BookOpen,
+  Brain,
+  Camera,
+  ClipboardList,
+  Info,
+  Lightbulb,
+  Play,
+  PlayCircle,
+  Pointer,
+  ShoppingBag,
+  Sparkles,
+  TriangleRight,
+  Zap,
+} from "lucide-react";
+import { scaninghands } from "@/assets";
+import Image from "next/image";
+import { streakMaintenanceIntervalInSeconds } from "@/configs/variables";
+import Link from "next/link";
+import { searchByTitle } from "@/googleBooks";
+import { priColor, priTextColor } from "@/configs/cssValues";
+import ScanRead from "@/components/ScanRead";
+import BottomNav from "@/components/Menu";
+import NextBooksToRead from "@/components/NextBooksToRead";
+import WishList from "@/components/WishList";
 
 const { Title } = Typography;
 
@@ -28,24 +45,33 @@ const Home = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const { profile, setProfile, isPremium, setIsPremium, summaryOrFullText, setSummaryOrFullText } = useAppContext();
+  const {
+    profile,
+    setProfile,
+    isPremium,
+    setIsPremium,
+    summaryOrFullText,
+    setSummaryOrFullText,
+  } = useAppContext();
 
   // differnece in seconds
-  const [lastPageScanDifference, setLastPageScanDifference] = useState(0)
+  const [lastPageScanDifference, setLastPageScanDifference] = useState(0);
 
-  useEffect(()=>{
-    searchByTitle('harry potter').then((res) => {
+  useEffect(() => {
+    searchByTitle("harry potter").then((res) => {
       console.log(res);
     });
-    if(typeof navigator !== "undefined") {
-      if("serviceWorker" in navigator) {
+    if (typeof navigator !== "undefined") {
+      if ("serviceWorker" in navigator) {
         navigator.serviceWorker
           .register("/firebase-messaging-sw.js")
           .then((registration) => {
             console.log("Service Worker registered:", registration);
           })
-          .catch((err) => console.log("Service Worker registration failed:", err));
-      } 
+          .catch((err) =>
+            console.log("Service Worker registration failed:", err)
+          );
+      }
     }
   }, []);
 
@@ -53,20 +79,28 @@ const Home = () => {
     if (profile?.streak?.lastPageScanTimestamp) {
       const now = Date.now();
       const lastPageScanTimestamp = profile.streak.lastPageScanTimestamp;
-      const lastPageScanDifference = Math.ceil((now - lastPageScanTimestamp)/1000);
+      const lastPageScanDifference = Math.ceil(
+        (now - lastPageScanTimestamp) / 1000
+      );
       console.log(lastPageScanDifference);
-      if(lastPageScanDifference > 84600){
-        if(profile.streak.days > profile.streak.longestStreak){
-          updateProfile(JSON.parse(storage.getItem('user')).email, {...profile, streak: {
-            ...profile.streak,
-            longestStreak: profile.streak.days,
-            days: 0
-          }}) 
+      if (lastPageScanDifference > 84600) {
+        if (profile.streak.days > profile.streak.longestStreak) {
+          updateProfile(JSON.parse(storage.getItem("user")).email, {
+            ...profile,
+            streak: {
+              ...profile.streak,
+              longestStreak: profile.streak.days,
+              days: 0,
+            },
+          });
         } else {
-          updateProfile(JSON.parse(storage.getItem('user')).email, {...profile, streak: {
-            ...profile.streak,
-            days: 0
-          }})
+          updateProfile(JSON.parse(storage.getItem("user")).email, {
+            ...profile,
+            streak: {
+              ...profile.streak,
+              days: 0,
+            },
+          });
         }
       }
       setLastPageScanDifference(lastPageScanDifference);
@@ -74,7 +108,9 @@ const Home = () => {
   }, [profile]);
 
   useEffect(() => {
-    isUserPremium().then((result) => setIsPremium(result)).catch((err) => console.log(err));
+    isUserPremium()
+      .then((result) => setIsPremium(result))
+      .catch((err) => console.log(err));
   }, []);
 
   useEffect(() => {
@@ -82,7 +118,7 @@ const Home = () => {
       setLoading(true);
       try {
         // Replace 'userId' with the actual user ID (e.g., from authentication)
-        const userId = JSON.parse(storage.getItem('user')).email; // You can get this from Firebase Auth or context
+        const userId = JSON.parse(storage.getItem("user")).email; // You can get this from Firebase Auth or context
         console.log(userId);
         let profileData;
         if (userId) {
@@ -99,13 +135,22 @@ const Home = () => {
     fetchProfile();
   }, []);
 
-  return ( !loading &&
-    <div style={{
-      overflow: 'scroll',
-      height: 'calc(100vh - 155px)'
-    }}>
-      <StreakCard isPremium={false} streak={profile?.streak} isActive={lastPageScanDifference < streakMaintenanceIntervalInSeconds*2} /> 
-      {/* {!isPremium && <Alert style={{
+  return (
+    !loading && (
+      <div
+        style={{
+          overflow: "scroll",
+          height: "calc(100vh - 155px)",
+        }}
+      >
+        <StreakCard
+          isPremium={false}
+          streak={profile?.streak}
+          isActive={
+            lastPageScanDifference < streakMaintenanceIntervalInSeconds * 2
+          }
+        />
+        {/* {!isPremium && <Alert style={{
         border: '0px',
         padding: '15px 20px',
         width: '93%',
@@ -116,127 +161,24 @@ const Home = () => {
       you can add upto 1 book! 
       Click <Link href="/premium">here</Link> to unlock Reeda premium.
       </>} type="warning" />} */}
-     {/* <ScanRead /> */}
-     <div style={{
-      padding: '25px'
-     }}>
-      <BookList />
-      <br/>
-      
-      <div
+        {/* <ScanRead /> */}
+        <div
           style={{
-            // marginTop: '13px',
-            margin: 'auto',
-            marginTop: '5px',
-            borderRadius: '10px',
-            padding: '20px 0px',
-            zIndex: '1',
-          }}>
-           <span style={{
-            
-            fontWeight: '400',
-            margin: '0px',
-            fontSize: '18px', 
-            padding: '5px 0px',
-            color: priTextColor,
-            borderRadius: '6px',
-            fontFamily: "'Inter', sans-serif",
+            padding: "25px",
+          }}
+        >
+          <BookList />
+          <br />
 
-        }}> Next books to read</span>
-        <br/>
-        <br/>
-        <span style={{
-          height: '50px',
-          display: 'inline-block',
-          width: '50px',
-          borderRadius: '50%',
-          backgroundColor: 'silver'
-        }}>
-        </span> 
-        &nbsp;
-        &nbsp;
-        &nbsp;
-        <span style={{
-          height: '50px',
-          display: 'inline-block',
-          width: '50px',
-          borderRadius: '50%',
-          backgroundColor: 'silver'
-        }}>
-        </span>
-        &nbsp;
-        &nbsp;
-        &nbsp;
-        <span style={{
-          height: '50px',
-          display: 'inline-block',
-          width: '50px',
-          borderRadius: '50%',
-          backgroundColor: 'silver'
-        }}></span>
-          </div>
+          <NextBooksToRead />
 
+          <WishList />
 
-
-
- 
-
-          <div
-          style={{
-            // marginTop: '13px',
-            margin: 'auto',
-            borderRadius: '10px',
-            padding: '20px 0px',
-            zIndex: '1',
-          }}>
-           <span style={{
-            
-            fontWeight: '400',
-            margin: '0px',
-            fontSize: '18px', 
-            padding: '5px 0px',
-            color: priTextColor,
-            borderRadius: '6px',
-            fontFamily: "'Inter', sans-serif",
-
-        }}> Wishlist</span>
-        <br/>
-        <br/>
-        <span style={{
-          height: '50px',
-          display: 'inline-block',
-          width: '50px',
-          borderRadius: '50%',
-          backgroundColor: 'silver'
-        }}>
-        </span> 
-        &nbsp;
-        &nbsp;
-        &nbsp;
-        <span style={{
-          height: '50px',
-          display: 'inline-block',
-          width: '50px',
-          borderRadius: '50%',
-          backgroundColor: 'silver'
-        }}>
-        </span>
-        &nbsp;
-        &nbsp;
-        &nbsp;
-        <span style={{
-          height: '50px',
-          display: 'inline-block',
-          width: '50px',
-          borderRadius: '50%',
-          backgroundColor: 'silver'
-        }}></span>
-          </div>
-
-      {/* <ContinueReading /> */}
-      <BottomNav />
+          {/* <ContinueReading /> */}
+          <BottomNav />
+        </div>
       </div>
-    </div>
+    )
   );
 };
 

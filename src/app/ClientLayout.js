@@ -1,8 +1,9 @@
 // app/ClientLayout.js
-'use client'
+"use client";
 import { useAppContext } from "@/context/AppContext";
 import { Navbar } from "@/components/Navbar";
 import { useEffect, useState } from "react";
+import SlideIn from "@/components/SlideIn";
 
 export default function ClientLayout({ children, font }) {
   const [inClient, setInClient] = useState(false);
@@ -24,11 +25,10 @@ export default function ClientLayout({ children, font }) {
         <link rel="manifest" href="/manifest.json" />
         <link rel="icon" href="/favicon.ico" />
       </head>
-      <body style={{overflowY: 'scroll'}} className={`${font.className}`}>
+      <body style={{ overflowY: "scroll" }} className={`${font.className}`}>
         {/* <Navbar /> */}
-        <div>
-          {children}
-        </div>
+        <div>{children}</div>
+        <SlideIn />
       </body>
     </html>
   );

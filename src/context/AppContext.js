@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import { storage } from "@/app/utility";
 import { getProfile } from "@/firebase/services/profileService";
@@ -14,31 +14,48 @@ export const AppProvider = ({ children }) => {
   const [nightModeOn, setNightModeOn] = useState(false);
   const [isPremium, setIsPremium] = useState(true);
   const [summaryOrFullText, setSummaryOrFullText] = useState("summary");
-  const [showingSummaryOrFullText, setShowingSummaryOrFullText] = useState(null);
-  const [selectedSessionNumberOfPages, setSelectedSessionNumberOfPages] = useState(1);
-
-
-
+  const [showingSummaryOrFullText, setShowingSummaryOrFullText] =
+    useState(null);
+  const [selectedSessionNumberOfPages, setSelectedSessionNumberOfPages] =
+    useState(1);
+  const [slideIn, setSlideIn] = useState(false);
+  const [slideInContent, setSlideInContent] = useState(null);
 
   const [currentBook, setCurrentBook] = useState(null);
 
   useEffect(() => {
-    if(!profile && storage.getItem('user')){
-        getProfile(JSON.parse(storage.getItem('user')).email).then(res => {
-            setProfile(res);
-        });
+    if (!profile && storage.getItem("user")) {
+      getProfile(JSON.parse(storage.getItem("user")).email).then((res) => {
+        setProfile(res);
+      });
     }
   }, [profile]);
 
   return (
-    <AppContext.Provider value={{ profile, setProfile, isPremium, setIsPremium, nightModeOn, setNightModeOn,
-    currentBook,
-    setCurrentBook,
-    summaryOrFullText, setSummaryOrFullText,
-    selectedSessionNumberOfPages, setSelectedSessionNumberOfPages,
-    showingSummaryOrFullText, setShowingSummaryOrFullText,
-    books, setBooks
-    }}>
+    <AppContext.Provider
+      value={{
+        profile,
+        setProfile,
+        isPremium,
+        setIsPremium,
+        nightModeOn,
+        setNightModeOn,
+        currentBook,
+        setCurrentBook,
+        summaryOrFullText,
+        setSummaryOrFullText,
+        selectedSessionNumberOfPages,
+        setSelectedSessionNumberOfPages,
+        showingSummaryOrFullText,
+        setShowingSummaryOrFullText,
+        books,
+        setBooks,
+        slideIn,
+        setSlideIn,
+        slideInContent,
+        setSlideInContent,
+      }}
+    >
       {children}
     </AppContext.Provider>
   );
