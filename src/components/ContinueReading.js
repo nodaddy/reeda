@@ -104,7 +104,7 @@ const ContinueReadingCard = () => {
           color: bookmarkColour,
           fontSize: "14px",
           paddingTop: "2px",
-          fontWeight: "200",
+          fontWeight: "300",
         }}
       >
         <span

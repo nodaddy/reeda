@@ -1,4 +1,4 @@
-import { priTextColor } from "@/configs/cssValues";
+import { priTextColor, secTextColor } from "@/configs/cssValues";
 
 import { Plus } from "lucide-react";
 
@@ -32,7 +32,7 @@ const NextBooksToRead = () => {
             margin: "0px",
             fontSize: "18px",
             padding: "5px 0px",
-            color: priTextColor,
+            color: secTextColor,
             borderRadius: "6px",
             fontFamily: "'Inter', sans-serif",
           }}

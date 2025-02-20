@@ -292,7 +292,7 @@ const BookList = () => {
                 margin: "0px",
                 fontSize: "23px",
                 padding: "5px 0px",
-                color: priTextColor,
+                color: secTextColor,
                 borderRadius: "6px",
                 fontFamily: "'Inter', sans-serif",
               }}
