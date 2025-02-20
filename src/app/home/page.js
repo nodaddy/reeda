@@ -140,7 +140,6 @@ const Home = () => {
       <div
         style={{
           overflow: "scroll",
-          height: "calc(100vh - 155px)",
         }}
       >
         <StreakCard
@@ -172,7 +171,7 @@ const Home = () => {
 
           <NextBooksToRead />
 
-          <WishList />
+          {/* <WishList /> */}
 
           {/* <ContinueReading /> */}
           <BottomNav />
