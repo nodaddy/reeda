@@ -4,7 +4,7 @@
 import { useEffect, useState } from 'react';
 import SignInWithGoogle from '@/components/SignInWithGoogle';
 import { useRouter } from 'next/navigation';
-import { Alert, Badge, Divider, Popover, Tag, Typography } from 'antd';
+import { Alert, Badge, Card, Divider, Popover, Tag, Typography } from 'antd';
 import BookList from '@/components/BookList';
 import { getProfile, updateProfile } from '@/firebase/services/profileService';
 import StreakCard from '@/components/StreakCard';
@@ -17,8 +17,9 @@ import Image from 'next/image';
 import { streakMaintenanceIntervalInSeconds } from '@/configs/variables';
 import Link from 'next/link';
 import { searchByTitle } from '@/googleBooks';
-import { priColor } from '@/configs/cssValues';
+import { priColor, priTextColor } from '@/configs/cssValues';
 import ScanRead from '@/components/ScanRead';
+import BottomNav from '@/components/Menu';
 
 
 const { Title } = Typography;
@@ -100,7 +101,8 @@ const Home = () => {
 
   return ( !loading &&
     <div style={{
-      overflow: 'auto',
+      overflow: 'scroll',
+      height: 'calc(100vh - 155px)'
     }}>
       <StreakCard isPremium={false} streak={profile?.streak} isActive={lastPageScanDifference < streakMaintenanceIntervalInSeconds*2} /> 
       {/* {!isPremium && <Alert style={{
@@ -114,11 +116,126 @@ const Home = () => {
       you can add upto 1 book! 
       Click <Link href="/premium">here</Link> to unlock Reeda premium.
       </>} type="warning" />} */}
-     <ScanRead />
-<br/>
-<br/>
+     {/* <ScanRead /> */}
+     <div style={{
+      padding: '25px'
+     }}>
       <BookList />
+      <br/>
+      
+      <div
+          style={{
+            // marginTop: '13px',
+            margin: 'auto',
+            marginTop: '5px',
+            borderRadius: '10px',
+            padding: '20px 0px',
+            zIndex: '1',
+          }}>
+           <span style={{
+            
+            fontWeight: '400',
+            margin: '0px',
+            fontSize: '18px', 
+            padding: '5px 0px',
+            color: priTextColor,
+            borderRadius: '6px',
+            fontFamily: "'Inter', sans-serif",
+
+        }}> Next books to read</span>
+        <br/>
+        <br/>
+        <span style={{
+          height: '50px',
+          display: 'inline-block',
+          width: '50px',
+          borderRadius: '50%',
+          backgroundColor: 'silver'
+        }}>
+        </span> 
+        &nbsp;
+        &nbsp;
+        &nbsp;
+        <span style={{
+          height: '50px',
+          display: 'inline-block',
+          width: '50px',
+          borderRadius: '50%',
+          backgroundColor: 'silver'
+        }}>
+        </span>
+        &nbsp;
+        &nbsp;
+        &nbsp;
+        <span style={{
+          height: '50px',
+          display: 'inline-block',
+          width: '50px',
+          borderRadius: '50%',
+          backgroundColor: 'silver'
+        }}></span>
+          </div>
+
+
+
+
+ 
+
+          <div
+          style={{
+            // marginTop: '13px',
+            margin: 'auto',
+            borderRadius: '10px',
+            padding: '20px 0px',
+            zIndex: '1',
+          }}>
+           <span style={{
+            
+            fontWeight: '400',
+            margin: '0px',
+            fontSize: '18px', 
+            padding: '5px 0px',
+            color: priTextColor,
+            borderRadius: '6px',
+            fontFamily: "'Inter', sans-serif",
+
+        }}> Wishlist</span>
+        <br/>
+        <br/>
+        <span style={{
+          height: '50px',
+          display: 'inline-block',
+          width: '50px',
+          borderRadius: '50%',
+          backgroundColor: 'silver'
+        }}>
+        </span> 
+        &nbsp;
+        &nbsp;
+        &nbsp;
+        <span style={{
+          height: '50px',
+          display: 'inline-block',
+          width: '50px',
+          borderRadius: '50%',
+          backgroundColor: 'silver'
+        }}>
+        </span>
+        &nbsp;
+        &nbsp;
+        &nbsp;
+        <span style={{
+          height: '50px',
+          display: 'inline-block',
+          width: '50px',
+          borderRadius: '50%',
+          backgroundColor: 'silver'
+        }}></span>
+          </div>
+
       {/* <ContinueReading /> */}
+      <BottomNav />
+      </div>
     </div>
   );
 };

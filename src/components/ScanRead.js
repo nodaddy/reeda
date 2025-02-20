@@ -25,10 +25,11 @@ const ScanRead = () => {
     <>
       <div
         style={{
-          borderRadius: "12px",
-          backgroundColor: priColor,
           padding: "20px",
+          position: 'absolute',
+          bottom: '0px',
           width: "82%",
+          left: '0px',
           margin: "auto",
           fontFamily: "'Inter', sans-serif",
         }}

@@ -63,7 +63,6 @@ const BookList = () => {
 
   const [loading, setLoading] = useState(false);
   const [uploadingBook, setUploadingBook] = useState(false);
-  const [height, setHeight] = useState(0);
 
   const [openPopOver, setOpenPopOver] = useState(false);
 
@@ -116,22 +115,6 @@ const BookList = () => {
       })
       }
   }
-
-  useEffect(() => {
-    const updateHeight = () => {
-      if (ref.current) {
-        const offsetTop = ref.current.offsetTop;
-      // alert(offsetTop);
-
-        setHeight(`calc(100vh - ${offsetTop + 11}px)`);
-      }
-    };
-
-    updateHeight();
-    window.addEventListener('resize', updateHeight);
-    
-    return () => window.removeEventListener('resize', updateHeight);
-  }, []);
 
   const showModal = () => setIsModalVisible(true);
   const handleCancel = () => setIsModalVisible(false);
@@ -207,41 +190,34 @@ const BookList = () => {
     <div 
     ref={ref}
     style={{ 
-    width: '96%',
-    maxHeight: height,
     margin: 'auto',
     position: 'relative',
-    borderRadius: '15px',
-    overflowY: 'scroll',
     overflowX: 'hidden',
     // background: 'linear-gradient(to bottom, #fafafa, #fafafa, #fafafa, #fafafa, #fafafa, white)'
-    backgroundColor: 'white'
     }}>
       <div style={{
         position: 'sticky',
-        width: '96%',
         margin: 'auto',
         top: '0px',
         zIndex: '2',
         marginBottom: '10px',
-        backgroundColor: 'white'
         // backgroundColor: '#fafafa',
       }}>
         <div style={
           {display:"flex",
           alignItems:"center",
-          background: 'rgba(74, 74, 255, 0.1)',
+          // background: 'rgba(74, 74, 255, 0.1)',
           justifyContent:"space-between",
           gap:"15px",
-          padding:"10px 20px 5px 20px",
-          borderRadius:"10px"}
+          padding:"10px 0px 5px 0px",
+          }
       }>
         <div>
        {/* <BadgeAnt count={books?.length} showZero={false} color={secColor} offset={[5, 3]} > */}
         {/* <BadgeAnt count={books?.length} showZero={true} color={secColor}  offset={[4, -3]}> */}
         <span style={{
             
-            fontWeight: '300',
+            fontWeight: '400',
             margin: '0px',
             fontSize: '18px', 
             padding: '5px 0px',
@@ -292,15 +268,17 @@ const BookList = () => {
 
         </div> */}
         </div>
-      {filteredBooks && (
-        <div>
+      {filteredBooks && filteredBooks.length > 0 && ( 
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(4, 1fr)', // Ensures exactly 4 items per row
+            gridTemplateColumns: 'repeat(700, 1fr)', // Ensures exactly 4 items per row
             // marginTop: '13px',
-            width: '96%',
             margin: 'auto',
+            overflowX: 'scroll',
+            marginTop: '5px',
+            borderRadius: '10px',
+            padding: '5px 1px',
             zIndex: '1'
           }}>
           {filteredBooks?.sort((a,b) => a.title.localeCompare(b.title)).map(item => (
@@ -310,27 +288,20 @@ const BookList = () => {
                   {/* Front Side */}
                   <Card
                     style={{ backfaceVisibility: 'hidden',
-                     
-                    //padding: '0px 20px',
-                   //boxShadow: '0 0px 8px rgba(0, 0, 0, 0.06)',
                     margin: '0px auto 0px auto',
                     width: 'fit-content',
 
                     
                     border: '0px' }}
                     bodyStyle={{
-                      padding: '5px',
+                      padding: '0px',
                       width: 'fit-content',
                     }}
                   >
 
                     <div style={{
                        position: 'relative',
-                       width: '19vw',
-                    // border: '1px solid '+defaultBorderColor,
-
-                      //  borderRadius: '3px',
-
+                       width: '17vw',
                     }}>
 
                 <Popover
@@ -475,61 +446,23 @@ const BookList = () => {
                               } */}
 
 
-<img 
-  src={item.cover} 
-  style={{
-    width: '19vw',
-    height: '29vw',
-    marginBottom: '5px',
-    objectFit: 'cover',
-    borderRadius: '5px',  // Optional: Slight rounding for a premium look
-    boxShadow: '0px 2px 10px rgba(0, 0, 0, 0.2)', // Soft shadow
-    transition: 'transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out', // Smooth hover effect
-  }} 
-/>
-                     <Link href={'/scan/'+item.title} style={{
-                      width: '19vw',
-                      position: 'absolute',
-                      bottom: '0px',
-                      display: 'flex',
-                      alignItems: 'flex-end',
-                      // borderRadius: '6px',  
-                      zIndex: '0',
-                      left: '0px',
-                      background: item.cover && item.cover != '' ? `url(${item.cover})` : 'linear-gradient(transparent, rgb(0,0,0,0.5), rgb(0,0,0,0.9) )'
-                    }}
-                    
-                    >
-                    {!item.cover || item.cover == '' && <span style={{
-                      }}>
-                    <div style={{
-                      padding: '0px 6px',
-                      width: '19vw',
-                      fontSize: '10px', color: 'white', overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}>
-                    {/* <BookMarked size={20} color={'gray'} />&nbsp; */}
-                    {item.title.toUpperCase()}
-                    </div>
-                    <span style={{width: '60%', padding: '0px 6px', marginBottom: '4px', color: 'silver', fontSize: '12px', display: 'block', overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}>
-                      {item.author}
-                    </span>
+                      <img 
+                        src={item.cover} 
+                        style={{
+                          width: '17vw',
+                          height: '26vw',
+                          objectFit: 'cover',
+                          borderRadius: '7px',  // Optional: Slight rounding for a premium look
+                          boxShadow: '0px 2px 10px rgba(0, 0, 0, 0.2)', // Soft shadow
+                          transition: 'transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out', // Smooth hover effect
+                        }} 
+                      />
                    
-                    
-                    </span>}
-                    {/* <Progress
-                      percent={Math.min(item.pagesRead ? ((item.pagesRead / (item.totalPages || 100)) * 100 + 4).toFixed(0) : 6, 100)}
-                      size="large"
-                      showInfo={false}
-                      
-                      strokeWidth={7}
-                      style={{ marginTop: '3px', width: '19vw', marginTop: '0px' }}
-                    /> */}
-                    </Link>
                     </div>
                   </Card>
             </div>)
           )}
-        </div> 
-        </div>
+        </div>  
       )}
 
       {
@@ -538,17 +471,22 @@ const BookList = () => {
             height: '160px',
             display: 'flex',
             flexDirection: 'column',
+            borderRadius: '10px',
+            backgroundColor: 'lavender',
             justifyContent: 'center',
             alignItems: 'center',
             color: secTextColor,
             fontFamily: "'Inter', sans-serif",
           }}>
-          <BookPlus size={50} color={secColor} style={{ cursor: 'pointer' }} onClick={() => {
+          <BookPlus size={40} color={secColor} style={{ cursor: 'pointer' }} onClick={() => {
             showModal(true);
             logGAEvent('click_add_book_icon');
           }} />
           <br/>
-          Add a book
+          <span onClick={() => {
+            showModal(true);
+            logGAEvent('click_add_book_icon');
+          }}>Add a book</span>
           </div>
         )
       }

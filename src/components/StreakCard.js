@@ -2,14 +2,22 @@ import { storage } from '@/app/utility';
 import { priColor, priTextColor, secColor, secTextColor } from '@/configs/cssValues';
 import { Card, Button, Modal, Tooltip, Spin, Popover } from 'antd';
 import { time } from 'framer-motion';
-import { Flame, Clock, Loader, GraduationCap, HelpCircle, Bookmark, Star } from 'lucide-react';
+import { Flame, Clock, Loader, GraduationCap, HelpCircle, Bookmark, Star, MoreVertical, List, X, MessageCircleCodeIcon } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { Sun, Moon } from 'lucide-react';
+import { logGAEvent } from '@/firebase/googleAnalytics';
+import Link from 'next/link';
+import { useAppContext } from '@/context/AppContext';
 
 const StreakCard = ({ streak, isActive, isPremium = true}) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [loading, setLoading] = useState(true);
   const [timeLeft, setTimeLeft] = useState({ hours: 0, minutes: 0 });
+
+  const [menuOpen, setMenuOpen] = useState(null);
+
+  const { setProfile } = useAppContext();
+
 
   const currentHour = new Date().getHours();
 let greeting = '';
@@ -56,53 +64,92 @@ if (currentHour >= 5 && currentHour < 12) {
   }, [streak]);
 
   return (
-    loading ? <Card
-    style={{
-      borderRadius: '16px',
-      width: '100%',
-      margin: 'auto',
-      border: '0px',
-      backgroundColor: 'transparent',
-      
-    }}
-  >
-    <br/>
-    <div style={{
-      display: 'flex',
-      alignItems: 'flex-end',
-      justifyContent: 'space-between',
-    }}> 
-    <div></div>
-    <div align="right">
-      <Loader className='loader' color={'grey'} size={40} />
-      <div align="center">
-        <p style={{ margin: 0, fontSize: '18px', fontWeight: 'bold', color: '#555555' }}>
-          <span style={{ display: 'flex', color: 'transparent', fontWeight: '500', justifyContent: 'flex-end', alignItems: 'center' }}>
-            {`${isActive ? streak?.days : 0} ${streak?.days > 1 ? 'Days' : 'Day'}`}
-          </span>
-        </p>
-        <h4 style={{ margin: 0, color: 'transparent'}}>
-          f
+      <>
+       {/* Sliding Menu */}
+       <div
+        style={{
+          position: "fixed",
+          top: "0",
+          right: menuOpen ? "0" : "-300px",
+          width: "280px",
+          height: "100vh",
+          backgroundColor: "white",
+          boxShadow: "2px 0 10px rgba(0,0,0,0.1)",
+          transition: "right 0.3s ease-in-out",
+          padding: "0px",
+          zIndex: "1000000",
+        }}
+      >
+        <X
+          size={24}
+          color="#555555"
+          style={{ cursor: "pointer", position: "absolute", right: "20px", top: "20px" }}
+          onClick={() => setMenuOpen(false)}
+        />
+
+        <h4 style={{ padding: "0px 20px", fontSize: "19px", color: "#333", fontWeight: "500" }}>
+          Menu
         </h4>
+        <ul style={{ listStyle: "none", padding: "20px", margin: "20px 0" }}>
+        <li style={{ borderBottom: "1px solid #ddd", padding: '18px 0px' }}>
+            <Link onClick={() => setMenuOpen(false)} href="/" style={{ color: "#333", textDecoration: "none" }}>Home</Link>
+          </li>
+          <li style={{ borderBottom: "1px solid #ddd", padding: '18px 0px' }}>
+            <Link onClick={() => setMenuOpen(false)} href="/profile" style={{ color: "#333", textDecoration: "none" }}>My Profile</Link>
+          </li>
+          {!isPremium && <li style={{ borderBottom: "1px solid #ddd", padding: '18px 0px' }}>
+            <Link onClick={() => {
+              setMenuOpen(false);
+              logGAEvent('click_upgrade_to_premium_navbar');
+              }} href="/premium" style={{ color: "#333", textDecoration: "none" }}>Upgrade to premium</Link>
+          </li>}
+          {/* <li style={{ borderBottom: "1px solid #ddd", padding: '18px 0px' }}>
+            <Link onClick={() => setMenuOpen(false)} href="/store" style={{ color: "#333", textDecoration: "none" }}>
+              The Reeda Store
+              
+            </Link>
+          </li> */}
+          {/* <li style={{ borderBottom: "1px solid #ddd", padding: '18px 0px' }}>
+            <Link onClick={() => setMenuOpen(false)} href="/settings" style={{ color: "#333", textDecoration: "none" }}>Settings</Link>
+          </li> */}
+          <li style={{ borderBottom: "1px solid #ddd", padding: '18px 0px' }}>
+            <Link onClick={() => setMenuOpen(false)} href="https://wa.me/918126153920" style={{ color: "#333", textDecoration: "none" }}>
+              Contact us &nbsp;<MessageCircleCodeIcon /> 
+            </Link>
+          </li>
+          <li style={{  padding: '18px 0px' }}>
+            <span onClick={() => {
+              storage.removeItem("user");
+              setProfile(null);
+              router.push('/');
+            }} style={{ color: "#e63946", textDecoration: "none" }}>Logout</span>
+          </li>
+        </ul>
       </div>
-    </div>
-    </div>
-    <Modal
-      title="Revive Streak"
-      visible={isModalVisible}
-      onOk={handleRevive}
-      onCancel={() => setIsModalVisible(false)}
-      okText="Revive"
-      style={{ zIndex: 9999 }}
-      cancelText="Cancel"
-    >
-      <p>Are you sure you want to revive your streak?</p>
-    </Modal>
-  </Card> : (
+      
+    {/* Overlay when menu is open */}
+    {menuOpen && (
+        <div
+          style={{
+            position: "fixed",
+            top: "0",
+            right: "0",
+            width: "100vw",
+            height: "100vh",
+            backgroundColor: "rgba(0,0,0,0.5)",
+            zIndex: "999999",
+          }}
+          onClick={() => setMenuOpen(false)}
+        ></div>
+      )}
+      
      <Card
      bodyStyle={{
     
-    padding: '24px'
+    padding: '18px 24px 20px 28px',
+    margin: '10px',
+    backgroundColor: priColor,
+    borderRadius: '10px',
     //  background: isPremium ? 'linear-gradient(135deg, #B08D01, goldenrod, gold,  whitesmoke)' : "linear-gradient(155deg,  silver,  whitesmoke)", // Gold, platinum, and light metallic gradient
     }}
      style={{
@@ -123,7 +170,7 @@ if (currentHour >= 5 && currentHour < 12) {
    >
         <div style={{
           display: 'flex',
-          alignItems: 'flex-end',
+          alignItems: 'center',
           justifyContent: 'space-between',
         }}>
         { <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }}>
@@ -142,25 +189,36 @@ if (currentHour >= 5 && currentHour < 12) {
       alignItems: 'center',
       fontWeight: '300'
     }}> 
-    <Icon size={23} style={{ marginRight: '10px' }} />  
-    {greeting}
+    {/* <Icon size={23} style={{ marginRight: '10px' }} />  
+    {greeting} */}
     </sub>
     <div style={{
       marginTop: '0px',
-      fontSize: '16px',
-      fontWeight: '300'
+      fontSize: '26px',
+      fontWeight: '300',
+      color: 'white'
     }}>
       {/* <Icon size={23} style={{ marginRight: '10px', opacity: '0' }} /> */}
-      {JSON.parse(storage.getItem('user'))?.displayName.split(" ").slice(0, 2).join(" ")}
- 
-      </div>
+      Hi, {JSON.parse(storage.getItem('user'))?.displayName.split(" ").slice(0, 2).join(" ").split(" ")[0]}
+      
+      </div> 
+      <sup style={{color: 'white'}}>Let's sync your reading progress.</sup>
       </span>
   </div> 
           </div>
         </div>}
 
+        <List
+        color={'white'}
+        size={30} 
+        onClick={() => setMenuOpen(!menuOpen)}
+        style={{
+          marginRight: '-3px'
+        }} />
+
         <div align="right"
         style={{
+          display: 'none',
           backgroundColor: 'white',
     /* border: 1px solid silver; */ 
     borderRadius: '11px'
@@ -191,7 +249,7 @@ if (currentHour >= 5 && currentHour < 12) {
         </div>
         </div>
       </Card>
-    )
+      </>
   );
 };
 

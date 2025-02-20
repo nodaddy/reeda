@@ -24,9 +24,9 @@ export default function ClientLayout({ children, font }) {
         <link rel="manifest" href="/manifest.json" />
         <link rel="icon" href="/favicon.ico" />
       </head>
-      <body className={`${font.className}`}>
-        <Navbar />
-        <div style={{marginTop: '68px'}}>
+      <body style={{overflowY: 'scroll'}} className={`${font.className}`}>
+        {/* <Navbar /> */}
+        <div>
           {children}
         </div>
       </body>

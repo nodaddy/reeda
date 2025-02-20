@@ -24,7 +24,7 @@ const FeatureCarousel = () => {
     },
     {
       title: "Digital Bookshelf",
-      description: "Organize all your books in one place",
+      description: "Create and share your digital bookshelf",
       icon: <Library size={48} />,
     },
     {
