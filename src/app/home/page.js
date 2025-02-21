@@ -192,7 +192,7 @@ const Home = () => {
             <BookList />
             <br />
 
-            <NextBooksToRead />
+            {books && books.length > 0 && <NextBooksToRead />}
 
             {/* <WishList /> */}
 
