@@ -23,8 +23,10 @@ import {
   Camera,
   CheckCircle2,
   Delete,
+  Expand,
   History,
   LetterText,
+  LibraryBig,
   Loader,
   MoreHorizontal,
   MoreVertical,
@@ -295,15 +297,21 @@ const BookList = () => {
               style={{
                 fontWeight: "400",
                 margin: "0px",
-                fontSize: "23px",
+                fontSize: "20px",
                 padding: "5px 0px",
+                display: "flex",
+                alignItems: "center",
                 color: secTextColor,
                 borderRadius: "6px",
                 fontFamily: "'Inter', sans-serif",
               }}
             >
               {" "}
-              My Bookshelf
+              <LibraryBig />
+              &nbsp;My Bookshelf &nbsp;&nbsp;{" "}
+              {books && books.length > 0 && (
+                <Expand size={18} color={priColor} />
+              )}
             </span>
 
             {/* </BadgeAnt> */}
@@ -313,6 +321,8 @@ const BookList = () => {
       }}>
           Collection of your physical books </sup> */}
           </div>
+
+          <div></div>
         </div>
         {/* <h5 style={{ fontSize: '20px', display: 'flex', alignItems: 'center', fontWeight: '400', color: '#555555', marginBottom: '15px', paddingBottom: '10px' }}>
                 My Bookshelf &nbsp;
@@ -348,7 +358,6 @@ const BookList = () => {
           margin: "auto",
           overflowX: "scroll",
           marginTop: "5px",
-          gap: "12px",
           borderRadius: "10px",
           padding: "5px 1px",
           zIndex: "1",
@@ -776,7 +785,7 @@ const BookList = () => {
                           handleAddBook({
                             title: item.volumeInfo.title,
                             author: item.volumeInfo.authors?.join(", "),
-                            totalPages: item.volumeInfo.pageCount || 1,
+                            totalPages: item.volumeInfo.pageCount || 243,
                             cover: item.volumeInfo.imageLinks?.thumbnail || "",
                             description: item.volumeInfo.description || "",
                           });
@@ -791,7 +800,7 @@ const BookList = () => {
                           handleAddBook({
                             title: item.volumeInfo.title,
                             author: item.volumeInfo.authors?.join(", "),
-                            totalPages: item.volumeInfo.pageCount || 1,
+                            totalPages: item.volumeInfo.pageCount || 243,
                             cover: item.volumeInfo.imageLinks?.thumbnail,
                           });
                         }}

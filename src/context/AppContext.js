@@ -17,7 +17,6 @@ export const AppProvider = ({ children }) => {
   const [summaryOrFullText, setSummaryOrFullText] = useState("summary");
   const [isAddBookModalVisible, setIsAddBookModalVisible] = useState(false);
 
-  const [bookmarkColour, setBookmarkColour] = useState("orange");
   const [showingSummaryOrFullText, setShowingSummaryOrFullText] =
     useState(null);
   const [selectedSessionNumberOfPages, setSelectedSessionNumberOfPages] =
@@ -58,8 +57,6 @@ export const AppProvider = ({ children }) => {
         setSlideIn,
         slideInContent,
         setSlideInContent,
-        bookmarkColour,
-        setBookmarkColour,
         isAddBookModalVisible,
         setIsAddBookModalVisible,
       }}

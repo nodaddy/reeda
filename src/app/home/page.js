@@ -13,6 +13,8 @@ import ContinueReadingCard from "@/components/ContinueReading";
 import NextBooksToRead from "@/components/NextBooksToRead";
 import BottomNav from "@/components/Menu";
 import { motion } from "framer-motion";
+import { priColor, secTextColor } from "@/configs/cssValues";
+import { BookOpen } from "lucide-react";
 
 const Home = () => {
   const [loading, setLoading] = useState(true);
@@ -99,9 +101,27 @@ const Home = () => {
             lastPageScanDifference < streakMaintenanceIntervalInSeconds * 2
           }
         />
-
         <br />
-        <br />
+        {
+          // <span
+          //   style={{
+          //     fontWeight: "500",
+          //     margin: "0px",
+          //     fontSize: "16px",
+          //     marginLeft: "42px",
+          //     padding: "5px 0px",
+          //     display: "flex",
+          //     alignItems: "center",
+          //     color: secTextColor,
+          //     borderRadius: "6px",
+          //     fontFamily: "'Inter', sans-serif",
+          //   }}
+          // >
+          //   {" "}
+          //   <BookOpen size={17} />
+          //   &nbsp; Continue reading
+          // </span>
+        }
         <div
           style={{
             display: "flex",
@@ -111,11 +131,11 @@ const Home = () => {
             overflowX: "scroll",
           }}
         >
-          {books?.filter((book) => book.inProgress).length === 0 && (
+          {books?.filter((book) => book.startedReadingOn).length === 0 && (
             <ContinueReadingCard />
           )}
           {books
-            ?.filter((book) => book.inProgress)
+            ?.filter((book) => book.startedReadingOn)
             .map((book) => (
               <ContinueReadingCard key={book.id} book={book} />
             ))}
@@ -124,7 +144,8 @@ const Home = () => {
         <div style={{ padding: "25px" }}>
           <BookList />
           <br />
-          {books && books.length > 0 && <NextBooksToRead />}
+
+          {/* {books && books.length > 0 && <NextBooksToRead />} */}
           <BottomNav />
         </div>
       </motion.div>

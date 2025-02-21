@@ -1,13 +1,29 @@
 "use client";
 import { priColor, secColor } from "@/configs/cssValues";
-import { getBookById } from "@/firebase/services/bookService";
-import { Button, Collapse, Card } from "antd";
+import {
+  getBookById,
+  updateBookByUserIdAndTitle,
+} from "@/firebase/services/bookService";
+import { Button, Collapse, Card, Popconfirm } from "antd";
 import Title from "antd/es/typography/Title";
-import { MoveLeft, NotebookPen, PlayCircle, Edit, Tag } from "lucide-react";
+import {
+  MoveLeft,
+  NotebookPen,
+  PlayCircle,
+  Edit,
+  Tag,
+  Timer,
+  Book as BookIcon,
+  Play,
+  PlaySquare,
+  MoreVertical,
+} from "lucide-react";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion"; // Import Framer Motion
 import { useRouter } from "next/navigation";
+import { useAppContext } from "@/context/AppContext";
+import { getCurrentTimestampInMilliseconds } from "@/app/utility";
 
 const Book = () => {
   const { bookId } = useParams();
@@ -76,15 +92,24 @@ const Book = () => {
             padding: "30px 40px",
             position: "relative",
             color: "white",
-            borderRadius: "0px 0px 80px 0px",
+            borderRadius: "0px 0px 90px 0px",
           }}
         >
-          <MoveLeft
-            color={"white"}
-            onClick={() => {
-              history.back();
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
             }}
-          />
+          >
+            <MoveLeft
+              color={"white"}
+              onClick={() => {
+                history.back();
+              }}
+            />
+          </div>
+
           <br />
           <br />
           <Title
@@ -109,9 +134,13 @@ const Book = () => {
           >
             <img
               src={book?.cover}
-              style={{ height: "160px", borderRadius: "5px" }}
+              style={{
+                height: "160px",
+                borderRadius: "5px",
+                boxShadow: "0px 3px 6px rgba(0,0,0,0.2)",
+              }}
             />
-            {book?.inProgress ? (
+            {book?.startedReadingOn ? (
               <span>
                 <sub>{"Reading"} </sub>
                 <span
@@ -139,24 +168,45 @@ const Book = () => {
                 backgroundColor: secColor,
                 padding: "11px 23px",
                 bottom: "-21px",
-                right: "14%",
+                right: "16%",
                 borderRadius: "999px",
                 transition: "all 0.3s ease-in-out",
               }}
             >
-              <PlayCircle
-                size={27}
-                color={"white"}
-                style={{
-                  paddingRight: "13px",
-                  borderRight: "1px solid " + priColor,
-                }}
-              />
+              {book?.startedReadingOn ? null : ( // /> //   }} //     borderRight: "1px solid " + priColor, //     paddingRight: "13px", //   style={{ //   color={"white"} //   size={27} // <Timer
+                <Popconfirm
+                  title="Want to start reading this book?"
+                  onConfirm={async () => {
+                    await updateBookByUserIdAndTitle(
+                      {
+                        inProgress: true,
+                        startedReadingOn: getCurrentTimestampInMilliseconds(),
+                      },
+                      book.title
+                    );
+
+                    history.push("/");
+                  }}
+                  icon={<></>}
+                  okText="Yes"
+                  cancelText="No"
+                >
+                  <PlayCircle
+                    size={27}
+                    color={"white"}
+                    style={{
+                      paddingRight: "13px",
+                      borderRight: "1px solid " + priColor,
+                    }}
+                  />
+                </Popconfirm>
+              )}
               <NotebookPen
                 size={25}
                 color={"white"}
                 style={{
                   marginLeft: "13px",
+                  marginRight: book?.startedReadingOn ? "13px" : "0px",
                 }}
               />
             </span>
@@ -169,7 +219,13 @@ const Book = () => {
         <br />
 
         {/* Expandable Description Section */}
-        <div style={{ padding: "15px" }}>
+        <div
+          style={{
+            padding: "15px",
+            display:
+              book?.description && book?.description != "" ? "block" : "none",
+          }}
+        >
           <Collapse
             accordion
             bordered={false}
@@ -200,20 +256,19 @@ const Book = () => {
         {/* Notes Section */}
         <div style={{ padding: "15px", marginTop: "0px" }}>
           <Title
-            level={5}
+            level={4}
             style={{
               marginBottom: "13px",
               display: "flex",
               padding: "10px 15px",
               borderRadius: "7px",
-              backgroundColor: "bisque",
-              fontWeight: "300",
+              fontWeight: "400",
               margin: "0px 0px 8px",
               alignItems: "center",
             }}
           >
-            <Tag fill="silver" color="grey" size={20} /> &nbsp;&nbsp;Your
-            Reading Sessions - Notes
+            <Tag fill="silver" color="grey" size={20} />
+            &nbsp;Notes
           </Title>
           {notes.map((note) => (
             <Card
