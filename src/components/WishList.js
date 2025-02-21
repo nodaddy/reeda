@@ -4,9 +4,9 @@ import { useAppContext } from "@/context/AppContext";
 import { Plus } from "lucide-react";
 
 export const bookIconCircleCss = {
-  height: "70px",
+  height: "53px",
   display: "inline-block",
-  width: "70px",
+  width: "53px",
   flex: "0 0 auto",
   borderRadius: "50%",
   display: "flex",

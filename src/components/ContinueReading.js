@@ -54,6 +54,7 @@ const ContinueReadingCard = ({ book }) => {
         alignItems: "center",
         color: priTextColor,
         fontFamily: "'Inter', sans-serif",
+        marginTop: "-11px",
         position: "relative",
         // borderTop: "4px solid " + bookmarkColour,
       }}
