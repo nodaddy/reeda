@@ -51,6 +51,7 @@ const Home = () => {
     setProfile,
     isPremium,
     setIsPremium,
+    books,
     summaryOrFullText,
     setSummaryOrFullText,
   } = useAppContext();
@@ -161,26 +162,44 @@ const Home = () => {
       you can add upto 1 book! 
       Click <Link href="/premium">here</Link> to unlock Reeda premium.
       </>} type="warning" />} */}
-        <br />
-        <br />
-        <ContinueReadingCard />
-        <br />
-
-        <div
-          style={{
-            padding: "25px",
-          }}
-        >
-          <BookList />
+        <>
           <br />
+          <br />
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "40px",
+              padding: "10px 40px",
+              overflowX: "scroll",
+            }}
+          >
+            {books?.filter((book) => book.inProgress).length == 0 && (
+              <ContinueReadingCard />
+            )}
+            {books
+              ?.filter((book) => book.inProgress)
+              .map((book) => (
+                <ContinueReadingCard key={book.id} book={book} />
+              ))}
+          </div>
 
-          <NextBooksToRead />
+          <div
+            style={{
+              padding: "25px",
+            }}
+          >
+            <BookList />
+            <br />
 
-          {/* <WishList /> */}
+            <NextBooksToRead />
 
-          {/* <ContinueReading /> */}
-          <BottomNav />
-        </div>
+            {/* <WishList /> */}
+
+            {/* <ContinueReading /> */}
+            <BottomNav />
+          </div>
+        </>
       </div>
     )
   );

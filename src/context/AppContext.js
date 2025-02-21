@@ -15,6 +15,8 @@ export const AppProvider = ({ children }) => {
   const [nightModeOn, setNightModeOn] = useState(false);
   const [isPremium, setIsPremium] = useState(true);
   const [summaryOrFullText, setSummaryOrFullText] = useState("summary");
+  const [isAddBookModalVisible, setIsAddBookModalVisible] = useState(false);
+
   const [bookmarkColour, setBookmarkColour] = useState("orange");
   const [showingSummaryOrFullText, setShowingSummaryOrFullText] =
     useState(null);
@@ -58,6 +60,8 @@ export const AppProvider = ({ children }) => {
         setSlideInContent,
         bookmarkColour,
         setBookmarkColour,
+        isAddBookModalVisible,
+        setIsAddBookModalVisible,
       }}
     >
       {children}

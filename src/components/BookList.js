@@ -75,7 +75,6 @@ import Loading from "./Loading";
 
 const BookList = () => {
   const [filteredBooks, setFilteredBooks] = useState([]);
-  const [isModalVisible, setIsModalVisible] = useState(false);
   const [form] = Form.useForm();
 
   const [searchQueryGoogleBooks, setSearchQueryGoogleBooks] = useState("");
@@ -115,7 +114,13 @@ const BookList = () => {
 
   const [summaryTillNow, setSummaryTillNow] = useState(null);
 
-  const { isPremium, books, setBooks } = useAppContext();
+  const {
+    isPremium,
+    books,
+    setBooks,
+    isAddBookModalVisible,
+    setIsAddBookModalVisible,
+  } = useAppContext();
 
   const router = useRouter();
 
@@ -174,8 +179,8 @@ const BookList = () => {
     }
   };
 
-  const showModal = () => setIsModalVisible(true);
-  const handleCancel = () => setIsModalVisible(false);
+  const showModal = () => setIsAddBookModalVisible(true);
+  const handleCancel = () => setIsAddBookModalVisible(false);
 
   useEffect(() => {
     setLoading(true);
@@ -230,7 +235,7 @@ const BookList = () => {
           setBooks(res);
           setFilteredBooks(res);
           setUploadingBook(false);
-          setIsModalVisible(false);
+          setIsAddBookModalVisible(false);
           form.resetFields();
           setImageBase64(null);
           setSearchQueryGoogleBooks(null);
@@ -649,7 +654,7 @@ const BookList = () => {
         </div>
       )}
 
-      {/* <Modal title="Add New Book" centered open={isModalVisible} onCancel={handleCancel} footer={null} width={'80vw'}
+      {/* <Modal title="Add New Book" centered open={isAddBookModalVisible} onCancel={handleCancel} footer={null} width={'80vw'}
     style={{zIndex: '999999'}}
     >
        <br/>
@@ -678,9 +683,9 @@ const BookList = () => {
 
       <Modal
         title="Search a book!"
-        open={isModalVisible}
+        open={isAddBookModalVisible}
         onCancel={() => {
-          setIsModalVisible(false);
+          setIsAddBookModalVisible(false);
         }}
         footer={null}
         style={{ zIndex: "999999" }}

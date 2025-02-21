@@ -19,11 +19,12 @@ import {
   NotebookPen,
   Play,
   PlayCircle,
+  Plus,
   Zap,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 
-const ContinueReadingCard = () => {
+const ContinueReadingCard = ({ book }) => {
   const { bookmarkColour } = useAppContext();
   const [showPanel, setShowPanel] = useState(false);
 
@@ -33,20 +34,54 @@ const ContinueReadingCard = () => {
     }, 500);
   }, []);
 
-  const book = {
-    title: "Harry Potter",
-    pagesRead: 4,
-    totalPages: 44,
-    startedReadingOn: Date.now(),
-    cover:
-      "http://books.google.com/books/content?id=E5V4zfHYaw0C&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api",
-  };
-  return (
+  // const book = {
+  //   title: "Harry Potter",
+  //   pagesRead: 4,
+  //   totalPages: 44,
+  //   startedReadingOn: Date.now(),
+  //   cover:
+  //     "http://books.google.com/books/content?id=E5V4zfHYaw0C&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api",
+  // };
+
+  return !book || book.length === 0 ? (
+    <div
+      style={{
+        // boxShadow: "0px 3px 10px rgba(0,0,0,0.2)",
+        borderRadius: "14px",
+        display: "flex",
+        gap: "20px",
+        justifyContent: "center",
+        alignItems: "center",
+        color: priTextColor,
+        fontFamily: "'Inter', sans-serif",
+        position: "relative",
+        // borderTop: "4px solid " + bookmarkColour,
+      }}
+    >
+      <img
+        src={
+          "https://media4.giphy.com/media/sAEbELl0mw5jO/giphy.webp?cid=ecf05e47bswal530vglqxeorok1dn92e2iqjzbodm1ccymxv&ep=v1_gifs_search&rid=giphy.webp&ct=g"
+        }
+        style={{
+          width: "110px",
+        }}
+      />
+      <span
+        style={{
+          color: secTextColor,
+        }}
+      >
+        <strong>No books in progress!</strong> <br />
+        <i>Pick a book from your bookshelf :)</i>
+      </span>
+    </div>
+  ) : (
     <div
       style={{
         width: "210px",
         boxShadow: "0px 3px 10px rgba(0,0,0,0.2)",
-        borderRadius: "14px 14px 14px 56px",
+        borderRadius: "14px 14px 14px 70px",
+        flex: "0 0 auto",
         padding: "20px 30px 50px 30px",
         margin: "24px auto",
         color: priTextColor,
