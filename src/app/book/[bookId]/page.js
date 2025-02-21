@@ -17,6 +17,7 @@ const Book = () => {
 
   useEffect(() => {
     if (!bookId) return; // Prevent fetching if bookId is undefined
+    setLoading(true);
     const fetchBook = async () => {
       try {
         const response = await getBookById(bookId);
@@ -29,15 +30,6 @@ const Book = () => {
     };
     fetchBook();
   }, [bookId]);
-
-  useEffect(() => {
-    const fetchBook = async () => {
-      const response = await getBookById(bookId);
-      setBook(response);
-      setLoading(false);
-    };
-    fetchBook();
-  }, []);
 
   // Mock notes
   const [notes, setNotes] = useState([
@@ -71,8 +63,8 @@ const Book = () => {
   return (
     !loading && (
       <motion.div
-        initial={{ x: "100%", opacity: 0 }} // Start off-screen (right)
-        animate={{ x: 0, opacity: 1 }} // Slide in
+        initial={{ opacity: 0 }} // Start off-screen (right)
+        animate={{ opacity: 1 }} // Slide in
         exit={{ x: "100%", opacity: 0 }} // Animate out when component unmounts
         transition={{ type: "spring", stiffness: 100, damping: 15 }}
       >
