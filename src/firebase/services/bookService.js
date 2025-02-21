@@ -1,5 +1,6 @@
 "use client";
 import { storage } from "@/app/utility";
+
 // services/bookservice.js
 import { db } from "../../firebase";
 import {
@@ -10,6 +11,7 @@ import {
   deleteDoc,
   query,
   where,
+  getDoc,
   getDocs,
 } from "firebase/firestore";
 const bookCollection = collection(db, "books");
@@ -148,6 +150,23 @@ export const updateBookByUserIdAndTitle = async (data, title) => {
   } catch (error) {
     console.error("Error updating book: ", error);
     throw error; // Re-throw the error to be handled by the calling function
+  }
+};
+
+// getBookById
+export const getBookById = async (bookId) => {
+  try {
+    const bookDoc = doc(db, "books", bookId);
+    const bookSnapshot = await getDoc(bookDoc); // 🔹 Use getDoc() instead of getDocs()
+
+    if (bookSnapshot.exists()) {
+      return { id: bookSnapshot.id, ...bookSnapshot.data() };
+    } else {
+      return null; // Book not found
+    }
+  } catch (error) {
+    console.error("Error getting book: ", error);
+    throw error; // Re-throw for handling
   }
 };
 

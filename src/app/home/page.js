@@ -1,79 +1,37 @@
 "use client";
 
-// src/app/signin/page.tsx
 import { useEffect, useState } from "react";
-import SignInWithGoogle from "@/components/SignInWithGoogle";
-import { useRouter } from "next/navigation";
-import { Alert, Badge, Card, Divider, Popover, Tag, Typography } from "antd";
-import BookList from "@/components/BookList";
+import { useAppContext } from "@/context/AppContext";
+import { searchByTitle } from "@/googleBooks";
 import { getProfile, updateProfile } from "@/firebase/services/profileService";
-import StreakCard from "@/components/StreakCard";
 import { storage } from "@/app/utility";
 import { isUserPremium } from "@/payments/playstoreBilling";
-import { useAppContext } from "@/context/AppContext";
-import {
-  Bolt,
-  BookCopy,
-  BookOpen,
-  Brain,
-  Camera,
-  ClipboardList,
-  Info,
-  Lightbulb,
-  Play,
-  PlayCircle,
-  Pointer,
-  ShoppingBag,
-  Sparkles,
-  TriangleRight,
-  Zap,
-} from "lucide-react";
-import { scaninghands } from "@/assets";
-import Image from "next/image";
 import { streakMaintenanceIntervalInSeconds } from "@/configs/variables";
-import Link from "next/link";
-import { searchByTitle } from "@/googleBooks";
-import { priColor, priTextColor } from "@/configs/cssValues";
-import ScanRead from "@/components/ScanRead";
-import BottomNav from "@/components/Menu";
-import NextBooksToRead from "@/components/NextBooksToRead";
-import WishList from "@/components/WishList";
+import StreakCard from "@/components/StreakCard";
+import BookList from "@/components/BookList";
 import ContinueReadingCard from "@/components/ContinueReading";
-
-const { Title } = Typography;
+import NextBooksToRead from "@/components/NextBooksToRead";
+import BottomNav from "@/components/Menu";
+import { motion } from "framer-motion";
 
 const Home = () => {
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  const {
-    profile,
-    setProfile,
-    isPremium,
-    setIsPremium,
-    books,
-    summaryOrFullText,
-    setSummaryOrFullText,
-  } = useAppContext();
-
-  // differnece in seconds
   const [lastPageScanDifference, setLastPageScanDifference] = useState(0);
 
+  const { profile, setProfile, books, setIsPremium } = useAppContext();
+
   useEffect(() => {
-    searchByTitle("harry potter").then((res) => {
-      console.log(res);
-    });
-    if (typeof navigator !== "undefined") {
-      if ("serviceWorker" in navigator) {
-        navigator.serviceWorker
-          .register("/firebase-messaging-sw.js")
-          .then((registration) => {
-            console.log("Service Worker registered:", registration);
-          })
-          .catch((err) =>
-            console.log("Service Worker registration failed:", err)
-          );
-      }
+    searchByTitle("harry potter").then((res) => console.log(res));
+
+    if (typeof navigator !== "undefined" && "serviceWorker" in navigator) {
+      navigator.serviceWorker
+        .register("/firebase-messaging-sw.js")
+        .then((registration) =>
+          console.log("Service Worker registered:", registration)
+        )
+        .catch((err) =>
+          console.log("Service Worker registration failed:", err)
+        );
     }
   }, []);
 
@@ -81,31 +39,23 @@ const Home = () => {
     if (profile?.streak?.lastPageScanTimestamp) {
       const now = Date.now();
       const lastPageScanTimestamp = profile.streak.lastPageScanTimestamp;
-      const lastPageScanDifference = Math.ceil(
-        (now - lastPageScanTimestamp) / 1000
-      );
-      console.log(lastPageScanDifference);
-      if (lastPageScanDifference > 84600) {
-        if (profile.streak.days > profile.streak.longestStreak) {
-          updateProfile(JSON.parse(storage.getItem("user")).email, {
-            ...profile,
-            streak: {
-              ...profile.streak,
-              longestStreak: profile.streak.days,
-              days: 0,
-            },
-          });
-        } else {
-          updateProfile(JSON.parse(storage.getItem("user")).email, {
-            ...profile,
-            streak: {
-              ...profile.streak,
-              days: 0,
-            },
-          });
-        }
+      const difference = Math.ceil((now - lastPageScanTimestamp) / 1000);
+
+      if (difference > 84600) {
+        const updateData = {
+          ...profile,
+          streak: {
+            ...profile.streak,
+            days:
+              profile.streak.days > profile.streak.longestStreak
+                ? 0
+                : profile.streak.days,
+          },
+        };
+        updateProfile(JSON.parse(storage.getItem("user")).email, updateData);
       }
-      setLastPageScanDifference(lastPageScanDifference);
+
+      setLastPageScanDifference(difference);
     }
   }, [profile]);
 
@@ -119,16 +69,13 @@ const Home = () => {
     const fetchProfile = async () => {
       setLoading(true);
       try {
-        // Replace 'userId' with the actual user ID (e.g., from authentication)
-        const userId = JSON.parse(storage.getItem("user")).email; // You can get this from Firebase Auth or context
-        console.log(userId);
-        let profileData;
+        const userId = JSON.parse(storage.getItem("user")).email;
         if (userId) {
-          profileData = await getProfile(userId);
+          const profileData = await getProfile(userId);
+          setProfile(profileData);
         }
-        setProfile(profileData);
       } catch (error) {
-        setError(error);
+        console.error(error);
       } finally {
         setLoading(false);
       }
@@ -139,10 +86,11 @@ const Home = () => {
 
   return (
     !loading && (
-      <div
-        style={{
-          overflow: "scroll",
-        }}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
+        style={{ overflow: "scroll" }}
       >
         <StreakCard
           isPremium={false}
@@ -151,56 +99,35 @@ const Home = () => {
             lastPageScanDifference < streakMaintenanceIntervalInSeconds * 2
           }
         />
-        {/* {!isPremium && <Alert style={{
-        border: '0px',
-        padding: '15px 20px',
-        width: '93%',
-        margin: 'auto'
-      }} message={<> <Lightbulb size={20} /> 
-      &nbsp;
-      Using free version,
-      you can add upto 1 book! 
-      Click <Link href="/premium">here</Link> to unlock Reeda premium.
-      </>} type="warning" />} */}
-        <>
+
+        <br />
+        <br />
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "40px",
+            padding: "10px 40px",
+            overflowX: "scroll",
+          }}
+        >
+          {books?.filter((book) => book.inProgress).length === 0 && (
+            <ContinueReadingCard />
+          )}
+          {books
+            ?.filter((book) => book.inProgress)
+            .map((book) => (
+              <ContinueReadingCard key={book.id} book={book} />
+            ))}
+        </div>
+
+        <div style={{ padding: "25px" }}>
+          <BookList />
           <br />
-          <br />
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "40px",
-              padding: "10px 40px",
-              overflowX: "scroll",
-            }}
-          >
-            {books?.filter((book) => book.inProgress).length == 0 && (
-              <ContinueReadingCard />
-            )}
-            {books
-              ?.filter((book) => book.inProgress)
-              .map((book) => (
-                <ContinueReadingCard key={book.id} book={book} />
-              ))}
-          </div>
-
-          <div
-            style={{
-              padding: "25px",
-            }}
-          >
-            <BookList />
-            <br />
-
-            {books && books.length > 0 && <NextBooksToRead />}
-
-            {/* <WishList /> */}
-
-            {/* <ContinueReading /> */}
-            <BottomNav />
-          </div>
-        </>
-      </div>
+          {books && books.length > 0 && <NextBooksToRead />}
+          <BottomNav />
+        </div>
+      </motion.div>
     )
   );
 };
