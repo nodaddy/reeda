@@ -17,7 +17,6 @@ const Book = () => {
 
   useEffect(() => {
     if (!bookId) return; // Prevent fetching if bookId is undefined
-    setLoading(true);
     const fetchBook = async () => {
       try {
         const response = await getBookById(bookId);
