@@ -437,6 +437,9 @@ const BookList = () => {
             >
               {/* Front Side */}
               <Card
+                onClick={() => {
+                  router.push(`/book/${item.id}`);
+                }}
                 style={{
                   backfaceVisibility: "hidden",
                   margin: "0px auto 0px auto",
@@ -774,7 +777,8 @@ const BookList = () => {
                             title: item.volumeInfo.title,
                             author: item.volumeInfo.authors?.join(", "),
                             totalPages: item.volumeInfo.pageCount || 1,
-                            cover: item.volumeInfo.imageLinks?.thumbnail,
+                            cover: item.volumeInfo.imageLinks?.thumbnail || "",
+                            description: item.volumeInfo.description || "",
                           });
                         }}
                         shape="square"
