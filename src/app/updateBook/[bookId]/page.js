@@ -388,6 +388,7 @@ const Book = () => {
                 style={{
                   borderRadius: "999px 0px 0px 999px",
                   backgroundColor: mode === "note" ? priColor : "transparent",
+                  border: "0px",
                   color: mode === "note" ? "white" : "black",
                 }}
               >
@@ -398,6 +399,7 @@ const Book = () => {
                 value="session"
                 style={{
                   borderRadius: "0px 999px 999px 0px",
+                  border: "0px",
                   backgroundColor:
                     mode === "session" ? priColor : "transparent",
                   color: mode === "session" ? "white" : "black",
