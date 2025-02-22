@@ -6,7 +6,10 @@ import { searchByTitle } from "@/googleBooks";
 import { getProfile, updateProfile } from "@/firebase/services/profileService";
 import { storage } from "@/app/utility";
 import { isUserPremium } from "@/payments/playstoreBilling";
-import { streakMaintenanceIntervalInSeconds } from "@/configs/variables";
+import {
+  bookTitleForAdHocAISession,
+  streakMaintenanceIntervalInSeconds,
+} from "@/configs/variables";
 import StreakCard from "@/components/StreakCard";
 import BookList from "@/components/BookList";
 import ContinueReadingCard from "@/components/ContinueReading";
@@ -14,8 +17,9 @@ import NextBooksToRead from "@/components/NextBooksToRead";
 import BottomNav from "@/components/Menu";
 import { motion } from "framer-motion";
 import { priColor, secTextColor } from "@/configs/cssValues";
-import { BookOpen } from "lucide-react";
-import { Empty } from "antd";
+import { BookOpen, Info, Sparkle, Sparkles, Wand, Wand2 } from "lucide-react";
+import { Empty, FloatButton, Popconfirm } from "antd";
+import Link from "next/link";
 
 const Home = () => {
   const [loading, setLoading] = useState(true);
@@ -178,7 +182,17 @@ const Home = () => {
           <br />
 
           {/* {books && books.length > 0 && <NextBooksToRead />} */}
-          <BottomNav />
+          {/* <BottomNav /> */}
+          <Link href={"/scan/" + bookTitleForAdHocAISession}>
+            <FloatButton
+              shape="square"
+              type="primary"
+              style={{
+                insetInlineEnd: 40,
+              }}
+              icon={<>AI</>}
+            />
+          </Link>
         </div>
       </motion.div>
     )

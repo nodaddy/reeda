@@ -47,7 +47,7 @@ export default function BottomNav() {
             display: "flex",
             color: priColor,
             alignItems: "center",
-            fontWeight: "400",
+            fontWeight: "300",
             fontFamily: "'Inter', sans-serif",
           }}
         >
