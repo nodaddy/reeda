@@ -57,9 +57,12 @@ export default function BottomNav() {
             overlayStyle={{ width: "57%" }}
             content={
               <div style={{ padding: "5px" }}>
-                - Scan pages <br />
-                - Get summary (AI) <br />
-                - In-page dictionary (AI)
+                <b>When to use an AI session? </b>
+                <br />
+                - Skim through a book: Scan pages - read summaries - finish the
+                book
+                <br /> - Encoutered tough words: Scan pages - get text - tap on
+                words to see meaningS (AI in-page dictionary)
                 <br />
               </div>
             }
