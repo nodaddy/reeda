@@ -6,6 +6,7 @@ import { Card, Input, Select } from "antd";
 import { priColor } from "@/configs/cssValues";
 import { Bookmark, CheckCircle, MoveLeft } from "lucide-react";
 import { generateRandomColourForString } from "../utility";
+import Link from "next/link";
 
 const Bookshelf = () => {
   const { books } = useAppContext();
@@ -128,71 +129,70 @@ const Bookshelf = () => {
               }}
             >
               {/* Front Side */}
-              <Card
-                onClick={() => {
-                  router.push(`/book/${item.id}`);
-                }}
-                style={{
-                  backfaceVisibility: "hidden",
-                  margin: "0px auto 20px auto",
-                  width: "fit-content",
-
-                  border: "0px",
-                }}
-                bodyStyle={{
-                  padding: "0px",
-                  width: "fit-content",
-                }}
-              >
-                {item.inProgress && (
-                  <Bookmark
-                    size={30}
-                    color={generateRandomColourForString(item.title)}
-                    fill={generateRandomColourForString(item.title)}
-                    style={{
-                      position: "absolute",
-                      top: "-7px",
-                      right: "7px",
-                      zIndex: "99",
-                    }}
-                  />
-                )}
-                {item.completedReading && (
-                  <CheckCircle
-                    size={30}
-                    fill={"green"}
-                    color={"white"}
-                    style={{
-                      position: "absolute",
-                      top: "50%",
-                      right: "50%",
-                      transform: "translate(50%, -50%)",
-                      zIndex: "99",
-                    }}
-                  />
-                )}
-                <div
+              <Link href={`/book/${item.id}`}>
+                <Card
                   style={{
-                    position: "relative",
-                    width: "19vw",
+                    backfaceVisibility: "hidden",
+                    margin: "0px auto 20px auto",
+                    width: "fit-content",
+
+                    border: "0px",
+                  }}
+                  bodyStyle={{
+                    padding: "0px",
+                    width: "fit-content",
                   }}
                 >
-                  <img
-                    src={item.cover}
+                  {item.inProgress && (
+                    <Bookmark
+                      size={30}
+                      color={generateRandomColourForString(item.title)}
+                      fill={generateRandomColourForString(item.title)}
+                      style={{
+                        position: "absolute",
+                        top: "-7px",
+                        right: "7px",
+                        zIndex: "99",
+                      }}
+                    />
+                  )}
+                  {item.completedReading && (
+                    <CheckCircle
+                      size={30}
+                      fill={"green"}
+                      color={"white"}
+                      style={{
+                        position: "absolute",
+                        top: "50%",
+                        right: "50%",
+                        transform: "translate(50%, -50%)",
+                        zIndex: "99",
+                      }}
+                    />
+                  )}
+                  <div
                     style={{
-                      opacity: item.completedReading ? "0.5" : "1",
+                      position: "relative",
                       width: "19vw",
-                      height: "30vw",
-                      objectFit: "cover",
-                      flex: "0 0 auto",
-                      borderRadius: "7px", // Optional: Slight rounding for a premium look
-                      boxShadow: "0px 2px 10px rgba(0, 0, 0, 0.2)", // Soft shadow
-                      transition:
-                        "transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out", // Smooth hover effect
                     }}
-                  />
-                </div>
-              </Card>
+                  >
+                    <img
+                      src={item.cover}
+                      style={{
+                        opacity: item.completedReading ? "0.5" : "1",
+                        width: "19vw",
+                        height: "30vw",
+                        objectFit: "cover",
+                        flex: "0 0 auto",
+                        borderRadius: "7px", // Optional: Slight rounding for a premium look
+                        boxShadow: "0px 2px 10px rgba(0, 0, 0, 0.2)", // Soft shadow
+                        transition:
+                          "transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out", // Smooth hover effect
+                      }}
+                    />
+                  </div>
+                </Card>
+              </Link>
             </div>
           ))}
         </div>
