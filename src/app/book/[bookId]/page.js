@@ -24,6 +24,7 @@ import { motion } from "framer-motion"; // Import Framer Motion
 import { useRouter } from "next/navigation";
 import { useAppContext } from "@/context/AppContext";
 import { getCurrentTimestampInMilliseconds } from "@/app/utility";
+import Link from "next/link";
 
 const Book = () => {
   const { bookId } = useParams();
@@ -140,7 +141,7 @@ const Book = () => {
                 boxShadow: "0px 3px 6px rgba(0,0,0,0.2)",
               }}
             />
-            {book?.startedReadingOn ? (
+            {book?.inProgress ? (
               <span>
                 <sub>{"Reading"} </sub>
                 <span
@@ -173,7 +174,7 @@ const Book = () => {
                 transition: "all 0.3s ease-in-out",
               }}
             >
-              {book?.startedReadingOn ? null : ( // /> //   }} //     borderRight: "1px solid " + priColor, //     paddingRight: "13px", //   style={{ //   color={"white"} //   size={27} // <Timer
+              {book?.inProgress ? null : ( // /> //   }} //     borderRight: "1px solid " + priColor, //     paddingRight: "13px", //   style={{ //   color={"white"} //   size={27} // <Timer
                 <Popconfirm
                   title="Want to start reading this book?"
                   onConfirm={async () => {
@@ -181,6 +182,7 @@ const Book = () => {
                       {
                         inProgress: true,
                         startedReadingOn: getCurrentTimestampInMilliseconds(),
+                        pagesRead: 0,
                       },
                       book.title
                     );
@@ -201,14 +203,16 @@ const Book = () => {
                   />
                 </Popconfirm>
               )}
-              <NotebookPen
-                size={25}
-                color={"white"}
-                style={{
-                  marginLeft: "13px",
-                  marginRight: book?.startedReadingOn ? "13px" : "0px",
-                }}
-              />
+              <Link href={`/updateBook/${book?.id}`}>
+                <NotebookPen
+                  size={25}
+                  color={"white"}
+                  style={{
+                    marginLeft: "13px",
+                    marginRight: book?.inProgress ? "13px" : "0px",
+                  }}
+                />
+              </Link>
             </span>
           </div>
         </div>

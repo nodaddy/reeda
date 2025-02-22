@@ -16,7 +16,6 @@ const PagePicker = ({ totalPages, currentPage, onPageSelect }) => {
       }}
       style={{
         borderRadius: "12px",
-        boxShadow: "0px 4px 10px rgba(0,0,0,0.1)",
         textAlign: "center",
         padding: "0px",
         backgroundColor: "transparent",
@@ -33,13 +32,21 @@ const PagePicker = ({ totalPages, currentPage, onPageSelect }) => {
         }}
         options={pageOptions}
         dropdownRender={(menu) => (
-          <div style={{ overflowY: "auto" }}>{menu}</div>
+          <div
+            align="center"
+            style={{
+              overflowY: "auto",
+            }}
+          >
+            {menu}
+          </div>
         )}
         style={{
           textAlign: "center",
           opacity: "0",
-          borderRadius: "8px",
-          width: "118px",
+          width: "120px",
+          borderRadius: "9999px",
+          backgroundColor: "transparent",
           height: "52px",
           fontSize: "16px",
           padding: "0px",

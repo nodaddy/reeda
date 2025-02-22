@@ -131,11 +131,11 @@ const Home = () => {
             overflowX: "scroll",
           }}
         >
-          {books?.filter((book) => book.startedReadingOn).length === 0 && (
+          {books?.filter((book) => book.inProgress).length === 0 && (
             <ContinueReadingCard />
           )}
           {books
-            ?.filter((book) => book.startedReadingOn)
+            ?.filter((book) => book.inProgress)
             .map((book) => (
               <ContinueReadingCard key={book.id} book={book} />
             ))}

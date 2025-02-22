@@ -1,7 +1,8 @@
 "use client";
-import { secColor } from "@/configs/cssValues";
+import { priTextColor, secColor, secTextColor } from "@/configs/cssValues";
 import {
   getBookById,
+  updateBookById,
   updateBookByUserIdAndTitle,
 } from "@/firebase/services/bookService";
 import {
@@ -13,6 +14,11 @@ import {
   Radio,
   Typography,
   Divider,
+  InputNumber,
+  message,
+  notification,
+  Dropdown,
+  Menu,
 } from "antd";
 import Title from "antd/es/typography/Title";
 import {
@@ -26,6 +32,9 @@ import {
   Play,
   PlaySquare,
   MoreVertical,
+  CheckCircle,
+  BookCheck,
+  CircleStop,
 } from "lucide-react";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -36,6 +45,8 @@ import {
   getCurrentTimestampInMilliseconds,
 } from "@/app/utility";
 import PagePicker from "@/components/PagePicker";
+import { createNote } from "@/firebase/services/notesService";
+import { createStudySession } from "@/firebase/services/studySessionService";
 
 const { TextArea } = Input;
 
@@ -43,11 +54,71 @@ const Book = () => {
   const { bookId } = useParams();
   const [book, setBook] = useState();
   const [loading, setLoading] = useState(false);
+  const [savingData, setSavingData] = useState(false);
   const history = useRouter();
 
+  const menu = (
+    <Menu>
+      <Menu.Item key="1">
+        <div
+          onClick={async () => {
+            await updateBookById(
+              {
+                pagesRead:
+                  book.pagesRead === book.totalPages ? 0 : book.totalPages,
+                inProgress: false,
+              },
+              book.id
+            );
+            setBook({
+              ...book,
+              pagesRead:
+                book.pagesRead === book.totalPages ? 0 : book.totalPages,
+              inProgress: false,
+            });
+            messageApi.success("Wow! You've read it all.");
+          }}
+          style={{
+            display: "flex",
+            alignItems: "center",
+          }}
+        >
+          <BookCheck
+            color={
+              book?.pagesRead === book?.totalPages ? "green" : priTextColor
+            }
+            size={16}
+          />{" "}
+          &nbsp;
+          {book?.pagesRead === book?.totalPages
+            ? "Reopen"
+            : "Mark as completed"}
+        </div>
+      </Menu.Item>
+      {/* {book?.pagesRead !== book?.totalPages && (
+        <Menu.Item key="2">
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
+            <CircleStop size={16} /> &nbsp; Give up{" "}
+          </div>
+        </Menu.Item>
+      )} */}
+    </Menu>
+  );
+
   const [mode, setMode] = useState("note");
-  const [note, setNote] = useState({ title: "", content: "" });
-  const [session, setSession] = useState({ lastPage: "", summary: "" });
+  const [note, setNote] = useState({ title: "", description: "", tags: [] });
+  const [session, setSession] = useState({
+    pagesCovered: "",
+    summary: "",
+    duration: "",
+  });
+
+  const [messageApi, contextHolder] = message.useMessage();
 
   const priColor = generateRandomColourForString(book?.title);
 
@@ -67,25 +138,21 @@ const Book = () => {
     fetchBook();
   }, [bookId]);
 
-  // Mock notes
-  const [notes, setNotes] = useState([
-    {
-      id: 1,
-      title: "Alchemy is about transformation",
-      content:
-        "The book emphasizes that transformation is not just about turning metal into gold but about personal growth.",
-      date: "Feb 20, 2025",
-      expanded: false,
-    },
-    {
-      id: 2,
-      title: "Follow your personal legend",
-      content:
-        "Your 'Personal Legend' is what you've always wanted to accomplish, and the universe conspires to help you achieve it.",
-      date: "Feb 18, 2025",
-      expanded: false,
-    },
-  ]);
+  const handleAddNote = async () => {
+    setSavingData(true);
+    await createNote(bookId, note);
+    setNote({ title: "", description: "", tags: [] });
+    messageApi.info("Note added successfully!");
+    setSavingData(false);
+  };
+
+  const handleAddStudySession = async () => {
+    setSavingData(true);
+    await createStudySession(bookId, session);
+    setSession({ pagesCovered: "", summary: "", duration: "" });
+    messageApi.info("Study session logged!");
+    setSavingData(false);
+  };
 
   // Toggle note expansion
   const toggleExpand = (id) => {
@@ -104,6 +171,7 @@ const Book = () => {
         exit={{ x: "100%", opacity: 0 }} // Animate out when component unmounts
         transition={{ type: "spring", stiffness: 100, damping: 15 }}
       >
+        {contextHolder}
         {/* Book Header */}
         <div
           style={{
@@ -128,7 +196,15 @@ const Book = () => {
                 history.back();
               }}
             />
-            <MoreVertical color={"white"} />
+            <Dropdown overlay={menu} trigger={["click"]} placement="bottomLeft">
+              <MoreVertical
+                color="white"
+                style={{
+                  cursor: "pointer",
+                  display: book?.inProgress ? "block" : "none",
+                }}
+              />
+            </Dropdown>
           </div>
 
           <br />
@@ -166,99 +242,98 @@ const Book = () => {
             </span>
 
             {/* Floating Button */}
-            <span
-              style={{
-                position: "absolute",
-                bottom: "-20px",
-                right: "16%",
-                borderRadius: "999px",
-              }}
-            >
-              <PagePicker
-                totalPages={book?.totalPages}
-                currentPage={book?.pagesRead}
-                onPageSelect={async (pageNumber) => {
-                  await updateBookByUserIdAndTitle(
-                    {
-                      pagesRead: pageNumber,
-                    },
-                    book.title
-                  );
-                  setBook({
-                    ...book,
-                    pagesRead: pageNumber,
-                  });
+            {book?.pagesRead !== book?.totalPages && (
+              <span
+                style={{
+                  position: "absolute",
+                  bottom: "-20px",
+                  right: "16%",
+                  borderRadius: "999px",
                 }}
-              />
-            </span>
+              >
+                <PagePicker
+                  totalPages={book?.totalPages}
+                  currentPage={book?.pagesRead}
+                  onPageSelect={async (pageNumber) => {
+                    await updateBookById(
+                      {
+                        pagesRead: pageNumber,
+                        inProgress: pageNumber !== book.totalPages,
+                      },
+                      book.id
+                    );
+                    setBook({
+                      ...book,
+                      pagesRead: pageNumber,
+                      inProgress: pageNumber !== book?.totalPages,
+                    });
+                    if (pageNumber == book.totalPages) {
+                      messageApi.success("Wow! You've read it all.");
+                    }
+                  }}
+                />
+              </span>
+            )}
             <span
+              onClick={async () => {
+                await updateBookById(
+                  {
+                    pagesRead: 0,
+                    inProgress: true,
+                  },
+                  book.id
+                );
+                setBook({
+                  ...book,
+                  pagesRead: 0,
+                  inProgress: true,
+                });
+              }}
               style={{
                 position: "absolute",
                 alignItems: "center",
                 justifyContent: "center",
                 backgroundColor: "grey",
-                padding: "6px 23px 11px 23px",
+                padding: `${
+                  book?.pagesRead === book?.totalPages ? "11" : "6"
+                }px 23px 11px 23px`,
                 bottom: "-21px",
                 right: "16%",
                 borderRadius: "999px",
                 transition: "all 0.3s ease-in-out",
               }}
             >
-              {book?.startedReadingOn ? null : ( // /> //   }} //     borderRight: "1px solid " + priColor, //     paddingRight: "13px", //   style={{ //   color={"white"} //   size={27} // <Timer
-                <Popconfirm
-                  title="Want to start reading this book?"
-                  onConfirm={async () => {
-                    await updateBookByUserIdAndTitle(
-                      {
-                        inProgress: true,
-                        startedReadingOn: getCurrentTimestampInMilliseconds(),
-                      },
-                      book.title
-                    );
-
-                    history.push("/");
-                  }}
-                  icon={<></>}
-                  okText="Yes"
-                  cancelText="No"
-                >
-                  <PlayCircle
-                    size={27}
-                    color={"white"}
+              {book?.pagesRead === book?.totalPages ? (
+                <span>Read Again</span>
+              ) : (
+                <span>
+                  p.
+                  <span
                     style={{
-                      paddingRight: "13px",
-                      borderRight: "1px solid " + priColor,
+                      fontSize: "27px",
+                      marginLeft: "5px",
+                      fontWeight: "bold",
+                      background: `linear-gradient(90deg, ${priColor}, white, ${priColor})`,
+                      backgroundSize: "200% 200%",
+                      WebkitBackgroundClip: "text",
+                      color: "transparent",
+                      animation: "shine 1s infinite linear",
                     }}
-                  />
-                </Popconfirm>
-              )}
-              <span>
-                p.
-                <span
-                  style={{
-                    fontSize: "27px",
-                    marginLeft: "5px",
-                    fontWeight: "bold",
-                    background: `linear-gradient(90deg, ${priColor}, white, ${priColor})`,
-                    backgroundSize: "200% 200%",
-                    WebkitBackgroundClip: "text",
-                    color: "transparent",
-                    animation: "shine 1s infinite linear",
-                  }}
-                >
-                  {book?.pagesRead}
-                </span>
-                <style>
-                  {`
+                  >
+                    {book?.pagesRead}
+                  </span>
+                  <style>
+                    {`
   @keyframes shine {
     0% { background-position: 0% 50%; }
     50% { background-position: 100% 50%; }
     100% { background-position: 50% 50%; }
   }
 `}
-                </style>{" "}
-                <sub>/ {book?.totalPages}</sub>
-              </span>
+                  </style>{" "}
+                  <sub>/ {book?.totalPages}</sub>
+                </span>
+              )}
             </span>
           </div>
         </div>
@@ -351,6 +426,19 @@ const Book = () => {
             {/* Quick Note Mode */}
             {mode === "note" && (
               <div>
+                <span
+                  style={{
+                    fontSize: "14px",
+                    fontWeight: "500",
+                    color: "#666",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "7px",
+                    color: secTextColor,
+                  }}
+                >
+                  Title (optional)
+                </span>
                 <Input
                   placeholder="Note Title"
                   value={note.title}
@@ -361,12 +449,26 @@ const Book = () => {
                     padding: "10px",
                   }}
                 />
+                <span
+                  style={{
+                    fontSize: "14px",
+                    fontWeight: "500",
+                    color: "#666",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "7px",
+                    color: secTextColor,
+                  }}
+                >
+                  Description
+                </span>
                 <TextArea
+                  required
                   rows={4}
                   placeholder="Write your note..."
-                  value={note.content}
+                  value={note.description}
                   onChange={(e) =>
-                    setNote({ ...note, content: e.target.value })
+                    setNote({ ...note, description: e.target.value })
                   }
                   style={{
                     marginBottom: "10px",
@@ -377,15 +479,20 @@ const Book = () => {
                 <div align="right">
                   <Button
                     type="primary"
+                    disabled={savingData || !note.description}
                     style={{
                       padding: "10px 0px",
                       backgroundColor: "white",
                       boxShadow: "0px 0px 0px transparent",
                       color: priColor,
+                      border: "0px",
                       fontSize: "16px",
                     }}
+                    onClick={() => {
+                      handleAddNote();
+                    }}
                   >
-                    Save Note
+                    {savingData ? "Saving..." : "Save Note"}
                   </Button>
                 </div>
               </div>
@@ -394,12 +501,24 @@ const Book = () => {
             {/* Reading Session Mode */}
             {mode === "session" && (
               <div>
+                <span
+                  style={{
+                    fontSize: "14px",
+                    fontWeight: "500",
+                    color: "#666",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "7px",
+                    color: secTextColor,
+                  }}
+                >
+                  Pages covered
+                </span>
                 <Input
-                  type="number"
-                  placeholder="Pages read e.g. 23 to 74"
-                  value={session.lastPage}
+                  placeholder="e.g. 23 to 74"
+                  value={session.pagesCovered}
                   onChange={(e) =>
-                    setSession({ ...session, lastPage: e.target.value })
+                    setSession({ ...session, pagesCovered: e.target.value })
                   }
                   style={{
                     marginBottom: "10px",
@@ -407,9 +526,23 @@ const Book = () => {
                     padding: "10px",
                   }}
                 />
+                <span
+                  style={{
+                    fontSize: "14px",
+                    fontWeight: "500",
+                    color: "#666",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "7px",
+                    color: secTextColor,
+                  }}
+                >
+                  Summary
+                </span>
+
                 <TextArea
                   rows={4}
-                  placeholder="Session summary, what did you read about in the session?"
+                  placeholder="What did you read about in the session?"
                   value={session.summary}
                   onChange={(e) =>
                     setSession({ ...session, summary: e.target.value })
@@ -420,18 +553,64 @@ const Book = () => {
                     padding: "10px",
                   }}
                 />
+
+                {/* Duration Input */}
+                <div style={{ marginBottom: "10px" }}>
+                  <span
+                    style={{
+                      fontSize: "14px",
+                      fontWeight: "500",
+                      color: "#666",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "7px",
+                      color: secTextColor,
+                    }}
+                  >
+                    <Timer color={secTextColor} /> Duration (minutes)
+                  </span>
+                  <InputNumber
+                    min={1}
+                    max={800}
+                    size="small"
+                    value={session.duration}
+                    onChange={(value) =>
+                      setSession({ ...session, duration: value })
+                    }
+                    style={{
+                      width: "100%",
+                      marginTop: "5px",
+                      borderRadius: "8px",
+                      border: "0px solid #ccc",
+                      padding: "10px",
+                      fontSize: "16px",
+                      boxShadow: "0px 0px 6px rgba(0, 0, 0, 0.07)",
+                    }}
+                  />
+                </div>
+
                 <div align="right">
                   <Button
                     type="primary"
+                    disabled={
+                      savingData ||
+                      !session.summary ||
+                      !session.duration ||
+                      !session.pagesCovered
+                    }
                     style={{
                       padding: "10px 0px",
                       backgroundColor: "white",
                       boxShadow: "0px 0px 0px transparent",
+                      border: "0px",
                       color: priColor,
                       fontSize: "16px",
                     }}
+                    onClick={() => {
+                      handleAddStudySession();
+                    }}
                   >
-                    Log Session
+                    {savingData ? "Saving..." : "Log Session"}
                   </Button>
                 </div>
               </div>

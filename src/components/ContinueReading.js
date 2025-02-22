@@ -141,7 +141,7 @@ const ContinueReadingCard = ({ book }) => {
         src={book.cover}
         alt={book.title}
         style={{
-          width: "78px",
+          width: "86px",
           position: "absolute",
           boxShadow: "0px 3px 10px rgba(0,0,0,0.2)",
           top: "71px",
@@ -152,7 +152,7 @@ const ContinueReadingCard = ({ book }) => {
       <br />
       <div
         style={{
-          paddingLeft: "44%",
+          paddingLeft: "48%",
           color: bookmarkColour,
           fontSize: "14px",
           paddingTop: "2px",
@@ -167,9 +167,9 @@ const ContinueReadingCard = ({ book }) => {
               fontSize: "25px",
             }}
           >
-            <File size={16} /> {book.pagesRead}
+            <i style={{ fontWeight: "300" }}>p.</i> {book.pagesRead}
           </span>{" "}
-          / {book.totalPages} pages
+          {/* / {book.totalPages} pages */}
           {/* <Edit2 color={bookmarkColour} size={11} /> */}
         </span>
         <br />
@@ -180,12 +180,16 @@ const ContinueReadingCard = ({ book }) => {
         </span> */}
         <span
           style={{
-            marginTop: "7px",
+            marginTop: "10px",
             display: "inline-block",
-            color: bookmarkColour,
+            border: "1px solid " + bookmarkColour,
+            padding: "3px 9px",
+            borderRadius: "999px",
+            fontSize: "12px",
+            fontWeight: "500",
           }}
         >
-          <Zap size={16} /> Recap
+          Recap
         </span>
       </div>
 

@@ -170,6 +170,19 @@ export const getBookById = async (bookId) => {
   }
 };
 
+// Update a book by ID
+export const updateBookById = async (data, bookId) => {
+  const currentData = await getBookById(bookId);
+  const updatedData = { ...currentData, ...data };
+  try {
+    const bookDoc = doc(db, "books", bookId);
+    await updateDoc(bookDoc, updatedData);
+  } catch (error) {
+    console.error("Error updating book: ", error);
+    throw error;
+  }
+};
+
 // Delete a book by ID
 export const deleteBook = async (bookId) => {
   try {
