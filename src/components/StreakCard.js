@@ -14,6 +14,7 @@ import {
   List,
   X,
   MessageCircleCodeIcon,
+  BookMarked,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Sun, Moon } from "lucide-react";
@@ -201,10 +202,12 @@ const StreakCard = ({ streak, isActive, isPremium = true }) => {
 
       <Card
         bodyStyle={{
-          padding: "18px 24px 20px 28px",
-          margin: "10px",
+          // padding: "18px 24px 20px 28px",
+          // margin: "10px",
+          padding: "18px 24px",
           backgroundColor: priColor,
-          borderRadius: "10px",
+          borderRadius: "0px",
+          // borderRadius: "10px",
           //  background: isPremium ? 'linear-gradient(135deg, #B08D01, goldenrod, gold,  whitesmoke)' : "linear-gradient(155deg,  silver,  whitesmoke)", // Gold, platinum, and light metallic gradient
         }}
         style={{
@@ -213,13 +216,11 @@ const StreakCard = ({ streak, isActive, isPremium = true }) => {
           // background: 'linear-gradient(11deg, silver, whitesmoke, whitesmoke) 0% 0% / 200% 200%',
           width: "100%",
           margin: "auto",
-          borderRadius: "12px",
 
           border: "0px",
           backgroundColor: "transparent",
           backgroundSize: "200% 200%",
           //  animation: 'shine 3s ease-in-out infinite', // Shine animation for glaring effect
-          marginTop: "9px",
           //  boxShadow: '0 4px 15px rgba(0, 0, 0, 0.2)', // Stronger shadow for depth
         }}
       >
@@ -262,24 +263,25 @@ const StreakCard = ({ streak, isActive, isPremium = true }) => {
                     <div
                       style={{
                         marginTop: "0px",
-                        fontSize: "26px",
+                        fontSize: "23px",
                         fontWeight: "300",
                         color: "white",
                       }}
                     >
                       {/* <Icon size={23} style={{ marginRight: '10px', opacity: '0' }} /> */}
-                      Hi,{" "}
+                      {/* Hi,{" "}
                       {
                         JSON.parse(storage.getItem("user"))
                           ?.displayName.split(" ")
                           .slice(0, 2)
                           .join(" ")
                           .split(" ")[0]
-                      }
+                      } */}
+                      <BookMarked size={18} /> Reeda
                     </div>
-                    <sup style={{ color: "white" }}>
+                    {/* <sup style={{ color: "white" }}>
                       Let's sync your reading progress.
-                    </sup>
+                    </sup> */}
                   </span>
                 </div>
               </div>
@@ -288,7 +290,7 @@ const StreakCard = ({ streak, isActive, isPremium = true }) => {
 
           <List
             color={"white"}
-            size={30}
+            size={26}
             onClick={() => setMenuOpen(!menuOpen)}
             style={{
               marginRight: "-3px",
@@ -301,7 +303,6 @@ const StreakCard = ({ streak, isActive, isPremium = true }) => {
               display: "none",
               backgroundColor: "white",
               /* border: 1px solid silver; */
-              borderRadius: "11px",
             }}
           >
             <Flame color={isActive ? "#fa541c" : "#bfbfbf"} size={35} />

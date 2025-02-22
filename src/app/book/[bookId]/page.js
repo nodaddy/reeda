@@ -122,7 +122,6 @@ const Book = () => {
           </div>
 
           <br />
-          <br />
           <Title
             level={2}
             style={{
@@ -151,24 +150,9 @@ const Book = () => {
                 boxShadow: "0px 3px 6px rgba(0,0,0,0.2)",
               }}
             />
-            {book?.inProgress ? (
-              <span>
-                <sub>{"Reading"} </sub>
-                <span
-                  style={{
-                    fontSize: "25px",
-                    marginLeft: "5px",
-                  }}
-                >
-                  {book?.pagesRead}
-                </span>{" "}
-                <sub>/ {book?.totalPages}</sub>
-              </span>
-            ) : (
-              <span>
-                by <i>{book?.author}</i>
-              </span>
-            )}
+            <span>
+              by <i>{book?.author}</i>
+            </span>
 
             {/* Floating Button */}
             <span

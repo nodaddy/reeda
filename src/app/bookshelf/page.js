@@ -72,7 +72,7 @@ const Bookshelf = () => {
             fontFamily: "'Inter', sans-serif",
           }}
         >
-          Your Bookshelf
+          My Bookshelf
         </h2>
 
         {/* Search & Filter Section */}
@@ -145,12 +145,12 @@ const Bookshelf = () => {
                 >
                   {item.inProgress && (
                     <Bookmark
-                      size={30}
-                      color={generateRandomColourForString(item.title)}
-                      fill={generateRandomColourForString(item.title)}
+                      size={25}
+                      color={"orange"}
+                      fill={"orange"}
                       style={{
                         position: "absolute",
-                        top: "-7px",
+                        top: "-8px",
                         right: "7px",
                         zIndex: "99",
                       }}

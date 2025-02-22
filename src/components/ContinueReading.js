@@ -1,5 +1,6 @@
 import { generateRandomColourForString } from "@/app/utility";
 import {
+  defaultBorderColor,
   priColor,
   priTextColor,
   secColor,
@@ -7,7 +8,7 @@ import {
 } from "@/configs/cssValues";
 import { loadingGif } from "@/configs/variables";
 import { useAppContext } from "@/context/AppContext";
-import { Progress, Typography } from "antd";
+import { Empty, Progress, Typography } from "antd";
 import {
   BookIcon,
   BookOpen,
@@ -36,7 +37,7 @@ const ContinueReadingCard = ({ book }) => {
   useEffect(() => {
     setTimeout(() => {
       setShowPanel(true);
-    }, 500);
+    }, 300);
   }, []);
 
   const bookmarkColour = generateRandomColourForString(book?.title);
@@ -50,43 +51,7 @@ const ContinueReadingCard = ({ book }) => {
   //     "http://books.google.com/books/content?id=E5V4zfHYaw0C&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api",
   // };
 
-  return !book || book.length === 0 ? (
-    <div
-      style={{
-        // boxShadow: "0px 3px 10px rgba(0,0,0,0.2)",
-        display: "flex",
-        height: "110px",
-        gap: "20px",
-        justifyContent: "center",
-        alignItems: "center",
-        color: priTextColor,
-        fontFamily: "'Inter', sans-serif",
-        marginTop: "-11px",
-        position: "relative",
-      }}
-    >
-      <div
-        style={{
-          width: "110px",
-        }}
-      >
-        <img
-          src={loadingGif}
-          style={{
-            width: "110px",
-          }}
-        />
-      </div>
-      <span
-        style={{
-          color: secTextColor,
-        }}
-      >
-        <strong>No books in progress!</strong> <br />
-        <i>Pick a book from your bookshelf :)</i>
-      </span>
-    </div>
-  ) : (
+  return !book || book.length === 0 ? null : (
     <div
       style={{
         width: "210px",
@@ -102,12 +67,13 @@ const ContinueReadingCard = ({ book }) => {
       }}
     >
       <Bookmark
+        size={28}
         color={bookmarkColour}
         fill={bookmarkColour}
         style={{
           position: "absolute",
           top: "-5px",
-          right: "20px",
+          right: "24px",
         }}
       />
       <Typography.Title
@@ -177,19 +143,23 @@ const ContinueReadingCard = ({ book }) => {
         >
           From: {new Date(book.startedReadingOn).toLocaleDateString()}
         </span> */}
-        <span
+        <Link
+          href={`/book/${book?.id}`}
           style={{
             marginTop: "10px",
+            textDecoration: "none",
             display: "inline-block",
-            border: "1px solid " + bookmarkColour,
+            border: "1px solid " + defaultBorderColor,
+            color: bookmarkColour,
             padding: "3px 9px",
             borderRadius: "999px",
             fontSize: "12px",
             fontWeight: "500",
           }}
         >
+          {" "}
           Recap
-        </span>
+        </Link>
       </div>
 
       <Link

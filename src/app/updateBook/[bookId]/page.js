@@ -63,55 +63,45 @@ const Book = () => {
       <Menu.Item key="1">
         <div
           onClick={async () => {
-            if (book?.completedReading) {
-              await updateBookById(
-                {
-                  completedReading: false,
-                  completedReadingOn: "",
-                  pagesRead: 0,
-                  inProgress: true,
-                },
-                bookId
-              );
-
-              setBook({
-                ...book,
-                completedReading: false,
-                completedReadingOn: "",
-                pagesRead: 0,
-                inProgress: true,
-              });
-
-              messageApi.success("Book reopened!");
-            } else {
-              setIsReviewModalOpen(true);
-            }
+            setIsReviewModalOpen(true);
           }}
           style={{
             display: "flex",
             alignItems: "center",
           }}
         >
-          <BookCheck
-            color={book?.completedReading ? "green" : priTextColor}
-            size={16}
-          />{" "}
-          &nbsp;
-          {book?.completedReading ? "Reopen" : "Mark as completed"}
+          <BookCheck color={priTextColor} size={16} />
+          &nbsp; Mark as completed
         </div>
       </Menu.Item>
-      {/* {book?.pagesRead !== book?.totalPages && (
+      {book?.pagesRead !== book?.totalPages && (
         <Menu.Item key="2">
           <div
             style={{
               display: "flex",
               alignItems: "center",
             }}
+            onClick={async () => {
+              await updateBookById(
+                {
+                  inProgress: false,
+                },
+                bookId
+              );
+              setBook({
+                ...book,
+                inProgress: false,
+              });
+              messageApi.success("It's okay :)");
+              setTimeout(() => {
+                history.push("/home");
+              }, 1000);
+            }}
           >
             <CircleStop size={16} /> &nbsp; Give up{" "}
           </div>
         </Menu.Item>
-      )} */}
+      )}
     </Menu>
   );
 
@@ -210,7 +200,6 @@ const Book = () => {
             </Dropdown>
           </div>
 
-          <br />
           <br />
           <Title
             level={2}

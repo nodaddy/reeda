@@ -15,6 +15,7 @@ import BottomNav from "@/components/Menu";
 import { motion } from "framer-motion";
 import { priColor, secTextColor } from "@/configs/cssValues";
 import { BookOpen } from "lucide-react";
+import { Empty } from "antd";
 
 const Home = () => {
   const [loading, setLoading] = useState(true);
@@ -101,7 +102,6 @@ const Home = () => {
             lastPageScanDifference < streakMaintenanceIntervalInSeconds * 2
           }
         />
-        <br />
         {
           // <span
           //   style={{
@@ -122,18 +122,28 @@ const Home = () => {
           //   &nbsp; Continue reading
           // </span>
         }
+
+        {books?.filter((book) => book.inProgress).length == 0 && (
+          <div>
+            <br />
+            <br />
+            <br />
+            <Empty
+              image={Empty.PRESENTED_IMAGE_SIMPLE}
+              description="No book in progress"
+            />
+          </div>
+        )}
         <div
           style={{
             display: "flex",
             alignItems: "center",
             gap: "40px",
-            padding: "10px 40px",
+            padding: "10px 60px",
+            margin: "37px 0px",
             overflowX: "scroll",
           }}
         >
-          {books?.filter((book) => book.inProgress).length === 0 && (
-            <ContinueReadingCard />
-          )}
           {books
             ?.filter((book) => book.inProgress)
             .map((book) => (
@@ -141,7 +151,7 @@ const Home = () => {
             ))}
         </div>
 
-        <div style={{ padding: "25px" }}>
+        <div style={{ padding: "0px 25px" }}>
           <BookList />
           <br />
 

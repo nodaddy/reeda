@@ -40,23 +40,26 @@ export const storage = {
 
 // method to generate a colour for a string
 export const generateRandomColourForString = (title) => {
-  if (!title) return "#CCCCCC"; // Default color if title is missing
+  if (!title) return "#444477"; // Default elegant shade
 
-  // Generate a hash from the title
   let hash = 0;
   for (let i = 0; i < title.length; i++) {
-    hash = title.charCodeAt(i) + ((hash << 5) - hash);
+    hash = title.charCodeAt(i) + ((hash << 7) - hash);
   }
 
-  // Convert hash to a 6-character hex color
-  let color = "#";
-  for (let i = 0; i < 3; i++) {
-    let value = (hash >> (i * 8)) & 0xff;
-    color += ("00" + value.toString(16)).slice(-2); // Ensure 2-digit hex
+  let r = ((hash & 0xff) % 120) + 60; // Keep in range 60-180
+  let g = (((hash >> 8) & 0xff) % 120) + 60;
+  let b = (((hash >> 16) & 0xff) % 120) + 60;
+
+  // Adjust to avoid brown/black shades
+  if (r > g && g > b) {
+    g += 40; // Push towards green/blue if it's leaning brown
+  }
+  if (r < 80 && g < 80 && b < 80) {
+    b += 100; // Prevent black-like colors
   }
 
-  // Adjust brightness for a premium feel
-  return adjustColorBrightness(color, 30);
+  return `rgb(${r}, ${g}, ${b})`;
 };
 
 // Function to adjust brightness (lighten/darken)

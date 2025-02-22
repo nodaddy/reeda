@@ -9,6 +9,7 @@ import {
   generateRandomColourForString,
   getCurrentTimestampInMilliseconds,
 } from "@/app/utility";
+import { useRouter } from "next/navigation";
 
 const { TextArea } = Input;
 
@@ -24,6 +25,7 @@ const FinalReviewModal = ({
   const [messageApi, contextHolder] = message.useMessage();
 
   const [savingData, setSavingData] = useState(false);
+  const history = useRouter();
 
   const handleSubmit = async () => {
     setSavingData(true);
@@ -52,6 +54,9 @@ const FinalReviewModal = ({
     messageApi.success("Wow! You've read it all.");
     setIsReviewModalOpen(false);
     setSavingData(false);
+    setTimeout(() => {
+      history.push(`/home`);
+    }, 1000);
   };
 
   return (
