@@ -99,13 +99,15 @@ const Home = () => {
         transition={{ duration: 0.6, ease: "easeOut" }}
         style={{ overflow: "scroll" }}
       >
-        <StreakCard
-          isPremium={false}
-          streak={profile?.streak}
-          isActive={
-            lastPageScanDifference < streakMaintenanceIntervalInSeconds * 2
-          }
-        />
+        {books?.length >= 0 && (
+          <StreakCard
+            isPremium={false}
+            streak={profile?.streak}
+            isActive={
+              lastPageScanDifference < streakMaintenanceIntervalInSeconds * 2
+            }
+          />
+        )}
         {
           // <span
           //   style={{
