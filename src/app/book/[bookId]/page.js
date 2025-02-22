@@ -192,6 +192,7 @@ const Book = () => {
                     await updateBookByUserIdAndTitle(
                       {
                         inProgress: true,
+                        completedReading: false,
                         startedReadingOn: getCurrentTimestampInMilliseconds(),
                         pagesRead: 0,
                       },
