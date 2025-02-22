@@ -9,10 +9,15 @@ import {
   deleteDoc,
   query,
   where,
+  orderBy,
+  limit,
+  startAfter,
   getDocs,
 } from "firebase/firestore";
 
 const notesCollection = collection(db, "notes");
+
+const PAGE_SIZE = 10; // Number of notes per page
 
 // Create a new note
 export const createNote = async (bookId, noteData) => {
@@ -41,20 +46,37 @@ export const createNote = async (bookId, noteData) => {
   }
 };
 
-// Read all notes for a specific bookId
-export const getNotesByBookId = async (bookId) => {
+// Read paginated notes for a specific bookId
+export const getNotesByBookId = async (bookId, lastDoc = null) => {
   try {
-    const q = query(notesCollection, where("bookId", "==", bookId));
+    let q = query(
+      notesCollection,
+      where("bookId", "==", bookId),
+      orderBy("createdAt", "desc"), // Make sure 'createdAt' exists in Firestore
+      limit(PAGE_SIZE)
+    );
+
+    if (lastDoc) {
+      q = query(q, startAfter(lastDoc));
+    }
+
     const querySnapshot = await getDocs(q);
 
     const notes = [];
+    let lastVisible = null;
+
     querySnapshot.forEach((doc) => {
       notes.push({ id: doc.id, ...doc.data() });
     });
 
-    return notes;
+    // Get the last document for next page reference
+    if (!querySnapshot.empty) {
+      lastVisible = querySnapshot.docs[querySnapshot.docs.length - 1];
+    }
+
+    return { notesData: notes, lastVisible };
   } catch (error) {
-    console.error("Error getting notes: ", error);
+    console.error("Error getting paginated notes: ", error);
     throw error;
   }
 };

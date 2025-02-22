@@ -4,7 +4,7 @@
  */
 
 // Base URL for Google Books API
-const API_BASE_URL = 'https://www.googleapis.com/books/v1/volumes';
+const API_BASE_URL = "https://www.googleapis.com/books/v1/volumes";
 
 /**
  * Main search function for Google Books API
@@ -24,10 +24,10 @@ async function searchBooks({
   field,
   maxResults = 10,
   startIndex = 0,
-  orderBy = 'relevance',
-  printType = 'all',
-  projection = 'lite',
-  apiKey
+  orderBy = "relevance",
+  printType = "all",
+  projection = "lite",
+  apiKey,
 }) {
   // Construct the query string based on field if provided
   let queryString = query;
@@ -36,15 +36,17 @@ async function searchBooks({
   }
 
   // Build URL with search parameters also append api key
-  let url = `${API_BASE_URL}?q=${encodeURIComponent(queryString)}&key=${process.env.NEXT_PUBLIC_GOOGLE_BOOKS_API_KEY}`;
-  
+  let url = `${API_BASE_URL}?q=${encodeURIComponent(queryString)}&key=${
+    process.env.NEXT_PUBLIC_GOOGLE_BOOKS_API_KEY
+  }`;
+
   // Add optional parameters
   url += `&maxResults=${maxResults}`;
   url += `&startIndex=${startIndex}`;
   url += `&orderBy=${orderBy}`;
   url += `&printType=${printType}`;
   url += `&projection=${projection}`;
-  
+
   // Add API key if provided
   if (apiKey) {
     url += `&key=${apiKey}`;
@@ -53,11 +55,13 @@ async function searchBooks({
   try {
     const response = await fetch(url);
     if (!response.ok) {
-      throw new Error(`Google Books API error: ${response.status} ${response.statusText}`);
+      throw new Error(
+        `Google Books API error: ${response.status} ${response.statusText}`
+      );
     }
     return await response.json();
   } catch (error) {
-    console.error('Error fetching books:', error);
+    console.error("Error fetching books:", error);
     throw error;
   }
 }
@@ -69,7 +73,7 @@ async function searchBooks({
  * @returns {Promise<Object>} - Promise resolving to search results
  */
 function searchByTitle(title, options = {}) {
-  return searchBooks({ ...options, query: title, field: 'intitle' });
+  return searchBooks({ ...options, query: title, field: "intitle" });
 }
 
 /**
@@ -79,7 +83,7 @@ function searchByTitle(title, options = {}) {
  * @returns {Promise<Object>} - Promise resolving to search results
  */
 function searchByAuthor(author, options = {}) {
-  return searchBooks({ ...options, query: author, field: 'inauthor' });
+  return searchBooks({ ...options, query: author, field: "inauthor" });
 }
 
 /**
@@ -89,7 +93,7 @@ function searchByAuthor(author, options = {}) {
  * @returns {Promise<Object>} - Promise resolving to search results
  */
 function searchByPublisher(publisher, options = {}) {
-  return searchBooks({ ...options, query: publisher, field: 'inpublisher' });
+  return searchBooks({ ...options, query: publisher, field: "inpublisher" });
 }
 
 /**
@@ -99,7 +103,7 @@ function searchByPublisher(publisher, options = {}) {
  * @returns {Promise<Object>} - Promise resolving to search results
  */
 function searchBySubject(subject, options = {}) {
-  return searchBooks({ ...options, query: subject, field: 'subject' });
+  return searchBooks({ ...options, query: subject, field: "subject" });
 }
 
 /**
@@ -109,7 +113,7 @@ function searchBySubject(subject, options = {}) {
  * @returns {Promise<Object>} - Promise resolving to search results
  */
 function searchByISBN(isbn, options = {}) {
-  return searchBooks({ ...options, query: isbn, field: 'isbn' });
+  return searchBooks({ ...options, query: isbn, field: "isbn" });
 }
 
 /**
@@ -120,7 +124,7 @@ function searchByISBN(isbn, options = {}) {
  */
 async function getBookById(bookId, apiKey) {
   let url = `${API_BASE_URL}/${bookId}`;
-  
+
   if (apiKey) {
     url += `?key=${apiKey}`;
   }
@@ -128,11 +132,13 @@ async function getBookById(bookId, apiKey) {
   try {
     const response = await fetch(url);
     if (!response.ok) {
-      throw new Error(`Google Books API error: ${response.status} ${response.statusText}`);
+      throw new Error(
+        `Google Books API error: ${response.status} ${response.statusText}`
+      );
     }
     return await response.json();
   } catch (error) {
-    console.error('Error fetching book details:', error);
+    console.error("Error fetching book details:", error);
     throw error;
   }
 }
@@ -145,8 +151,8 @@ async function getBookById(bookId, apiKey) {
 function getNewReleases(options = {}) {
   return searchBooks({
     ...options,
-    query: '',
-    orderBy: 'newest'
+    query: "",
+    orderBy: "newest",
   });
 }
 
@@ -157,10 +163,12 @@ function getNewReleases(options = {}) {
  * @returns {Promise<Object>} - Promise resolving to search results
  */
 function searchFreeEbooks(query, options = {}) {
-  const url = `${API_BASE_URL}?q=${encodeURIComponent(query)}&filter=free-ebooks`;
+  const url = `${API_BASE_URL}?q=${encodeURIComponent(
+    query
+  )}&filter=free-ebooks`;
   return searchBooks({
     ...options,
-    query
+    query,
   });
 }
 
@@ -171,7 +179,7 @@ function searchFreeEbooks(query, options = {}) {
  */
 function formatBookInfo(book) {
   const { volumeInfo, saleInfo, accessInfo, id } = book;
-  
+
   return {
     id,
     title: volumeInfo.title,
@@ -184,7 +192,7 @@ function formatBookInfo(book) {
     categories: volumeInfo.categories || [],
     averageRating: volumeInfo.averageRating || null,
     ratingsCount: volumeInfo.ratingsCount || null,
-    thumbnail: volumeInfo.imageLinks?.thumbnail || null,
+    thumbnail: volumeInfo.imageLinks?.thumbnail || "",
     language: volumeInfo.language || null,
     previewLink: volumeInfo.previewLink || null,
     infoLink: volumeInfo.infoLink || null,
@@ -194,14 +202,14 @@ function formatBookInfo(book) {
       saleability: saleInfo?.saleability || null,
       listPrice: saleInfo?.listPrice || null,
       retailPrice: saleInfo?.retailPrice || null,
-      buyLink: saleInfo?.buyLink || null
+      buyLink: saleInfo?.buyLink || null,
     },
     accessInfo: {
       webReaderLink: accessInfo?.webReaderLink || null,
       accessViewStatus: accessInfo?.accessViewStatus || null,
       isAvailableForDownload: accessInfo?.epub?.isAvailable || false,
-      isPdfAvailable: accessInfo?.pdf?.isAvailable || false
-    }
+      isPdfAvailable: accessInfo?.pdf?.isAvailable || false,
+    },
   };
 }
 
@@ -214,13 +222,13 @@ function formatSearchResults(searchResult) {
   if (!searchResult.items) {
     return {
       totalItems: 0,
-      books: []
+      books: [],
     };
   }
-  
+
   return {
     totalItems: searchResult.totalItems || 0,
-    books: searchResult.items.map(formatBookInfo)
+    books: searchResult.items.map(formatBookInfo),
   };
 }
 
@@ -235,5 +243,5 @@ export {
   getNewReleases,
   searchFreeEbooks,
   formatBookInfo,
-  formatSearchResults
+  formatSearchResults,
 };

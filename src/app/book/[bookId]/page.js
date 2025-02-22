@@ -1,10 +1,10 @@
 "use client";
-import { priColor, secColor } from "@/configs/cssValues";
+import { priColor, secColor, secTextColor } from "@/configs/cssValues";
 import {
   getBookById,
   updateBookByUserIdAndTitle,
 } from "@/firebase/services/bookService";
-import { Button, Collapse, Card, Popconfirm } from "antd";
+import { Button, Collapse, Card, Popconfirm, Empty } from "antd";
 import Title from "antd/es/typography/Title";
 import {
   MoveLeft,
@@ -23,14 +23,38 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion"; // Import Framer Motion
 import { useRouter } from "next/navigation";
 import { useAppContext } from "@/context/AppContext";
-import { getCurrentTimestampInMilliseconds } from "@/app/utility";
+import {
+  generateRandomColourForString,
+  getCurrentTimestampInMilliseconds,
+} from "@/app/utility";
 import Link from "next/link";
+import { getNotesByBookId } from "@/firebase/services/notesService";
+import { getStudySessionsByBookId } from "@/firebase/services/studySessionService";
+import { loadingGif } from "@/configs/variables";
 
 const Book = () => {
   const { bookId } = useParams();
   const [book, setBook] = useState();
   const [loading, setLoading] = useState(false);
   const history = useRouter();
+
+  const [notes, setNotes] = useState([]);
+
+  const [studySessions, setStudySessions] = useState([]);
+
+  const [notesOrSessions, setNotesOrSessions] = useState("notes");
+
+  const [lastDoc, setLastDoc] = useState(null);
+  const fetchNotes = async () => {
+    const { notesData, lastVisible } = await getNotesByBookId(bookId, lastDoc);
+    setNotes((prevNotes) => [...prevNotes, ...notesData]);
+    setLastDoc(lastVisible); // Store last document for next page
+  };
+
+  const fetchStudySessions = async () => {
+    const studySessions = await getStudySessionsByBookId(bookId);
+    setStudySessions(studySessions);
+  };
 
   useEffect(() => {
     if (!bookId) return; // Prevent fetching if bookId is undefined
@@ -46,27 +70,9 @@ const Book = () => {
       }
     };
     fetchBook();
+    fetchNotes();
+    fetchStudySessions();
   }, [bookId]);
-
-  // Mock notes
-  const [notes, setNotes] = useState([
-    {
-      id: 1,
-      title: "Alchemy is about transformation",
-      content:
-        "The book emphasizes that transformation is not just about turning metal into gold but about personal growth.",
-      date: "Feb 20, 2025",
-      expanded: false,
-    },
-    {
-      id: 2,
-      title: "Follow your personal legend",
-      content:
-        "Your 'Personal Legend' is what you've always wanted to accomplish, and the universe conspires to help you achieve it.",
-      date: "Feb 18, 2025",
-      expanded: false,
-    },
-  ]);
 
   // Toggle note expansion
   const toggleExpand = (id) => {
@@ -84,6 +90,10 @@ const Book = () => {
         animate={{ opacity: 1 }} // Slide in
         exit={{ x: "100%", opacity: 0 }} // Animate out when component unmounts
         transition={{ type: "spring", stiffness: 100, damping: 15 }}
+        style={{
+          height: "100vh",
+          overflow: "auto",
+        }}
       >
         {/* Book Header */}
         <div
@@ -176,6 +186,7 @@ const Book = () => {
             >
               {book?.inProgress ? null : ( // /> //   }} //     borderRight: "1px solid " + priColor, //     paddingRight: "13px", //   style={{ //   color={"white"} //   size={27} // <Timer
                 <Popconfirm
+                  placement="topLeft"
                   title="Want to start reading this book?"
                   onConfirm={async () => {
                     await updateBookByUserIdAndTitle(
@@ -193,26 +204,21 @@ const Book = () => {
                   okText="Yes"
                   cancelText="No"
                 >
-                  <PlayCircle
-                    size={27}
-                    color={"white"}
-                    style={{
-                      paddingRight: "13px",
-                      borderRight: "1px solid " + priColor,
-                    }}
-                  />
+                  <PlayCircle size={27} color={"white"} style={{}} />
                 </Popconfirm>
               )}
-              <Link href={`/updateBook/${book?.id}`}>
-                <NotebookPen
-                  size={25}
-                  color={"white"}
-                  style={{
-                    marginLeft: "13px",
-                    marginRight: book?.inProgress ? "13px" : "0px",
-                  }}
-                />
-              </Link>
+              {book?.inProgress && (
+                <Link href={`/updateBook/${book?.id}`}>
+                  <NotebookPen
+                    size={25}
+                    color={"white"}
+                    style={{
+                      marginLeft: "13px",
+                      marginRight: book?.inProgress ? "13px" : "0px",
+                    }}
+                  />
+                </Link>
+              )}
             </span>
           </div>
         </div>
@@ -258,93 +264,246 @@ const Book = () => {
         </div>
 
         {/* Notes Section */}
-        <div style={{ padding: "15px", marginTop: "0px" }}>
-          <Title
-            level={4}
+        <div
+          style={{
+            padding: "15px",
+            marginTop: "0px",
+          }}
+        >
+          <div
+            align="center"
             style={{
-              marginBottom: "13px",
-              display: "flex",
-              padding: "10px 15px",
-              borderRadius: "7px",
-              fontWeight: "400",
-              margin: "0px 0px 8px",
-              alignItems: "center",
+              margin: "20px auto 30px auto",
             }}
           >
-            <Tag fill="silver" color="grey" size={20} />
-            &nbsp;Notes
-          </Title>
-          {notes.map((note) => (
-            <Card
-              key={note.id}
-              style={{
-                marginBottom: "14px",
-                borderRadius: "8px",
-                boxShadow: "0px 4px 8px rgba(0,0,0,0.1)",
-                transition: "transform 0.2s ease-in-out",
-                cursor: "pointer",
+            <Button
+              onClick={() => {
+                setNotesOrSessions("notes");
               }}
-              hoverable
-              bodyStyle={{ padding: "15px" }}
+              type="primary"
+              style={{
+                backgroundColor:
+                  notesOrSessions === "notes" ? priColor : "white",
+                color: notesOrSessions === "notes" ? "white" : priColor,
+                transition: "all 0.3s ease-in-out",
+                borderRadius: "999px 0px 0px 999px",
+                boxShadow: "0px 4px 10px rgba(0,0,0,0.1)",
+              }}
             >
-              <div
+              Notes
+            </Button>
+            <Button
+              onClick={() => {
+                setNotesOrSessions("sessions");
+              }}
+              type="primary"
+              style={{
+                backgroundColor:
+                  notesOrSessions === "sessions" ? priColor : "white",
+                color: notesOrSessions === "sessions" ? "white" : priColor,
+                transition: "all 0.3s ease-in-out",
+                borderRadius: "0px 999px 999px 0px",
+                boxShadow: "0px 4px 10px rgba(0,0,0,0.1)",
+              }}
+            >
+              Study Sessions
+            </Button>
+          </div>
+          {notes.length == 0 && studySessions.length == 0 ? (
+            <div align="center">
+              <br />
+              <br />
+              <Empty
+                image={Empty.PRESENTED_IMAGE_SIMPLE}
+                description={
+                  notesOrSessions === "notes"
+                    ? "No notes found"
+                    : "No study sessions found"
+                }
+              />
+            </div>
+          ) : null}
+
+          {notesOrSessions === "notes" &&
+            notes.map((note) => (
+              <Card
+                key={note.id}
                 style={{
-                  display: "flex",
-                  justifyContent: "space-between",
+                  marginBottom: "14px",
+                  borderRadius: "8px",
+                  boxShadow: "0px 4px 8px rgba(0,0,0,0.1)",
+                  transition: "transform 0.2s ease-in-out",
+                  cursor: "pointer",
                 }}
+                hoverable
+                bodyStyle={{ padding: "15px" }}
               >
-                <div>
-                  <small style={{ color: "#888" }}>{note.date}</small>
-                  <br />
-                  <b style={{ fontSize: "16px" }}>{note.title}</b>
-                  <p
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <div>
+                    <small style={{ color: "#888" }}>
+                      {new Date(note.createdAt).toDateString()}
+                    </small>
+                    <br />
+                    <span style={{ fontSize: "16px" }}>{note.title}</span>
+                    <p
+                      style={{
+                        fontSize: "14px",
+                        color: "#555",
+                        marginTop: "5px",
+                        marginBottom: "3px",
+                        display: "-webkit-box",
+                        WebkitLineClamp: note.expanded ? "unset" : 2,
+                        WebkitBoxOrient: "vertical",
+                        overflow: "hidden",
+                      }}
+                    >
+                      {note.description}
+                    </p>
+
+                    {note.description.split(" ").length > 15 &&
+                      !note.expanded && (
+                        <Button
+                          type="link"
+                          style={{
+                            padding: 0,
+                            fontSize: "14px",
+                            paddingTop: "0",
+                          }}
+                          onClick={() => toggleExpand(note.id)}
+                        >
+                          Read More
+                        </Button>
+                      )}
+                    {note.expanded && (
+                      <Button
+                        type="link"
+                        style={{
+                          padding: 0,
+                          fontSize: "14px",
+                          marginLeft: "5px",
+                        }}
+                        onClick={() => toggleExpand(note.id)}
+                      >
+                        Show Less
+                      </Button>
+                    )}
+                  </div>
+                  <div style={{ display: "flex", gap: "10px" }}>
+                    <MoreVertical size={20} style={{ cursor: "pointer" }} />
+                  </div>
+                </div>
+              </Card>
+            ))}
+          {notesOrSessions === "notes" && notes.length === 10 && (
+            <Button
+              onClick={() => {
+                fetchNotes();
+              }}
+              type={"ghost"}
+              style={{ width: "100%", marginBottom: "30px" }}
+            >
+              Load More
+            </Button>
+          )}
+
+          {notesOrSessions === "sessions"
+            ? studySessions.map((session) => (
+                <Card
+                  key={session.id}
+                  style={{
+                    marginBottom: "14px",
+                    borderRadius: "8px",
+                    boxShadow: "0px 4px 8px rgba(0,0,0,0.1)",
+                    transition: "transform 0.2s ease-in-out",
+                    cursor: "pointer",
+                  }}
+                  hoverable
+                  bodyStyle={{ padding: "15px" }}
+                >
+                  <div
                     style={{
-                      fontSize: "14px",
-                      color: "#555",
-                      marginTop: "5px",
-                      marginBottom: "3px",
-                      display: "-webkit-box",
-                      WebkitLineClamp: note.expanded ? "unset" : 2,
-                      WebkitBoxOrient: "vertical",
-                      overflow: "hidden",
+                      display: "flex",
+                      justifyContent: "space-between",
                     }}
                   >
-                    {note.content}
-                  </p>
+                    <div>
+                      <small style={{ color: "#888" }}>
+                        {new Date(session.createdAt).toDateString()}
+                      </small>
+                      <br />
+                      <span
+                        style={{
+                          fontSize: "16px",
+                        }}
+                      >
+                        {session.pagesCovered}
+                        <br />
+                        <span
+                          style={{
+                            color: secTextColor,
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "5px",
+                          }}
+                        >
+                          <Timer size={18} /> {session.duration}
+                        </span>
+                      </span>
+                      <p
+                        style={{
+                          fontSize: "14px",
+                          color: "#555",
+                          marginTop: "5px",
+                          marginBottom: "3px",
+                          display: "-webkit-box",
+                          WebkitLineClamp: session.expanded ? "unset" : 2,
+                          WebkitBoxOrient: "vertical",
+                          overflow: "hidden",
+                        }}
+                      >
+                        {session.summary}
+                      </p>
 
-                  {note.content.split(" ").length > 15 && !note.expanded && (
-                    <Button
-                      type="link"
-                      style={{ padding: 0, fontSize: "14px", paddingTop: "0" }}
-                      onClick={() => toggleExpand(note.id)}
-                    >
-                      Read More
-                    </Button>
-                  )}
-                  {note.expanded && (
-                    <Button
-                      type="link"
-                      style={{
-                        padding: 0,
-                        fontSize: "14px",
-                        marginLeft: "5px",
-                      }}
-                      onClick={() => toggleExpand(note.id)}
-                    >
-                      Show Less
-                    </Button>
-                  )}
-                </div>
-                <div style={{ display: "flex", gap: "10px" }}>
-                  <Edit
-                    size={20}
-                    color={secColor}
-                    style={{ cursor: "pointer" }}
-                  />
-                </div>
-              </div>
-            </Card>
-          ))}
+                      {session.summary.split(" ").length > 15 &&
+                        !session.expanded && (
+                          <Button
+                            type="link"
+                            style={{
+                              padding: 0,
+                              fontSize: "14px",
+                              paddingTop: "0",
+                            }}
+                            onClick={() => toggleExpand(session.id)}
+                          >
+                            Read More
+                          </Button>
+                        )}
+                      {session.expanded && (
+                        <Button
+                          type="link"
+                          style={{
+                            padding: 0,
+                            fontSize: "14px",
+                            marginLeft: "5px",
+                          }}
+                          onClick={() => toggleExpand(session.id)}
+                        >
+                          Show Less
+                        </Button>
+                      )}
+                    </div>
+                    <div style={{ display: "flex", gap: "10px" }}>
+                      <MoreVertical size={20} style={{ cursor: "pointer" }} />
+                    </div>
+                  </div>
+                </Card>
+              ))
+            : null}
         </div>
       </motion.div>
     )

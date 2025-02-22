@@ -40,13 +40,11 @@ import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion"; // Import Framer Motion
 import { useRouter } from "next/navigation";
-import {
-  generateRandomColourForString,
-  getCurrentTimestampInMilliseconds,
-} from "@/app/utility";
+import { generateRandomColourForString } from "@/app/utility";
 import PagePicker from "@/components/PagePicker";
 import { createNote } from "@/firebase/services/notesService";
 import { createStudySession } from "@/firebase/services/studySessionService";
+import FinalReviewModal from "@/components/FinalReviewModal";
 
 const { TextArea } = Input;
 
@@ -57,26 +55,37 @@ const Book = () => {
   const [savingData, setSavingData] = useState(false);
   const history = useRouter();
 
+  const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
+  const [messageApi, contextHolder] = message.useMessage();
+
   const menu = (
     <Menu>
       <Menu.Item key="1">
         <div
           onClick={async () => {
-            await updateBookById(
-              {
-                pagesRead:
-                  book.pagesRead === book.totalPages ? 0 : book.totalPages,
-                inProgress: false,
-              },
-              book.id
-            );
-            setBook({
-              ...book,
-              pagesRead:
-                book.pagesRead === book.totalPages ? 0 : book.totalPages,
-              inProgress: false,
-            });
-            messageApi.success("Wow! You've read it all.");
+            if (book?.completedReading) {
+              await updateBookById(
+                {
+                  completedReading: false,
+                  completedReadingOn: "",
+                  pagesRead: 0,
+                  inProgress: true,
+                },
+                bookId
+              );
+
+              setBook({
+                ...book,
+                completedReading: false,
+                completedReadingOn: "",
+                pagesRead: 0,
+                inProgress: true,
+              });
+
+              messageApi.success("Book reopened!");
+            } else {
+              setIsReviewModalOpen(true);
+            }
           }}
           style={{
             display: "flex",
@@ -84,15 +93,11 @@ const Book = () => {
           }}
         >
           <BookCheck
-            color={
-              book?.pagesRead === book?.totalPages ? "green" : priTextColor
-            }
+            color={book?.completedReading ? "green" : priTextColor}
             size={16}
           />{" "}
           &nbsp;
-          {book?.pagesRead === book?.totalPages
-            ? "Reopen"
-            : "Mark as completed"}
+          {book?.completedReading ? "Reopen" : "Mark as completed"}
         </div>
       </Menu.Item>
       {/* {book?.pagesRead !== book?.totalPages && (
@@ -118,8 +123,6 @@ const Book = () => {
     duration: "",
   });
 
-  const [messageApi, contextHolder] = message.useMessage();
-
   const priColor = generateRandomColourForString(book?.title);
 
   useEffect(() => {
@@ -142,7 +145,7 @@ const Book = () => {
     setSavingData(true);
     await createNote(bookId, note);
     setNote({ title: "", description: "", tags: [] });
-    messageApi.info("Note added successfully!");
+    messageApi.success("Note added successfully!");
     setSavingData(false);
   };
 
@@ -150,7 +153,7 @@ const Book = () => {
     setSavingData(true);
     await createStudySession(bookId, session);
     setSession({ pagesCovered: "", summary: "", duration: "" });
-    messageApi.info("Study session logged!");
+    messageApi.success("Study session logged!");
     setSavingData(false);
   };
 
@@ -242,7 +245,7 @@ const Book = () => {
             </span>
 
             {/* Floating Button */}
-            {book?.pagesRead !== book?.totalPages && (
+            {!book?.completedReading && (
               <span
                 style={{
                   position: "absolute",
@@ -258,18 +261,16 @@ const Book = () => {
                     await updateBookById(
                       {
                         pagesRead: pageNumber,
-                        inProgress: pageNumber !== book.totalPages,
                       },
                       book.id
                     );
                     setBook({
                       ...book,
                       pagesRead: pageNumber,
-                      inProgress: pageNumber !== book?.totalPages,
                     });
-                    if (pageNumber == book.totalPages) {
-                      messageApi.success("Wow! You've read it all.");
-                    }
+                    messageApi.success(
+                      `Yay! On page ${pageNumber}. Good Job!!`
+                    );
                   }}
                 />
               </span>
@@ -294,46 +295,41 @@ const Book = () => {
                 alignItems: "center",
                 justifyContent: "center",
                 backgroundColor: "grey",
-                padding: `${
-                  book?.pagesRead === book?.totalPages ? "11" : "6"
-                }px 23px 11px 23px`,
+                padding: `6px 23px 11px 23px`,
                 bottom: "-21px",
+                display: book?.inProgress ? "block" : "none",
                 right: "16%",
                 borderRadius: "999px",
                 transition: "all 0.3s ease-in-out",
               }}
             >
-              {book?.pagesRead === book?.totalPages ? (
-                <span>Read Again</span>
-              ) : (
-                <span>
-                  p.
-                  <span
-                    style={{
-                      fontSize: "27px",
-                      marginLeft: "5px",
-                      fontWeight: "bold",
-                      background: `linear-gradient(90deg, ${priColor}, white, ${priColor})`,
-                      backgroundSize: "200% 200%",
-                      WebkitBackgroundClip: "text",
-                      color: "transparent",
-                      animation: "shine 1s infinite linear",
-                    }}
-                  >
-                    {book?.pagesRead}
-                  </span>
-                  <style>
-                    {`
+              <span>
+                p.
+                <span
+                  style={{
+                    fontSize: "27px",
+                    marginLeft: "5px",
+                    fontWeight: "bold",
+                    background: `linear-gradient(90deg, ${priColor}, white, ${priColor})`,
+                    backgroundSize: "200% 200%",
+                    WebkitBackgroundClip: "text",
+                    color: "transparent",
+                    animation: "shine 1s infinite linear",
+                  }}
+                >
+                  {book?.pagesRead}
+                </span>
+                <style>
+                  {`
   @keyframes shine {
     0% { background-position: 0% 50%; }
     50% { background-position: 100% 50%; }
     100% { background-position: 50% 50%; }
   }
 `}
-                  </style>{" "}
-                  <sub>/ {book?.totalPages}</sub>
-                </span>
-              )}
+                </style>{" "}
+                <sub>/ {book?.totalPages}</sub>
+              </span>
             </span>
           </div>
         </div>
@@ -512,10 +508,10 @@ const Book = () => {
                     color: secTextColor,
                   }}
                 >
-                  Pages covered
+                  Coverage
                 </span>
                 <Input
-                  placeholder="e.g. 23 to 74"
+                  placeholder="type e.g. Page 23 to 74 or Chapter 3"
                   value={session.pagesCovered}
                   onChange={(e) =>
                     setSession({ ...session, pagesCovered: e.target.value })
@@ -616,6 +612,14 @@ const Book = () => {
               </div>
             )}
           </Card>
+
+          <FinalReviewModal
+            isReviewModalOpen={isReviewModalOpen}
+            setIsReviewModalOpen={setIsReviewModalOpen}
+            bookId={bookId}
+            book={book}
+            setBook={setBook}
+          />
         </div>
       </motion.div>
     )

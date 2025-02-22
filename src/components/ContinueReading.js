@@ -5,6 +5,7 @@ import {
   secColor,
   secTextColor,
 } from "@/configs/cssValues";
+import { loadingGif } from "@/configs/variables";
 import { useAppContext } from "@/context/AppContext";
 import { Progress, Typography } from "antd";
 import {
@@ -70,9 +71,7 @@ const ContinueReadingCard = ({ book }) => {
         }}
       >
         <img
-          src={
-            "https://media4.giphy.com/media/sAEbELl0mw5jO/giphy.webp?cid=ecf05e47bswal530vglqxeorok1dn92e2iqjzbodm1ccymxv&ep=v1_gifs_search&rid=giphy.webp&ct=g"
-          }
+          src={loadingGif}
           style={{
             width: "110px",
           }}

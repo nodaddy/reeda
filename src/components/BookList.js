@@ -310,7 +310,9 @@ const BookList = () => {
               <LibraryBig />
               &nbsp;My Bookshelf &nbsp;&nbsp;{" "}
               {books && books.length > 0 && (
-                <Expand size={18} color={priColor} />
+                <Link href={"/bookshelf"}>
+                  <Expand size={18} color={priColor} />
+                </Link>
               )}
             </span>
 
@@ -478,7 +480,7 @@ const BookList = () => {
                           onCancel={() => setOpenPopOver(null)}
                           placement="topLeft"
                           title={
-                            item.pagesRead === item.totalPages
+                            item.completedReading
                               ? "Re-read this book?"
                               : "Mark this book as completed?"
                           }
@@ -506,7 +508,7 @@ const BookList = () => {
                                 });
                               setFilteredBooks(filtered);
                               setOpenPopOver(null);
-                            } else if (book1?.pagesRead == item.totalPages) {
+                            } else if (item.completedReading) {
                               await updateBookByUserIdAndTitle(
                                 { ...book1, pagesRead: 0 },
                                 book1.title
@@ -539,15 +541,12 @@ const BookList = () => {
                             <CheckCircle2
                               size={20}
                               style={{
-                                color:
-                                  item.pagesRead === item.totalPages
-                                    ? "#0a0"
-                                    : "#666",
+                                color: item.completedReading ? "#0a0" : "#666",
                                 cursor: "pointer",
                                 marginRight: "-2px",
                               }}
                             />
-                            {item.pagesRead === item.totalPages
+                            {item.completedReading
                               ? "Re-read"
                               : "Mark Completed"}
                           </span>
