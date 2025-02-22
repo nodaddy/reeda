@@ -204,11 +204,11 @@ const StreakCard = ({ streak, isActive, isPremium = true }) => {
         bodyStyle={{
           // padding: "18px 24px 20px 28px",
           // margin: "10px",
-          padding: "18px 24px 200px 24px",
+          padding: "18px 24px 190px 24px",
           backgroundColor: priColor,
           width: "100vw",
           position: "absolute",
-          borderRadius: "0px 0px 250px 0px",
+          borderRadius: "0px 0px 177px 87px",
           // borderRadius: "10px",
           //  background: isPremium ? 'linear-gradient(135deg, #B08D01, goldenrod, gold,  whitesmoke)' : "linear-gradient(155deg,  silver,  whitesmoke)", // Gold, platinum, and light metallic gradient
         }}
