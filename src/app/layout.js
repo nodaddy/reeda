@@ -10,15 +10,18 @@ const font = Merriweather({
 });
 
 export default function RootLayout({ children }) {
-  document.addEventListener(
-    "touchstart",
-    (e) => {
-      if (e.touches.length > 1) {
-        e.preventDefault();
-      }
-    },
-    { passive: false }
-  );
+  // check if document is not undefined
+  if (typeof document !== "undefined") {
+    document.addEventListener(
+      "touchstart",
+      (e) => {
+        if (e.touches.length > 1) {
+          e.preventDefault();
+        }
+      },
+      { passive: false }
+    );
+  }
   return (
     <AppProvider>
       <ClientLayout font={font}>{children}</ClientLayout>
