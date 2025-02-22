@@ -142,7 +142,7 @@ const Home = () => {
               image={Empty.PRESENTED_IMAGE_SIMPLE}
               description={
                 <div style={{ color: "white", marginTop: "14px" }}>
-                  No active books
+                  No open books
                 </div>
               }
             />

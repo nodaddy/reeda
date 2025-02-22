@@ -296,6 +296,7 @@ const StreakCard = ({ streak, isActive, isPremium = true }) => {
             onClick={() => setMenuOpen(!menuOpen)}
             style={{
               marginRight: "-3px",
+              zIndex: "9999999",
             }}
           />
 
