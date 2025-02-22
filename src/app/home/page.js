@@ -124,13 +124,27 @@ const Home = () => {
         }
 
         {books?.filter((book) => book.inProgress).length == 0 && (
-          <div>
+          <div
+            style={{
+              position: "absolute",
+              width: "100%",
+              top: "20px",
+              left: "0px",
+            }}
+          >
             <br />
             <br />
             <br />
             <Empty
+              style={{
+                color: "white",
+              }}
               image={Empty.PRESENTED_IMAGE_SIMPLE}
-              description="No book in progress"
+              description={
+                <div style={{ color: "white", marginTop: "14px" }}>
+                  No active books
+                </div>
+              }
             />
           </div>
         )}
@@ -151,7 +165,15 @@ const Home = () => {
             ))}
         </div>
 
-        <div style={{ padding: "0px 25px" }}>
+        <div
+          style={{
+            padding: "0px 25px",
+            marginTop:
+              books?.filter((book) => book.inProgress).length == 0
+                ? "231px"
+                : "0px",
+          }}
+        >
           <BookList />
           <br />
 
