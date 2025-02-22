@@ -277,7 +277,7 @@ const StreakCard = ({ streak, isActive, isPremium = true }) => {
                           .join(" ")
                           .split(" ")[0]
                       } */}
-                      <BookMarked size={18} /> Reeda
+                      Reeda
                     </div>
                     {/* <sup style={{ color: "white" }}>
                       Let's sync your reading progress.

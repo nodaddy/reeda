@@ -1,10 +1,24 @@
-'use client'
+"use client";
 
 import { useState } from "react";
-import { Home, Camera, BookOpen, Library, WholeWord, Search, ChartBarBig, Scan, Users2, UsersIcon, FileQuestion, Info } from "lucide-react";
+import {
+  Home,
+  Camera,
+  BookOpen,
+  Library,
+  WholeWord,
+  Search,
+  ChartBarBig,
+  Scan,
+  Users2,
+  UsersIcon,
+  FileQuestion,
+  Info,
+  PlaySquare,
+} from "lucide-react";
 import styles from "./Menu.module.css"; // Import CSS for styling
 import Link from "next/link";
-import { Badge, Popover } from "antd";
+import { Badge, Button, Popover } from "antd";
 import { priColor, secColor } from "@/configs/cssValues";
 import { bookTitleForAdHocAISession } from "@/configs/variables";
 
@@ -37,30 +51,32 @@ export default function BottomNav() {
             fontFamily: "'Inter', sans-serif",
           }}
         >
-          Start an AI Session &nbsp;
+          Start an AI Scans Session &nbsp;
           <Popover
-           placement="top"
-            overlayStyle={{width: '57%'}}
+            placement="top"
+            overlayStyle={{ width: "57%" }}
             content={
-              <div style={{padding: '5px'}}>
-                 - Scan pages <br/>
-                 - Get summary (AI) <br/> 
-                 - In-page dictionary (AI)<br/>
+              <div style={{ padding: "5px" }}>
+                - Scan pages <br />
+                - Get summary (AI) <br />
+                - In-page dictionary (AI)
+                <br />
               </div>
-          }>
+            }
+          >
             <Info size={18} />
           </Popover>
         </span>
 
-        <Link 
-          href={`scan/${bookTitleForAdHocAISession}`}
-          className={`${styles.menuItem} ${active === "dictionary" ? styles.active : ""}`}
-          onClick={() => handleMenuClick("dictionary")}
-        >
-          <Scan size={24} className={styles.icon} />
-          <Badge className={styles.menuItem} count={"AI"} color={secColor} size="small" offset={[-25, 0]}>
-            <span>Start</span>
-          </Badge>
+        <Link href={`scan/${bookTitleForAdHocAISession}`}>
+          <Button
+            type="primary"
+            style={{
+              borderRadius: "999px",
+            }}
+          >
+            Start
+          </Button>
         </Link>
 
         {/* <Link 
