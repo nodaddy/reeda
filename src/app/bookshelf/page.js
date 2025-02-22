@@ -39,7 +39,7 @@ const Bookshelf = () => {
           position: "absolute",
           width: "100vw",
           top: "0px",
-          height: "300px",
+          height: "297px",
           left: "0px",
           borderRadius: "0px 0px 0px 90px",
           backgroundColor: priColor,
