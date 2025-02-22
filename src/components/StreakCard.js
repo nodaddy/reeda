@@ -101,8 +101,8 @@ const StreakCard = ({ streak, isActive, isPremium = true }) => {
           style={{
             cursor: "pointer",
             position: "absolute",
-            right: "20px",
-            top: "20px",
+            right: "14px",
+            top: "17px",
           }}
           onClick={() => setMenuOpen(false)}
         />
@@ -206,6 +206,8 @@ const StreakCard = ({ streak, isActive, isPremium = true }) => {
           // margin: "10px",
           padding: "18px 24px 190px 24px",
           backgroundColor: priColor,
+          background:
+            "linear-gradient(135deg,rgb(0, 80, 200) 0%, rgb(0, 112, 243) 40%, rgb(50, 140, 255) 70%, rgb(100, 170, 255) 100%)",
           width: "100vw",
           position: "absolute",
           borderRadius: "0px 0px 177px 87px",

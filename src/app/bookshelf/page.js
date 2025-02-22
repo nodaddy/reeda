@@ -146,7 +146,7 @@ const Bookshelf = () => {
                   {item.inProgress && (
                     <Bookmark
                       size={25}
-                      color={"orange"}
+                      color={"white"}
                       fill={"orange"}
                       style={{
                         position: "absolute",
