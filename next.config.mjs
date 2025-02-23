@@ -1,13 +1,16 @@
-import withPWA from 'next-pwa';
+import withPWA from "next-pwa";
 
 const nextConfig = {
   reactStrictMode: false,
+  images: {
+    domains: ["books.google.com"], // Add Google's book image domain
+  },
   // compiler: {
   //   removeConsole: true, // Removes all console logs in production
   // },
   experimental: {
     outputFileTracingIncludes: {
-      '/api/**/*': ['./node_modules/**/*.wasm', './node_modules/**/*.proto'],
+      "/api/**/*": ["./node_modules/**/*.wasm", "./node_modules/**/*.proto"],
     },
   },
   webpack(config, { isServer }) {
@@ -17,7 +20,7 @@ const nextConfig = {
 };
 
 export default withPWA({
-  dest: 'public', // Store service worker and manifest in the public folder
+  dest: "public", // Store service worker and manifest in the public folder
   register: true, // Auto-register service worker
   skipWaiting: true, // Activate new service worker immediately
 })(nextConfig);

@@ -16,6 +16,7 @@ export const AppProvider = ({ children }) => {
   const [isPremium, setIsPremium] = useState(true);
   const [summaryOrFullText, setSummaryOrFullText] = useState("summary");
   const [isAddBookModalVisible, setIsAddBookModalVisible] = useState(false);
+  const [wishlistBooks, setWishlistBooks] = useState([]);
 
   const [showingSummaryOrFullText, setShowingSummaryOrFullText] =
     useState(null);
@@ -59,6 +60,8 @@ export const AppProvider = ({ children }) => {
         setSlideInContent,
         isAddBookModalVisible,
         setIsAddBookModalVisible,
+        wishlistBooks,
+        setWishlistBooks,
       }}
     >
       {children}

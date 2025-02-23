@@ -20,6 +20,7 @@ import { priColor, secTextColor } from "@/configs/cssValues";
 import { BookOpen, Info, Sparkle, Sparkles, Wand, Wand2 } from "lucide-react";
 import { Empty, FloatButton, Popconfirm } from "antd";
 import Link from "next/link";
+import FloatingWords from "@/components/FloatingWords";
 
 const Home = () => {
   const [loading, setLoading] = useState(true);
@@ -173,7 +174,7 @@ const Home = () => {
 
         <div
           style={{
-            padding: "0px 25px",
+            padding: "0px 0px 0px 24px",
             marginTop:
               books?.filter((book) => book.inProgress).length == 0
                 ? "231px"
@@ -182,6 +183,8 @@ const Home = () => {
         >
           <BookList />
           <br />
+
+          <FloatingWords />
 
           {/* {books && books.length > 0 && <NextBooksToRead />} */}
           {/* <BottomNav /> */}

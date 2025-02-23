@@ -82,6 +82,7 @@ const BookList = () => {
 
   const [searchQueryGoogleBooks, setSearchQueryGoogleBooks] = useState("");
   const [searchResultsGoogleBooks, setSearchResultsGoogleBooks] = useState([]);
+
   const [loadingGoogleBooks, setLoadingGoogleBooks] = useState(false);
 
   const handleSearchGoogleBooks = async (value) => {
@@ -99,6 +100,8 @@ const BookList = () => {
     }
     setLoadingGoogleBooks(false);
   };
+
+  const [messageApi, contextHolder] = message.useMessage();
 
   const [processingImageUplaod, setProcessingImageUplaod] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -190,7 +193,7 @@ const BookList = () => {
     getBooks()
       .then((res) => {
         setBooks(res);
-        setFilteredBooks(res);
+        setFilteredBooks(res.filter((book) => !book.inWishlist));
         setLoading(false);
       })
       .catch(console.log);
@@ -204,61 +207,89 @@ const BookList = () => {
     } else {
       const filtered = filteredBooks.filter(
         (book) =>
-          book.title.toLowerCase().includes(query) ||
-          book.author.toLowerCase().includes(query)
+          (book.title.toLowerCase().includes(query) ||
+            book.author.toLowerCase().includes(query)) &&
+          !book.inWishlist
       );
       setFilteredBooks(filtered);
     }
   };
 
-  const handleAddBook = (values) => {
+  const handleAddBook = (newBook) => {
     if (books?.length == freeBooks && !isPremium) {
       // route to premium page
       router.push("/premium");
     } else {
-      setUploadingBook(true);
-      const newBook = {
-        title: values.title,
-        totalPages: values.totalPages,
-        author: values.author ? values.author : "",
-        cover: values.cover,
-      };
-      createbook(newBook).then(() =>
-        getBooks().then(async (res) => {
-          const profile = await getProfile(
-            JSON.parse(storage.getItem("user")).email
+      if (
+        filteredBooks.find(
+          (book) => book.title + book.author === newBook.title + book.author
+        )
+      ) {
+        messageApi.error("Book exists in bookshelf");
+      } else if (
+        books.find(
+          (book) => book.title + book.author === newBook.title + book.author
+        )
+      ) {
+        messageApi.error("Book exists in wishlist");
+      } else {
+        if (newBook.inWishlist) {
+          createbook(newBook).then(() =>
+            getBooks().then(async (res) => {
+              const profile = await getProfile(
+                JSON.parse(storage.getItem("user")).email
+              );
+
+              // add coins to the profile
+              await updateProfile(profile.userId, {
+                ...profile,
+                coins: (profile?.coins || 0) + addCoinsPerNewBookAdded,
+              });
+
+              setBooks(res);
+              setFilteredBooks(res.filter((book) => !book.inWishlist));
+              messageApi.info("Book added to wishlist!");
+            })
           );
+        } else {
+          createbook(newBook).then(() =>
+            getBooks().then(async (res) => {
+              const profile = await getProfile(
+                JSON.parse(storage.getItem("user")).email
+              );
 
-          // add coins to the profile
-          await updateProfile(profile.userId, {
-            ...profile,
-            coins: (profile?.coins || 0) + addCoinsPerNewBookAdded,
-          });
+              // add coins to the profile
+              await updateProfile(profile.userId, {
+                ...profile,
+                coins: (profile?.coins || 0) + addCoinsPerNewBookAdded,
+              });
 
-          setBooks(res);
-          setFilteredBooks(res);
-          setUploadingBook(false);
-          setIsAddBookModalVisible(false);
-          form.resetFields();
-          setImageBase64(null);
-          setSearchQueryGoogleBooks(null);
-          setSearchResultsGoogleBooks([]);
-          message.success("Book added successfully!");
-        })
-      );
+              setBooks(res);
+              setFilteredBooks(res.filter((book) => !book.inWishlist));
+              setUploadingBook(false);
+              setIsAddBookModalVisible(false);
+              form.resetFields();
+              setImageBase64(null);
+              setSearchQueryGoogleBooks(null);
+              setSearchResultsGoogleBooks([]);
+              messageApi.success("Book added to bookshelf");
+            })
+          );
+        }
+      }
     }
   };
 
   const handleDeleteBook = (bookId) => {
     deleteBook(bookId)
       .then(() => {
-        message.success("Book deleted successfully!");
+        messageApi.success("Book deleted successfully!");
         getBooks().then((res) => {
           setBooks(res);
-          setFilteredBooks(res);
+          setFilteredBooks(res.filter((book) => !book.inWishlist));
         });
       })
-      .catch(() => message.error("Failed to delete the book."));
+      .catch(() => messageApi.error("Failed to delete the book."));
   };
 
   return (
@@ -272,6 +303,7 @@ const BookList = () => {
           // background: 'linear-gradient(to bottom, #fafafa, #fafafa, #fafafa, #fafafa, #fafafa, white)'
         }}
       >
+        {contextHolder}
         <div
           style={{
             position: "sticky",
@@ -289,7 +321,7 @@ const BookList = () => {
               // background: 'rgba(74, 74, 255, 0.1)',
               justifyContent: "space-between",
               gap: "15px",
-              padding: "10px 0px 5px 0px",
+              padding: "0px 0px 5px 0px",
             }}
           >
             <div>
@@ -300,7 +332,6 @@ const BookList = () => {
                   fontWeight: "400",
                   margin: "0px",
                   fontSize: "20px",
-                  padding: "5px 0px",
                   display: "flex",
                   alignItems: "center",
                   color: secTextColor,
@@ -385,7 +416,7 @@ const BookList = () => {
           </div>
           {filteredBooks &&
             !loading &&
-            filteredBooks.filter((b) => !b.wishlist).length == 0 && (
+            filteredBooks.filter((b) => !b.inWishlist).length == 0 && (
               <>
                 <div
                   style={{
@@ -442,6 +473,7 @@ const BookList = () => {
             )}
           {filteredBooks
             ?.sort((a, b) => a.title.localeCompare(b.title))
+            .filter((b) => !b.inWishlist)
             .map((item) => (
               <div
                 style={{
@@ -520,10 +552,10 @@ const BookList = () => {
                                     { ...book1, pagesRead: item.totalPages },
                                     book1.title
                                   );
-                                  // message.success('Book marked as completed!');
+                                  // messageApi.success('Book marked as completed!');
                                   // update in filtered books
                                   const filtered = filteredBooks
-                                    .filter((book) => !book.wishlist)
+                                    .filter((book) => !book.inWishlist)
                                     .map((book) => {
                                       if (book.title === item.title) {
                                         return {
@@ -540,10 +572,10 @@ const BookList = () => {
                                     { ...book1, pagesRead: 0 },
                                     book1.title
                                   );
-                                  // message.success('Book marked as completed!');
+                                  // messageApi.success('Book marked as completed!');
                                   // update in filtered books
                                   const filtered = filteredBooks
-                                    .filter((book) => !book.wishlist)
+                                    .filter((book) => !book.inWishlist)
                                     .map((book) => {
                                       if (book.title === item.title) {
                                         return { ...book, pagesRead: 0 };
@@ -795,45 +827,122 @@ const BookList = () => {
                     }}
                   >
                     <List.Item.Meta
-                      avatar={
-                        <Avatar
-                          onClick={() => {
-                            handleAddBook({
-                              title: item.volumeInfo.title,
-                              author: item.volumeInfo.authors?.join(", "),
-                              totalPages: item.volumeInfo.pageCount || 243,
-                              cover:
-                                item.volumeInfo.imageLinks?.thumbnail || "",
-                              description: item.volumeInfo.description || "",
-                            });
-                          }}
-                          shape="square"
-                          src={item.volumeInfo.imageLinks?.thumbnail}
-                        />
-                      }
+                      // avatar={
+                      //   <Avatar
+                      //     onClick={() => {
+                      //       handleAddBook({
+                      //         title: item.volumeInfo.title,
+                      //         author: item.volumeInfo.authors?.join(", "),
+                      //         totalPages: item.volumeInfo.pageCount || 243,
+                      //         cover:
+                      //           item.volumeInfo.imageLinks?.thumbnail || "",
+                      //         description: item.volumeInfo.description || "",
+                      //       });
+                      //     }}
+                      //     shape="square"
+                      //     src={item.volumeInfo.imageLinks?.thumbnail}
+                      //   />
+                      // }
                       description={
                         <div
-                          onClick={() => {
-                            handleAddBook({
-                              title: item.volumeInfo.title,
-                              author: item.volumeInfo.authors?.join(", "),
-                              totalPages: item.volumeInfo.pageCount || 243,
-                              cover: item.volumeInfo.imageLinks?.thumbnail,
-                            });
-                          }}
                           style={{
                             lineHeight: "normal",
+                            display: "flex",
+                            flexDirection: "column",
+                            alignItems: "flex-start",
+                            padding: "10px",
+                            borderRadius: "8px",
+                            cursor: "pointer",
+                            transition: "all 0.3s ease",
                           }}
                         >
+                          {/* Book Header */}
                           <div
                             style={{
-                              textDecoration: "none",
-                              color: priTextColor,
+                              display: "flex",
+                              alignItems: "flex-start",
                             }}
                           >
-                            {item.volumeInfo.title}
+                            <img
+                              src={item.volumeInfo.imageLinks?.thumbnail}
+                              alt={item.volumeInfo.title}
+                              style={{
+                                width: "50px",
+                                height: "75px",
+                                objectFit: "cover",
+                                marginRight: "10px",
+                                transition: "transform 0.3s ease",
+                                border: "1px solid silver",
+                                borderRadius: "4px",
+                              }}
+                            />
+                            <div
+                              style={{
+                                textDecoration: "none",
+                                color: priTextColor,
+                                fontSize: "14px",
+                                width: "100%",
+                              }}
+                            >
+                              <strong>{item.volumeInfo.title}</strong>
+                              <br />
+                              <sup>
+                                by{" "}
+                                {item.volumeInfo.authors
+                                  ?.join(", ")
+                                  .substring(0, 30)}
+                              </sup>
+                              <br />
+                              <br />
+                              <Button
+                                size="small"
+                                type="primary"
+                                style={{
+                                  gap: "3px",
+                                  borderRadius: "999px",
+                                  padding: "6px 3px",
+                                  boxShadow: "0px 4px 10px rgba(0, 0, 0, 0)",
+                                  color: priColor,
+                                  backgroundColor: "transparent",
+                                }}
+                                onClick={() => {
+                                  handleAddBook({
+                                    title: item.volumeInfo.title,
+                                    author:
+                                      item.volumeInfo.authors?.join(", ") || "",
+                                    totalPages:
+                                      item.volumeInfo.pageCount || 243,
+                                    cover:
+                                      item.volumeInfo.imageLinks?.thumbnail ||
+                                      "",
+                                  });
+                                }}
+                              >
+                                <Plus size={14} /> Bookshelf
+                              </Button>{" "}
+                              &nbsp; &nbsp;
+                              <Button
+                                size="small"
+                                type="ghost"
+                                style={{ gap: "3px" }}
+                                onClick={() => {
+                                  handleAddBook({
+                                    title: item.volumeInfo.title,
+                                    author:
+                                      item.volumeInfo.authors?.join(", ") || "",
+                                    totalPages:
+                                      item.volumeInfo.pageCount || 243,
+                                    cover:
+                                      item.volumeInfo.imageLinks?.thumbnail ||
+                                      "",
+                                    inWishlist: true,
+                                  });
+                                }}
+                              >
+                                <Plus size={14} /> Wishlist
+                              </Button>
+                            </div>
                           </div>
-                          <sup>by {item.volumeInfo.authors?.join(", ")}</sup>
                         </div>
                       }
                     />

@@ -38,6 +38,15 @@ export const storage = {
   },
 };
 
+export const shuffleArray = (array) => {
+  let shuffled = [...array]; // Copy to avoid modifying original array
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
+};
+
 // method to generate a colour for a string
 export const generateRandomColourForString = (title) => {
   if (!title) return "#444477"; // Default elegant shade
