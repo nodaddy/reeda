@@ -87,7 +87,7 @@ const ProfilePage = () => {
           style={{
             color: "white",
             fontFamily: "'Inter', sans-serif",
-            fontWeight: "500",
+            fontWeight: "400",
           }}
         >
           Profile
@@ -120,8 +120,8 @@ const ProfilePage = () => {
                 <div>
                   <h2
                     style={{
-                      fontSize: "24px",
-                      fontWeight: "500",
+                      fontSize: "22px",
+                      fontWeight: "400",
                       marginBottom: "4px",
                       color: "#1a1a1a",
                     }}
