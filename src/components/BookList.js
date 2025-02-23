@@ -85,15 +85,10 @@ const BookList = () => {
 
   const [loadingGoogleBooks, setLoadingGoogleBooks] = useState(false);
 
-  const handleSearchGoogleBooks = async (value) => {
-    setSearchQueryGoogleBooks(value);
-    if (!value) {
-      setSearchResultsGoogleBooks([]);
-      return;
-    }
+  const handleSearchGoogleBooks = async () => {
     setLoadingGoogleBooks(true);
     try {
-      const results = await searchByTitle(value);
+      const results = await searchByTitle(searchQueryGoogleBooks);
       setSearchResultsGoogleBooks(results.items);
     } catch (error) {
       console.error("Error fetching books:", error);
@@ -764,10 +759,22 @@ const BookList = () => {
               type="search"
               value={searchQueryGoogleBooks}
               onChange={(e) => setSearchQueryGoogleBooks(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  handleSearchGoogleBooks(); // Call your search function
+                }
+              }}
               style={{ width: "-webkit-fill-available" }}
             />
             {loadingGoogleBooks ? (
-              <Loader className="loader" />
+              <Loader
+                style={{
+                  padding: "10px 13px",
+                  borderRadius: "999px",
+                  marginLeft: "15px",
+                }}
+                className="loader"
+              />
             ) : (
               <SearchIcon
                 size={23}
@@ -776,7 +783,7 @@ const BookList = () => {
                   borderRadius: "999px",
                   marginLeft: "15px",
                 }}
-                onClick={() => handleSearchGoogleBooks(searchQueryGoogleBooks)}
+                onClick={() => handleSearchGoogleBooks()}
                 loading={loadingGoogleBooks}
               />
             )}
@@ -807,14 +814,7 @@ const BookList = () => {
                 locale={{
                   emptyText: (
                     <div style={{ textAlign: "center" }}>
-                      <img
-                        src={
-                          "https://media0.giphy.com/media/TdiKel6pexKml8vLIJ/giphy.webp?cid=ecf05e47uom5m5c8qqf5ojb1ntbzund8uadlqttg2ortfblj&ep=v1_gifs_search&rid=giphy.webp&ct=g"
-                        }
-                        alt="No results found"
-                        style={{ width: "140px", margin: "20px 0px" }}
-                      />
-                      <p>No results found</p>
+                      <p> Add to your digital bookshelf </p>
                     </div>
                   ),
                 }}
