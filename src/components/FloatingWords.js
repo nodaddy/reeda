@@ -14,7 +14,7 @@ const FloatingWords = () => {
   const [wordList, setWordList] = useState([]);
   const [availableHeight, setAvailableHeight] = useState(0);
   const containerRef = useRef(null);
-  const { books } = useAppContext();
+  const { books, profile } = useAppContext();
 
   useEffect(() => {
     const updateHeight = () => {
@@ -29,10 +29,11 @@ const FloatingWords = () => {
     return () => window.removeEventListener("resize", updateHeight);
   }, [books]);
 
+  const [baseWords, setBaseWords] = useState(profile.readingInterests);
+
   useEffect(() => {
     if (availableHeight === 0) return;
 
-    const baseWords = ["Innovation", "Technology", "Design", "React"];
     const screenWidth =
       typeof window !== "undefined" ? window.innerWidth : 1200;
 

@@ -13,7 +13,7 @@ export const AppProvider = ({ children }) => {
   const [profile, setProfile] = useState(null);
   const [books, setBooks] = useState(null);
   const [nightModeOn, setNightModeOn] = useState(false);
-  const [isPremium, setIsPremium] = useState(true);
+  const [isPremium, setIsPremium] = useState(false);
   const [summaryOrFullText, setSummaryOrFullText] = useState("summary");
   const [isAddBookModalVisible, setIsAddBookModalVisible] = useState(false);
   const [wishlistBooks, setWishlistBooks] = useState([]);

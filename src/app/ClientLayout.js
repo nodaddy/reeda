@@ -4,10 +4,11 @@ import { useAppContext } from "@/context/AppContext";
 import { Navbar } from "@/components/Navbar";
 import { useEffect, useState } from "react";
 import SlideIn from "@/components/SlideIn";
+import ReadingInterests from "@/components/ReadingInterests";
 
 export default function ClientLayout({ children, font }) {
   const [inClient, setInClient] = useState(false);
-  const { nightModeOn } = useAppContext();
+  const { profile } = useAppContext();
 
   useEffect(() => {
     setInClient(true);
@@ -27,7 +28,12 @@ export default function ClientLayout({ children, font }) {
       </head>
       <body style={{ overflowY: "scroll" }} className={`${font.className}`}>
         {/* <Navbar /> */}
-        <div>{children}</div>
+        {profile && !profile.onboarded ? (
+          <ReadingInterests />
+        ) : (
+          <div>{children}</div>
+        )}
+
         <SlideIn />
       </body>
     </html>
