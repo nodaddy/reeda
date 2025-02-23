@@ -116,7 +116,7 @@ const FloatingWords = () => {
       </span>
 
       {shuffleArray(wordList).map((word) => {
-        const randim = getRandom(30, 70);
+        const randim = getRandom(30, 55);
         return (
           <motion.div
             key={word.id}
