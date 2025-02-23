@@ -122,79 +122,81 @@ const Bookshelf = () => {
             justifyContent: "center",
           }}
         >
-          {filteredBooks?.map((item) => (
-            <div
-              style={{
-                flex: "0 0 auto",
-              }}
-            >
-              {/* Front Side */}
-              <Link href={`/book/${item.id}`}>
-                <Card
-                  style={{
-                    backfaceVisibility: "hidden",
-                    margin: "0px auto 20px auto",
-                    width: "fit-content",
-
-                    border: "0px",
-                  }}
-                  bodyStyle={{
-                    padding: "0px",
-                    width: "fit-content",
-                  }}
-                >
-                  {item.inProgress && (
-                    <Bookmark
-                      size={25}
-                      color={"white"}
-                      fill={"orange"}
-                      style={{
-                        position: "absolute",
-                        top: "-8px",
-                        right: "7px",
-                        zIndex: "99",
-                      }}
-                    />
-                  )}
-                  {item.completedReading && (
-                    <CheckCircle
-                      size={30}
-                      fill={"green"}
-                      color={"white"}
-                      style={{
-                        position: "absolute",
-                        top: "50%",
-                        right: "50%",
-                        transform: "translate(50%, -50%)",
-                        zIndex: "99",
-                      }}
-                    />
-                  )}
-                  <div
+          {filteredBooks
+            ?.filter((item) => !item.inWishlist)
+            .map((item) => (
+              <div
+                style={{
+                  flex: "0 0 auto",
+                }}
+              >
+                {/* Front Side */}
+                <Link href={`/book/${item.id}`}>
+                  <Card
                     style={{
-                      position: "relative",
-                      width: "19vw",
+                      backfaceVisibility: "hidden",
+                      margin: "0px auto 20px auto",
+                      width: "fit-content",
+
+                      border: "0px",
+                    }}
+                    bodyStyle={{
+                      padding: "0px",
+                      width: "fit-content",
                     }}
                   >
-                    <img
-                      src={item.cover}
+                    {item.inProgress && (
+                      <Bookmark
+                        size={25}
+                        color={"white"}
+                        fill={"orange"}
+                        style={{
+                          position: "absolute",
+                          top: "-8px",
+                          right: "7px",
+                          zIndex: "99",
+                        }}
+                      />
+                    )}
+                    {item.completedReading && (
+                      <CheckCircle
+                        size={30}
+                        fill={"green"}
+                        color={"white"}
+                        style={{
+                          position: "absolute",
+                          top: "50%",
+                          right: "50%",
+                          transform: "translate(50%, -50%)",
+                          zIndex: "99",
+                        }}
+                      />
+                    )}
+                    <div
                       style={{
-                        opacity: item.completedReading ? "0.5" : "1",
+                        position: "relative",
                         width: "19vw",
-                        height: "30vw",
-                        objectFit: "cover",
-                        flex: "0 0 auto",
-                        borderRadius: "7px", // Optional: Slight rounding for a premium look
-                        boxShadow: "0px 2px 10px rgba(0, 0, 0, 0.2)", // Soft shadow
-                        transition:
-                          "transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out", // Smooth hover effect
                       }}
-                    />
-                  </div>
-                </Card>
-              </Link>
-            </div>
-          ))}
+                    >
+                      <img
+                        src={item.cover}
+                        style={{
+                          opacity: item.completedReading ? "0.5" : "1",
+                          width: "19vw",
+                          height: "30vw",
+                          objectFit: "cover",
+                          flex: "0 0 auto",
+                          borderRadius: "7px", // Optional: Slight rounding for a premium look
+                          boxShadow: "0px 2px 10px rgba(0, 0, 0, 0.2)", // Soft shadow
+                          transition:
+                            "transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out", // Smooth hover effect
+                        }}
+                      />
+                    </div>
+                  </Card>
+                </Link>
+              </div>
+            ))}
         </div>
       </div>
     </div>

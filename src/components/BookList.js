@@ -128,6 +128,8 @@ const BookList = () => {
   const ref = useRef(null);
 
   const [imageBase64, setImageBase64] = useState(null);
+  const [showManuallyAddBookModal, setShowManuallyAddBookModal] =
+    useState(false);
 
   const handleImageUpload = (file) => {
     setProcessingImageUplaod(true);
@@ -211,6 +213,7 @@ const BookList = () => {
   };
 
   const handleAddBook = (newBook) => {
+    setUploadingBook(true);
     if (books?.length == freeBooks && !isPremium) {
       // route to premium page
       router.push("/premium");
@@ -268,6 +271,8 @@ const BookList = () => {
               setSearchQueryGoogleBooks(null);
               setSearchResultsGoogleBooks([]);
               messageApi.success("Book added to bookshelf");
+              setShowManuallyAddBookModal(false);
+              setUploadingBook(false);
             })
           );
         }
@@ -709,32 +714,86 @@ const BookList = () => {
             ))}
         </div>
 
-        {/* <Modal title="Add New Book" centered open={isAddBookModalVisible} onCancel={handleCancel} footer={null} width={'80vw'}
-    style={{zIndex: '999999'}}
-    >
-       <br/>
-        <Form form={form} layout="vertical" onFinish={handleAddBook}>
-          <Form.Item name="title" label="Book Title" rules={[{ required: true, message: 'Please enter the book title' }]}>
-            <Input placeholder="Enter book title" />
-          </Form.Item> */}
-        {/* <Form.Item name="author" label="Author (optional)" rules={[{ required: false, message: 'Please enter the author' }]}>
-            <Input placeholder="Enter author name" />
-          </Form.Item> */}
-        {/* <Form.Item name="totalPages" label="Total number of pages" rules={[{ required: true, message: 'Please enter the total number of pages' }]}>
-            <Input type='number' placeholder="Number of pages e.g 348" />
-          </Form.Item>
-          <Form.Item label="Book Cover Photo (optional)">
-          <CameraUpload forBookCover={true} handleImage={handleImageUpload} />
-        </Form.Item>
-        <Form.Item>
-          <Button disabled={processingImageUplaod} style={{
-            backgroundColor: 'black'
-          }} type="primary" htmlType="submit" block>
-            {uploadingBook ? <Loader className='loader' size={20} /> : 'Add Book'}
-            </Button>
-        </Form.Item>
-        </Form>
-      </Modal> */}
+        <Modal
+          title="Add New Book"
+          centered
+          open={showManuallyAddBookModal}
+          onCancel={() => {
+            setShowManuallyAddBookModal(false);
+            setIsAddBookModalVisible(true);
+            form.resetFields();
+          }}
+          footer={null}
+          width={"80vw"}
+          style={{ zIndex: "999999" }}
+        >
+          <br />
+          <Form
+            form={form}
+            layout="vertical"
+            onFinish={(values) => {
+              handleAddBook({
+                title: values.title,
+                author: values.authors?.join(", ") || "",
+                totalPages: values.totalPages || 243,
+                cover: imageBase64 || "",
+              });
+            }}
+          >
+            <Form.Item
+              name="title"
+              label="Book Title"
+              rules={[
+                { required: true, message: "Please enter the book title" },
+              ]}
+            >
+              <Input placeholder="Enter book title" />
+            </Form.Item>
+            <Form.Item
+              name="author"
+              label="Author (optional)"
+              rules={[{ required: true, message: "Please enter the author" }]}
+            >
+              <Input placeholder="Enter author name" />
+            </Form.Item>
+            <Form.Item
+              name="totalPages"
+              label="Total number of pages"
+              rules={[
+                {
+                  required: true,
+                  message: "Please enter the total number of pages",
+                },
+              ]}
+            >
+              <Input type="number" placeholder="Number of pages e.g 348" />
+            </Form.Item>
+            <Form.Item label="Book Cover Photo (optional)">
+              <CameraUpload
+                forBookCover={true}
+                handleImage={handleImageUpload}
+              />
+            </Form.Item>
+            <Form.Item>
+              <Button
+                disabled={processingImageUplaod}
+                style={{
+                  backgroundColor: "black",
+                  color: "white",
+                }}
+                type="primary"
+                htmlType="submit"
+                block
+              >
+                {uploadingBook ? (
+                  <Loader className="loader" size={20} />
+                ) : (
+                  "Add to Bookshelf"
+                )}
+              </Button>
+            </Form.Item>
+          </Form>
+        </Modal>
 
         <Modal
           title="Search a book!"
@@ -798,7 +857,7 @@ const BookList = () => {
               padding: "0px 10px",
             }}
           >
-            {uploadingBook ? (
+            {false ? (
               <div
                 style={{
                   display: "flex",
@@ -950,6 +1009,17 @@ const BookList = () => {
                 )}
               />
             )}
+            <br />
+            <div
+              align="right"
+              style={{ fontSize: "12px", color: priColor }}
+              onClick={() => {
+                setIsAddBookModalVisible(false);
+                setShowManuallyAddBookModal(true);
+              }}
+            >
+              or add manually
+            </div>
           </div>
         </Modal>
 

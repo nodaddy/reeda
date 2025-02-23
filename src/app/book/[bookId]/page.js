@@ -2,9 +2,18 @@
 import { priColor, secColor, secTextColor } from "@/configs/cssValues";
 import {
   getBookById,
+  updateBookById,
   updateBookByUserIdAndTitle,
 } from "@/firebase/services/bookService";
-import { Button, Collapse, Card, Popconfirm, Empty } from "antd";
+import {
+  Button,
+  Collapse,
+  Card,
+  Popconfirm,
+  Empty,
+  Alert,
+  message,
+} from "antd";
 import Title from "antd/es/typography/Title";
 import {
   MoveLeft,
@@ -17,6 +26,7 @@ import {
   Play,
   PlaySquare,
   MoreVertical,
+  PlusCircle,
 } from "lucide-react";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -44,6 +54,8 @@ const Book = () => {
 
   const [notesOrSessions, setNotesOrSessions] = useState("notes");
 
+  const [messageApi, contextHolder] = message.useMessage();
+
   const [lastDoc, setLastDoc] = useState(null);
   const fetchNotes = async () => {
     const { notesData, lastVisible } = await getNotesByBookId(bookId, lastDoc);
@@ -55,6 +67,8 @@ const Book = () => {
     const studySessions = await getStudySessionsByBookId(bookId);
     setStudySessions(studySessions);
   };
+
+  const [reloadCount, setReloadCount] = useState(0);
 
   useEffect(() => {
     if (!bookId) return; // Prevent fetching if bookId is undefined
@@ -73,6 +87,26 @@ const Book = () => {
     fetchNotes();
     fetchStudySessions();
   }, [bookId]);
+
+  useEffect(() => {
+    if (reloadCount == 1) {
+      if (!bookId) return; // Prevent fetching if bookId is undefined
+      setLoading(true);
+      const fetchBook = async () => {
+        try {
+          const response = await getBookById(bookId);
+          setBook(response);
+        } catch (error) {
+          console.error("Error fetching book:", error);
+        } finally {
+          setLoading(false);
+        }
+      };
+      fetchBook();
+      fetchNotes();
+      fetchStudySessions();
+    }
+  }, [reloadCount]);
 
   // Toggle note expansion
   const toggleExpand = (id) => {
@@ -95,11 +129,12 @@ const Book = () => {
           overflow: "auto",
         }}
       >
+        {contextHolder}
         {/* Book Header */}
         <div
           style={{
             height: "230px",
-            backgroundColor: priColor,
+            backgroundColor: book?.inWishlist ? "gray" : priColor,
             padding: "30px 40px",
             position: "relative",
             color: "white",
@@ -148,6 +183,7 @@ const Book = () => {
                 height: "160px",
                 borderRadius: "5px",
                 boxShadow: "0px 3px 6px rgba(0,0,0,0.2)",
+                filter: book?.inWishlist ? "grayscale(100%)" : "none",
               }}
             />
             <span>
@@ -163,12 +199,13 @@ const Book = () => {
                 backgroundColor: secColor,
                 padding: "11px 23px",
                 bottom: "-21px",
+                display: !book?.inWishlist ? "block" : "none",
                 right: "16%",
                 borderRadius: "999px",
                 transition: "all 0.3s ease-in-out",
               }}
             >
-              {book?.inProgress ? null : ( // /> //   }} //     borderRight: "1px solid " + priColor, //     paddingRight: "13px", //   style={{ //   color={"white"} //   size={27} // <Timer
+              {book?.inWishlist || book?.inProgress ? null : ( // /> //   }} //     borderRight: "1px solid " + priColor, //     paddingRight: "13px", //   style={{ //   color={"white"} //   size={27} // <Timer
                 <Popconfirm
                   placement="topLeft"
                   title="Want to start reading this book?"
@@ -248,11 +285,45 @@ const Book = () => {
           />
         </div>
 
+        {book?.inWishlist && (
+          <div align="center">
+            <br />
+            <Alert
+              message="This book is in your wishlist"
+              type="info"
+              style={{
+                border: "0px",
+                borderRadius: "0px",
+                backgroundColor: "white",
+              }}
+              showIcon={false}
+            />
+            <br />
+            <Button
+              type={"primary"}
+              style={{
+                borderRadius: "999px",
+                padding: "3px 20px",
+              }}
+              onClick={async () => {
+                await updateBookById({ inWishlist: false }, book?.id);
+                messageApi.success("Added to bookshelf");
+                setTimeout(() => {
+                  setReloadCount(1);
+                }, 1000);
+              }}
+            >
+              Add to Bookshelf
+            </Button>
+          </div>
+        )}
+
         {/* Notes Section */}
         <div
           style={{
             padding: "15px",
             marginTop: "0px",
+            display: !book?.inWishlist ? "block" : "none",
           }}
         >
           <div

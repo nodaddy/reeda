@@ -27,7 +27,7 @@ const FloatingWords = () => {
     updateHeight();
     window.addEventListener("resize", updateHeight);
     return () => window.removeEventListener("resize", updateHeight);
-  }, []);
+  }, [books]);
 
   useEffect(() => {
     if (availableHeight === 0) return;
@@ -57,7 +57,7 @@ const FloatingWords = () => {
       ...prev.filter((w) => w.inWishlist),
       ...generatedWords,
     ]);
-  }, [availableHeight]);
+  }, [books, availableHeight]);
 
   useEffect(() => {
     if (books && availableHeight !== 0 && books?.length > 0) {
@@ -85,87 +85,89 @@ const FloatingWords = () => {
   }, [books, availableHeight]);
 
   return (
-    <div
-      ref={containerRef}
-      style={{
-        position: "relative",
-        width: "100vw",
-        marginLeft: "-24px",
-        height: availableHeight ? `${availableHeight}px` : "auto",
-        overflow: "hidden",
-      }}
-    >
-      <span
+    books && (
+      <div
+        ref={containerRef}
         style={{
-          fontWeight: "400",
-          fontSize: "20px",
-          padding: "5px 20px",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          color: secTextColor,
-          borderRadius: "6px",
-          fontFamily: "'Inter', sans-serif",
+          position: "relative",
+          width: "100vw",
+          marginLeft: "-24px",
+          height: availableHeight ? `${availableHeight}px` : "auto",
+          overflow: "hidden",
         }}
       >
-        <span style={{ display: "flex", alignItems: "center" }}>
-          <BookHeart />
-          &nbsp;Interests & Wishlist &nbsp;&nbsp;
+        <span
+          style={{
+            fontWeight: "400",
+            fontSize: "20px",
+            padding: "5px 20px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            color: secTextColor,
+            borderRadius: "6px",
+            fontFamily: "'Inter', sans-serif",
+          }}
+        >
+          <span style={{ display: "flex", alignItems: "center" }}>
+            <BookHeart />
+            &nbsp;Interests & Wishlist &nbsp;&nbsp;
+          </span>
+          <MoveRight />
         </span>
-        <MoveRight />
-      </span>
 
-      {shuffleArray(wordList).map((word) => {
-        const randim = getRandom(30, 55);
-        return (
-          <motion.div
-            key={word.id}
-            initial={{ x: word.startX }}
-            animate={{ x: -200 }} // End further left to ensure smooth exit
-            transition={{
-              duration: word.duration,
-              delay: word.delay,
-              repeat: Infinity,
-              ease: "linear",
-            }}
-            style={{
-              position: "absolute",
-              top: word.top,
-              fontSize: word.size,
-              fontWeight: "bold",
-              whiteSpace: "nowrap",
-            }}
-          >
-            {Object.keys(word).includes("inWishlist") ? (
-              <Link href={`/book/${word.id}`}>
-                <Image
-                  width={randim}
-                  height={randim}
-                  src={word.cover}
-                  alt={word.title}
+        {shuffleArray(wordList).map((word) => {
+          const randim = getRandom(30, 55);
+          return (
+            <motion.div
+              key={word.id}
+              initial={{ x: word.startX }}
+              animate={{ x: -200 }} // End further left to ensure smooth exit
+              transition={{
+                duration: word.duration,
+                delay: word.delay,
+                repeat: Infinity,
+                ease: "linear",
+              }}
+              style={{
+                position: "absolute",
+                top: word.top,
+                fontSize: word.size,
+                fontWeight: "bold",
+                whiteSpace: "nowrap",
+              }}
+            >
+              {Object.keys(word).includes("inWishlist") ? (
+                <Link href={`/book/${word.id}`}>
+                  <Image
+                    width={randim}
+                    height={randim}
+                    src={word.cover}
+                    alt={word.title}
+                    style={{
+                      objectFit: "cover",
+                      borderRadius: "50%",
+                      boxShadow: "0 0 10px rgba(0, 0, 0, 0.5)",
+                      filter: "grayscale(100%)",
+                    }}
+                  />
+                </Link>
+              ) : (
+                <span
                   style={{
-                    objectFit: "cover",
-                    borderRadius: "50%",
-                    boxShadow: "0 0 10px rgba(0, 0, 0, 0.5)",
-                    filter: "grayscale(60%)",
+                    color: secTextColor,
+                    transformOrigin: "100% 100%",
                   }}
-                />
-              </Link>
-            ) : (
-              <span
-                style={{
-                  color: secTextColor,
-                  transformOrigin: "100% 100%",
-                }}
-              >
-                {word.text}
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              </span>
-            )}
-          </motion.div>
-        );
-      })}
-    </div>
+                >
+                  {word.text}
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                </span>
+              )}
+            </motion.div>
+          );
+        })}
+      </div>
+    )
   );
 };
 
