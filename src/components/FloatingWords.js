@@ -53,7 +53,10 @@ const FloatingWords = () => {
       size: getRandom(10, 28) + "px",
     }));
 
-    setWordList(generatedWords);
+    setWordList((prev) => [
+      ...prev.filter((w) => w.inWishlist),
+      ...generatedWords,
+    ]);
   }, [availableHeight]);
 
   useEffect(() => {
@@ -74,7 +77,10 @@ const FloatingWords = () => {
           delay: index * 2 + 4, // Offset from text words
         }));
 
-      setWordList((prev) => [...prev, ...bookWords]);
+      setWordList((prev) => [
+        ...prev.filter((w) => !w.inWishlist),
+        ...bookWords,
+      ]);
     }
   }, [books, availableHeight]);
 
