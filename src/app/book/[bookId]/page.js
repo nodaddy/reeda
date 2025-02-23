@@ -199,7 +199,8 @@ const Book = () => {
                 backgroundColor: secColor,
                 padding: "11px 23px",
                 bottom: "-21px",
-                display: !book?.inWishlist ? "block" : "none",
+                display:
+                  !book?.inWishlist && !book?.inProgress ? "block" : "none",
                 right: "16%",
                 borderRadius: "999px",
                 transition: "all 0.3s ease-in-out",
@@ -229,7 +230,7 @@ const Book = () => {
                   <PlayCircle size={27} color={"white"} style={{}} />
                 </Popconfirm>
               )}
-              {book?.inProgress && (
+              {/* {book?.inProgress && (
                 <Link href={`/updateBook/${book?.id}`}>
                   <NotebookPen
                     size={25}
@@ -240,7 +241,7 @@ const Book = () => {
                     }}
                   />
                 </Link>
-              )}
+              )} */}
             </span>
           </div>
         </div>
