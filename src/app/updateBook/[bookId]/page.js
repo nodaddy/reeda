@@ -199,12 +199,15 @@ const Book = () => {
               />
             </Dropdown>
           </div>
-
           <br />
+          <i style={{ fontFamily: "'Inter', sans-serif" }}>
+            <sub>You are reading</sub>
+          </i>
           <Title
             level={2}
             style={{
               color: "white",
+              marginTop: "4px",
               width: "100%",
               whiteSpace: "nowrap",
               overflow: "hidden",
