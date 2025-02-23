@@ -46,18 +46,18 @@ const Home = () => {
   useEffect(() => {
     if (profile?.streak?.lastPageScanTimestamp) {
       const now = Date.now();
-      const lastPageScanTimestamp = profile.streak.lastPageScanTimestamp;
+      const lastPageScanTimestamp = profile?.streak.lastPageScanTimestamp;
       const difference = Math.ceil((now - lastPageScanTimestamp) / 1000);
 
       if (difference > 84600) {
         const updateData = {
           ...profile,
           streak: {
-            ...profile.streak,
+            ...profile?.streak,
             days:
-              profile.streak.days > profile.streak.longestStreak
+              profile?.streak.days > profile?.streak.longestStreak
                 ? 0
-                : profile.streak.days,
+                : profile?.streak.days,
           },
         };
         updateProfile(JSON.parse(storage.getItem("user")).email, updateData);

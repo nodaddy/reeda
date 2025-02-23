@@ -29,7 +29,7 @@ const FloatingWords = () => {
     return () => window.removeEventListener("resize", updateHeight);
   }, [books]);
 
-  const [baseWords, setBaseWords] = useState(profile.readingInterests);
+  const [baseWords, setBaseWords] = useState(profile?.readingInterests);
 
   useEffect(() => {
     if (availableHeight === 0) return;

@@ -219,7 +219,7 @@ const ReadingInterests = () => {
             whileTap={{ scale: 0.98 }}
             onClick={async () => {
               setLoading(true);
-              await updateProfile(profile.userId, {
+              await updateProfile(profile?.userId, {
                 ...profile,
                 onboarded: true,
                 readingInterests: genres

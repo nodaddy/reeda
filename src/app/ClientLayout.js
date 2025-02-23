@@ -28,7 +28,7 @@ export default function ClientLayout({ children, font }) {
       </head>
       <body style={{ overflowY: "scroll" }} className={`${font.className}`}>
         {/* <Navbar /> */}
-        {profile && !profile.onboarded ? (
+        {profile && !profile?.onboarded ? (
           <ReadingInterests />
         ) : (
           <div>{children}</div>

@@ -239,7 +239,7 @@ const BookList = () => {
               );
 
               // add coins to the profile
-              await updateProfile(profile.userId, {
+              await updateProfile(profile?.userId, {
                 ...profile,
                 coins: (profile?.coins || 0) + addCoinsPerNewBookAdded,
               });
@@ -257,7 +257,7 @@ const BookList = () => {
               );
 
               // add coins to the profile
-              await updateProfile(profile.userId, {
+              await updateProfile(profile?.userId, {
                 ...profile,
                 coins: (profile?.coins || 0) + addCoinsPerNewBookAdded,
               });
