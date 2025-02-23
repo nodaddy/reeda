@@ -734,7 +734,7 @@ const BookList = () => {
             onFinish={(values) => {
               handleAddBook({
                 title: values.title,
-                author: values.authors?.join(", ") || "",
+                author: values.author || "",
                 totalPages: values.totalPages || 243,
                 cover: imageBase64 || "",
               });
