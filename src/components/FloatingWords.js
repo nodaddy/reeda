@@ -43,7 +43,7 @@ const FloatingWords = () => {
     const generatedWords = baseWords.map((word, index) => ({
       id: `word-${index}`,
       text: word,
-      top: getRandom(40, availableHeight * 0.8 - 180) + "px",
+      top: getRandom(50, availableHeight * 0.8 - 30) + "px",
       // Start position spaced out across segments
       startX: screenWidth + index * segmentWidth,
       // Longer duration for smoother movement
@@ -71,7 +71,7 @@ const FloatingWords = () => {
         .map((word, index) => ({
           id: `book-${index}`,
           ...word,
-          top: getRandom(40, availableHeight * 0.8 - 180) + "px",
+          top: getRandom(50, availableHeight * 0.8 - 30) + "px",
           startX: screenWidth + index * segmentWidth,
           duration: getRandom(15, 20),
           delay: index * 2 + 4, // Offset from text words

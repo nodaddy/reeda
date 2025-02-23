@@ -26,14 +26,7 @@ const Home = () => {
         <main className="content">
           <div className="logo-section">
             <h1 align="left">
-              <Image
-                width={200}
-                src={logo}
-                style={{
-                  borderRadius: "50%",
-                  boxShadow: "0 0 10px rgba(0, 0, 0, 0.05)",
-                }}
-              />
+              <Image width={180} src={logo} />
             </h1>
           </div>
 
