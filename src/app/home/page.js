@@ -156,6 +156,7 @@ const Home = () => {
           </div>
         )}
         <div
+          id="continue-reading-div"
           style={{
             display: "flex",
             alignItems: "center",

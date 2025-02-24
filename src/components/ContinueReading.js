@@ -8,7 +8,7 @@ import {
 } from "@/configs/cssValues";
 import { bookSessionStorageKey, loadingGif } from "@/configs/variables";
 import { useAppContext } from "@/context/AppContext";
-import { Empty, Progress, Typography } from "antd";
+import { Empty, Popconfirm, Progress, Typography } from "antd";
 import {
   BookIcon,
   BookOpen,
@@ -89,6 +89,7 @@ const ContinueReadingCard = ({ book }) => {
         padding: "20px 30px 45px 30px",
         margin: "60px auto 20px auto",
         color: priTextColor,
+        transition: "all 0.3s ease-in-out",
         backgroundColor: "white",
         fontFamily: "'Inter', sans-serif",
         position: "relative",
@@ -258,28 +259,38 @@ const ContinueReadingCard = ({ book }) => {
             }}
           />
         ) : (
-          <Timer
-            size={21}
-            color={"white"}
-            style={{
-              paddingRight: "12px",
-              borderRight: "1px solid " + "silver",
-            }}
-            onClick={() => {
+          <Popconfirm
+            icon={<></>}
+            onCancel={() => {
               storage.setItem(
                 bookSessionStorageKey,
                 JSON.stringify({ ...book, timestamp: Date.now() })
               );
               setCurrentSessionBook({ ...book, timestamp: Date.now() });
             }}
-          />
+            onConfirm={() => {
+              // open session logging panel
+            }}
+            okText="Log session"
+            cancelText="Start timer"
+          >
+            <Timer
+              size={21}
+              color={"white"}
+              style={{
+                paddingRight: "12px",
+                borderRight: "1px solid " + "silver",
+              }}
+            />
+          </Popconfirm>
         )}
         <Link href={`/updateBook/${book?.id}`}>
           <NotebookPen
-            size={20}
+            size={19}
             color={"white"}
             style={{
-              margin: "0px 7px",
+              paddingLeft: "10px",
+              margin: "0px 0px",
             }}
           />
         </Link>

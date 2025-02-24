@@ -45,6 +45,7 @@ import PagePicker from "@/components/PagePicker";
 import { createNote } from "@/firebase/services/notesService";
 import { createStudySession } from "@/firebase/services/studySessionService";
 import FinalReviewModal from "@/components/FinalReviewModal";
+import TipTapEditor from "@/components/TipTapEditot";
 
 const { TextArea } = Input;
 
@@ -351,9 +352,8 @@ const Book = () => {
             ]}
           />
         </div>
-        <br />
         {/* Note / Session Toggle */}
-        <div style={{ padding: "20px", marginTop: "-30px" }}>
+        <div style={{ padding: "0px", marginTop: "-30px" }}>
           <Card
             style={{
               borderRadius: "12px",
@@ -361,84 +361,41 @@ const Book = () => {
               border: "0px",
             }}
           >
-            {/* Toggle Buttons */}
-            <Radio.Group
-              value={mode}
-              onChange={(e) => setMode(e.target.value)}
-              buttonStyle="solid"
+            <div
               style={{
                 display: "flex",
-                justifyContent: "center",
-                marginBottom: "20px",
+                justifyContent: "space-between",
+                alignItems: "center",
+                padding: "0px 3px",
               }}
             >
-              <Radio.Button
-                value="note"
+              <Button
+                size="large"
                 style={{
-                  borderRadius: "999px 0px 0px 999px",
-                  backgroundColor: mode === "note" ? priColor : "transparent",
                   border: "0px",
-                  color: mode === "note" ? "white" : "black",
+                  boxShadow: "0px 4px 10px rgba(0,0,0,0)",
+                  padding: "0px",
+                  margin: "0px",
+                  color: secTextColor,
                 }}
               >
-                <NotebookPen size={14} style={{ marginRight: "8px" }} />
-                <span>Note</span>
-              </Radio.Button>
-              <Radio.Button
-                value="session"
-                style={{
-                  borderRadius: "0px 999px 999px 0px",
-                  border: "0px",
-                  backgroundColor:
-                    mode === "session" ? priColor : "transparent",
-                  color: mode === "session" ? "white" : "black",
-                }}
-              >
-                <Play size={14} style={{ marginRight: "8px" }} />
-                Log a Session
-              </Radio.Button>
-            </Radio.Group>
+                <NotebookPen size={14} style={{ marginRight: "0px" }} />
+                <span>Add notes</span>
+              </Button>
 
+              <span
+                style={{
+                  color: secTextColor,
+                }}
+              >
+                {new Date(Date.now()).toDateString()}
+              </span>
+            </div>
             {/* Quick Note Mode */}
             {mode === "note" && (
               <div>
-                <span
-                  style={{
-                    fontSize: "14px",
-                    fontWeight: "500",
-                    color: "#666",
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "7px",
-                    color: secTextColor,
-                  }}
-                >
-                  Title (optional)
-                </span>
-                <Input
-                  placeholder="Note Title"
-                  value={note.title}
-                  onChange={(e) => setNote({ ...note, title: e.target.value })}
-                  style={{
-                    marginBottom: "10px",
-                    borderRadius: "8px",
-                    padding: "10px",
-                  }}
-                />
-                <span
-                  style={{
-                    fontSize: "14px",
-                    fontWeight: "500",
-                    color: "#666",
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "7px",
-                    color: secTextColor,
-                  }}
-                >
-                  Description
-                </span>
-                <TextArea
+                <TipTapEditor />
+                {/* <TextArea
                   required
                   rows={4}
                   placeholder="Write your note..."
@@ -451,13 +408,13 @@ const Book = () => {
                     borderRadius: "8px",
                     padding: "10px",
                   }}
-                />
+                /> */}
                 <div align="right">
                   <Button
                     type="primary"
                     disabled={savingData || !note.description}
                     style={{
-                      padding: "10px 0px",
+                      padding: "25px 0px",
                       backgroundColor: "white",
                       boxShadow: "0px 0px 0px transparent",
                       color: priColor,
@@ -469,124 +426,6 @@ const Book = () => {
                     }}
                   >
                     {savingData ? "Saving..." : "Save Note"}
-                  </Button>
-                </div>
-              </div>
-            )}
-
-            {/* Reading Session Mode */}
-            {mode === "session" && (
-              <div>
-                <span
-                  style={{
-                    fontSize: "14px",
-                    fontWeight: "500",
-                    color: "#666",
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "7px",
-                    color: secTextColor,
-                  }}
-                >
-                  Coverage
-                </span>
-                <Input
-                  placeholder="type e.g. Page 23 to 74 or Chapter 3"
-                  value={session.pagesCovered}
-                  onChange={(e) =>
-                    setSession({ ...session, pagesCovered: e.target.value })
-                  }
-                  style={{
-                    marginBottom: "10px",
-                    borderRadius: "8px",
-                    padding: "10px",
-                  }}
-                />
-                <span
-                  style={{
-                    fontSize: "14px",
-                    fontWeight: "500",
-                    color: "#666",
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "7px",
-                    color: secTextColor,
-                  }}
-                >
-                  Summary
-                </span>
-
-                <TextArea
-                  rows={4}
-                  placeholder="What did you read about in the session?"
-                  value={session.summary}
-                  onChange={(e) =>
-                    setSession({ ...session, summary: e.target.value })
-                  }
-                  style={{
-                    marginBottom: "10px",
-                    borderRadius: "8px",
-                    padding: "10px",
-                  }}
-                />
-
-                {/* Duration Input */}
-                <div style={{ marginBottom: "10px" }}>
-                  <span
-                    style={{
-                      fontSize: "14px",
-                      fontWeight: "500",
-                      color: "#666",
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "7px",
-                      color: secTextColor,
-                    }}
-                  >
-                    <Timer color={secTextColor} /> Duration (minutes)
-                  </span>
-                  <InputNumber
-                    min={1}
-                    max={800}
-                    size="small"
-                    value={session.duration}
-                    onChange={(value) =>
-                      setSession({ ...session, duration: value })
-                    }
-                    style={{
-                      width: "100%",
-                      marginTop: "5px",
-                      borderRadius: "8px",
-                      border: "0px solid #ccc",
-                      padding: "10px",
-                      fontSize: "16px",
-                      boxShadow: "0px 0px 6px rgba(0, 0, 0, 0.07)",
-                    }}
-                  />
-                </div>
-
-                <div align="right">
-                  <Button
-                    type="primary"
-                    disabled={
-                      savingData ||
-                      !session.summary ||
-                      !session.duration ||
-                      !session.pagesCovered
-                    }
-                    style={{
-                      padding: "10px 0px",
-                      backgroundColor: "white",
-                      boxShadow: "0px 0px 0px transparent",
-                      border: "0px",
-                      color: priColor,
-                      fontSize: "16px",
-                    }}
-                    onClick={() => {
-                      handleAddStudySession();
-                    }}
-                  >
-                    {savingData ? "Saving..." : "Log Session"}
                   </Button>
                 </div>
               </div>

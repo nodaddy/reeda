@@ -4,6 +4,7 @@ import { storage } from "@/app/utility";
 import { priColor } from "@/configs/cssValues";
 import { bookSessionStorageKey } from "@/configs/variables";
 import { getProfile } from "@/firebase/services/profileService";
+import { doc } from "firebase/firestore";
 import { createContext, useState, useContext, useEffect } from "react";
 
 // 1️⃣ Create Context
@@ -40,6 +41,26 @@ export const AppProvider = ({ children }) => {
       });
     }
   }, [profile]);
+
+  useEffect(() => {
+    if (currentSessionBook && books && books[0].id !== currentSessionBook.id) {
+      // bring the book to the front
+      const index = books.findIndex(
+        (book) => book.id === currentSessionBook.id
+      );
+      if (index !== -1) {
+        const updatedBooks = [...books];
+        updatedBooks.splice(index, 1);
+        updatedBooks.unshift(currentSessionBook);
+        setBooks(updatedBooks);
+      }
+
+      // and horizontally scroll the elemetn to the leftmost position in a smooth way
+      document
+        .getElementById("continue-reading-div")
+        .scroll({ left: 0, behavior: "smooth" });
+    }
+  }, [currentSessionBook, books]);
 
   return (
     <AppContext.Provider
