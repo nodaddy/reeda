@@ -5,6 +5,9 @@ import { Navbar } from "@/components/Navbar";
 import { useEffect, useState } from "react";
 import SlideIn from "@/components/SlideIn";
 import ReadingInterests from "@/components/ReadingInterests";
+import { storage } from "./utility";
+import { bookSessionStorageKey } from "@/configs/variables";
+import SessionTimer from "@/components/SessionTimer";
 
 export default function ClientLayout({ children, font }) {
   const [inClient, setInClient] = useState(false);
@@ -28,6 +31,7 @@ export default function ClientLayout({ children, font }) {
       </head>
       <body style={{ overflowY: "scroll" }} className={`${font.className}`}>
         {/* <Navbar /> */}
+
         {profile && !profile?.onboarded ? (
           <ReadingInterests />
         ) : (

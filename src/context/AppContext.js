@@ -2,6 +2,7 @@
 
 import { storage } from "@/app/utility";
 import { priColor } from "@/configs/cssValues";
+import { bookSessionStorageKey } from "@/configs/variables";
 import { getProfile } from "@/firebase/services/profileService";
 import { createContext, useState, useContext, useEffect } from "react";
 
@@ -12,6 +13,11 @@ const AppContext = createContext();
 export const AppProvider = ({ children }) => {
   const [profile, setProfile] = useState(null);
   const [books, setBooks] = useState(null);
+
+  const [currentSessionBook, setCurrentSessionBook] = useState(
+    JSON.parse(storage.getItem(bookSessionStorageKey))
+  );
+
   const [nightModeOn, setNightModeOn] = useState(false);
   const [isPremium, setIsPremium] = useState(false);
   const [summaryOrFullText, setSummaryOrFullText] = useState("summary");
@@ -62,6 +68,8 @@ export const AppProvider = ({ children }) => {
         setIsAddBookModalVisible,
         wishlistBooks,
         setWishlistBooks,
+        currentSessionBook,
+        setCurrentSessionBook,
       }}
     >
       {children}

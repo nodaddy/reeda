@@ -201,7 +201,7 @@ const Book = () => {
           </div>
           <br />
           <i style={{ fontFamily: "'Inter', sans-serif" }}>
-            <sub>You are reading</sub>
+            <sub>Update book progress</sub>
           </i>
           <Title
             level={2}
@@ -268,20 +268,6 @@ const Book = () => {
               </span>
             )}
             <span
-              onClick={async () => {
-                await updateBookById(
-                  {
-                    pagesRead: 0,
-                    inProgress: true,
-                  },
-                  book.id
-                );
-                setBook({
-                  ...book,
-                  pagesRead: 0,
-                  inProgress: true,
-                });
-              }}
               style={{
                 position: "absolute",
                 alignItems: "center",
