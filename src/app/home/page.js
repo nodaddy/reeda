@@ -160,7 +160,7 @@ const Home = () => {
           style={{
             display: "flex",
             alignItems: "center",
-            gap: "40px",
+            gap: "30px",
             padding: "10px 60px",
             margin: "37px 0px",
             overflowX: "scroll",

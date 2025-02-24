@@ -13,6 +13,7 @@ import {
   Empty,
   Alert,
   message,
+  Divider,
 } from "antd";
 import Title from "antd/es/typography/Title";
 import {
@@ -277,9 +278,10 @@ const Book = () => {
                   </b>
                 ),
                 children: (
-                  <p style={{ fontSize: "14px", lineHeight: "1.6" }}>
-                    {book?.description}
-                  </p>
+                  <p
+                    dangerouslySetInnerHTML={{ __html: book?.description }}
+                    style={{ fontSize: "14px", lineHeight: "1.6" }}
+                  ></p>
                 ),
               },
             ]}
@@ -327,45 +329,6 @@ const Book = () => {
             display: !book?.inWishlist ? "block" : "none",
           }}
         >
-          <div
-            align="center"
-            style={{
-              margin: "20px auto 30px auto",
-            }}
-          >
-            <Button
-              onClick={() => {
-                setNotesOrSessions("notes");
-              }}
-              type="primary"
-              style={{
-                backgroundColor:
-                  notesOrSessions === "notes" ? priColor : "white",
-                color: notesOrSessions === "notes" ? "white" : priColor,
-                transition: "all 0.3s ease-in-out",
-                borderRadius: "999px 0px 0px 999px",
-                boxShadow: "0px 4px 10px rgba(0,0,0,0.1)",
-              }}
-            >
-              Notes
-            </Button>
-            <Button
-              onClick={() => {
-                setNotesOrSessions("sessions");
-              }}
-              type="primary"
-              style={{
-                backgroundColor:
-                  notesOrSessions === "sessions" ? priColor : "white",
-                color: notesOrSessions === "sessions" ? "white" : priColor,
-                transition: "all 0.3s ease-in-out",
-                borderRadius: "0px 999px 999px 0px",
-                boxShadow: "0px 4px 10px rgba(0,0,0,0.1)",
-              }}
-            >
-              Study Sessions
-            </Button>
-          </div>
           {notes.length == 0 && studySessions.length == 0 ? (
             <div align="center">
               <br />
@@ -383,78 +346,81 @@ const Book = () => {
 
           {notesOrSessions === "notes" &&
             notes.map((note) => (
-              <Card
-                key={note.id}
-                style={{
-                  marginBottom: "14px",
-                  borderRadius: "8px",
-                  boxShadow: "0px 4px 8px rgba(0,0,0,0.1)",
-                  transition: "transform 0.2s ease-in-out",
-                  cursor: "pointer",
-                }}
-                hoverable
-                bodyStyle={{ padding: "15px" }}
-              >
-                <div
+              <>
+                <Card
+                  key={note.id}
                   style={{
-                    display: "flex",
-                    justifyContent: "space-between",
+                    marginBottom: "14px",
+                    borderRadius: "8px",
+                    border: "0px",
+                    boxShadow: "0px 4px 8px rgba(0,0,0,0)",
+                    transition: "transform 0.2s ease-in-out",
+                    cursor: "pointer",
                   }}
+                  hoverable
+                  bodyStyle={{ padding: "15px" }}
                 >
-                  <div>
-                    <small style={{ color: "#888" }}>
-                      {new Date(note.createdAt).toDateString()}
-                    </small>
-                    <br />
-                    <span style={{ fontSize: "16px" }}>{note.title}</span>
-                    <p
-                      style={{
-                        fontSize: "14px",
-                        color: "#555",
-                        marginTop: "5px",
-                        marginBottom: "3px",
-                        display: "-webkit-box",
-                        WebkitLineClamp: note.expanded ? "unset" : 2,
-                        WebkitBoxOrient: "vertical",
-                        overflow: "hidden",
-                      }}
-                    >
-                      {note.description}
-                    </p>
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <div>
+                      <small style={{ color: "#888" }}>
+                        {new Date(note.createdAt).toDateString()}
+                      </small>
+                      <br />
+                      <span style={{ fontSize: "16px" }}>{note.title}</span>
+                      <p
+                        style={{
+                          fontSize: "14px",
+                          color: "#555",
+                          marginTop: "5px",
+                          marginBottom: "3px",
+                          display: "-webkit-box",
+                          WebkitLineClamp: note.expanded ? "unset" : 2,
+                          WebkitBoxOrient: "vertical",
+                          overflow: "hidden",
+                        }}
+                        dangerouslySetInnerHTML={{ __html: note.description }}
+                      ></p>
 
-                    {note.description.split(" ").length > 15 &&
-                      !note.expanded && (
+                      {note.description.split(" ").length > 15 &&
+                        !note.expanded && (
+                          <Button
+                            type="link"
+                            style={{
+                              padding: 0,
+                              fontSize: "14px",
+                              marginLeft: "-2px",
+                            }}
+                            onClick={() => toggleExpand(note.id)}
+                          >
+                            Read More
+                          </Button>
+                        )}
+                      {note.expanded && (
                         <Button
                           type="link"
                           style={{
                             padding: 0,
                             fontSize: "14px",
-                            paddingTop: "0",
+                            marginLeft: "-2px",
                           }}
                           onClick={() => toggleExpand(note.id)}
                         >
-                          Read More
+                          Show Less
                         </Button>
                       )}
-                    {note.expanded && (
-                      <Button
-                        type="link"
-                        style={{
-                          padding: 0,
-                          fontSize: "14px",
-                          marginLeft: "5px",
-                        }}
-                        onClick={() => toggleExpand(note.id)}
-                      >
-                        Show Less
-                      </Button>
-                    )}
+                    </div>
+                    <div style={{ display: "flex", gap: "10px" }}>
+                      <MoreVertical size={20} style={{ cursor: "pointer" }} />
+                    </div>
                   </div>
-                  <div style={{ display: "flex", gap: "10px" }}>
-                    <MoreVertical size={20} style={{ cursor: "pointer" }} />
-                  </div>
-                </div>
-              </Card>
+                </Card>
+                <Divider />
+              </>
             ))}
           {notesOrSessions === "notes" && notes.length === 10 && (
             <Button

@@ -230,20 +230,40 @@ const ContinueReadingCard = ({ book }) => {
       </div>
 
       <div
+        className="bounce-effect"
         style={{
           position: "absolute",
           alignItems: "center",
+          height: "50px",
+          width: "50px",
+          borderRadius: "50%",
           justifyContent: "center",
           backgroundColor: bookmarkColour,
-          padding: "8px 18px",
+          display: "flex",
           bottom: "-16px",
           right: "11%",
           borderRadius: "999px",
-          opacity: showPanel ? 1 : 0,
           transition: "all 0.3s ease-in-out",
+          overflow: "hidden", // Important for containing the glare
         }}
       >
-        {JSON.parse(storage.getItem(bookSessionStorageKey) || null)?.id ==
+        <style>
+          {`
+    @keyframes bounce {
+      0%, 100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-15px);
+      }
+    }
+
+    .bounce-effect {
+      animation: bounce 1s ease-in-out ;
+    }
+  `}
+        </style>
+        {/* {JSON.parse(storage.getItem(bookSessionStorageKey) || null)?.id ==
           book?.id || currentSessionBook?.id == book?.id ? (
           <CircleStop
             size={21}
@@ -278,18 +298,17 @@ const ContinueReadingCard = ({ book }) => {
               size={21}
               color={"white"}
               style={{
-                paddingRight: "12px",
+                paddingRight: "9px",
                 borderRight: "1px solid " + "silver",
               }}
             />
           </Popconfirm>
-        )}
+        )} */}
         <Link href={`/updateBook/${book?.id}`}>
           <NotebookPen
-            size={19}
+            size={20}
             color={"white"}
             style={{
-              paddingLeft: "10px",
               margin: "0px 0px",
             }}
           />

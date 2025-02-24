@@ -19,25 +19,19 @@ import {
   notification,
   Dropdown,
   Menu,
+  Tag,
 } from "antd";
 import Title from "antd/es/typography/Title";
 import {
   MoveLeft,
   NotebookPen,
-  PlayCircle,
-  Edit,
-  Tag,
-  Timer,
   Book as BookIcon,
-  Play,
-  PlaySquare,
   MoreVertical,
-  CheckCircle,
   BookCheck,
   CircleStop,
 } from "lucide-react";
 import { useParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { motion } from "framer-motion"; // Import Framer Motion
 import { useRouter } from "next/navigation";
 import { generateRandomColourForString } from "@/app/utility";
@@ -55,6 +49,8 @@ const Book = () => {
   const [loading, setLoading] = useState(false);
   const [savingData, setSavingData] = useState(false);
   const history = useRouter();
+
+  const [editorContentResetFlag, setEditorContentResetFlag] = useState(false);
 
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
   const [messageApi, contextHolder] = message.useMessage();
@@ -136,6 +132,7 @@ const Book = () => {
     setSavingData(true);
     await createNote(bookId, note);
     setNote({ title: "", description: "", tags: [] });
+    setEditorContentResetFlag(!editorContentResetFlag);
     messageApi.success("Note added successfully!");
     setSavingData(false);
   };
@@ -154,6 +151,155 @@ const Book = () => {
       prevNotes.map((note) =>
         note.id === id ? { ...note, expanded: !note.expanded } : note
       )
+    );
+  };
+
+  const PageProgress = ({ onUpdatePages }) => {
+    const [isEditing, setIsEditing] = useState(false);
+    const [inputValue, setInputValue] = useState(
+      book?.pagesRead?.toString() || "0"
+    );
+    const [showError, setShowError] = useState(false);
+    const inputRef = useRef(null);
+
+    const handleClick = () => {
+      setIsEditing(true);
+      // Focus will be handled by useEffect
+    };
+
+    useEffect(() => {
+      if (isEditing && inputRef.current) {
+        inputRef.current.focus();
+        inputRef.current.select();
+      }
+    }, [isEditing]);
+
+    const validateAndUpdate = (value) => {
+      const numValue = parseInt(value, 10);
+      if (!isNaN(numValue) && numValue >= 0 && numValue <= book?.totalPages) {
+        onUpdatePages(numValue);
+        setIsEditing(false);
+        setShowError(false);
+      } else {
+        setShowError(true);
+        // Hide error after 2 seconds
+        setTimeout(() => setShowError(false), 2000);
+      }
+    };
+
+    const handleKeyDown = (e) => {
+      if (e.key === "Enter") {
+        validateAndUpdate(inputValue);
+      } else if (e.key === "Escape") {
+        setIsEditing(false);
+        setInputValue(book?.pagesRead?.toString() || "0");
+      }
+    };
+
+    const handleBlur = () => {
+      validateAndUpdate(inputValue);
+    };
+
+    const handleChange = (e) => {
+      // Only allow numbers
+      const value = e.target.value.replace(/[^\d]/g, "");
+      setInputValue(value);
+    };
+
+    return (
+      <div
+        style={{
+          position: "relative",
+          display: "inline-flex",
+          alignItems: "center",
+        }}
+      >
+        <span>p.</span>
+        {isEditing ? (
+          <input
+            ref={inputRef}
+            type="text"
+            value={inputValue}
+            onChange={handleChange}
+            onKeyDown={handleKeyDown}
+            onBlur={handleBlur}
+            style={{
+              fontSize: "25px",
+              marginLeft: "5px",
+              width: `${Math.max(inputValue.length, 1) * 20 + 16}px`,
+              padding: "0 10px",
+              border: `2px solid ${priColor}`,
+              borderRadius: "6px",
+              outline: "none",
+              backgroundColor: "white",
+            }}
+          />
+        ) : (
+          <span
+            onClick={handleClick}
+            style={{
+              fontSize: "25px",
+              marginLeft: "5px",
+              fontWeight: "bold",
+              background: `linear-gradient(90deg, ${priColor}, white, ${priColor})`,
+              backgroundSize: "200% 200%",
+              WebkitBackgroundClip: "text",
+              color: "transparent",
+              animation: "shine 1s infinite linear",
+              cursor: "pointer",
+              position: "relative",
+            }}
+          >
+            {book?.pagesRead}
+          </span>
+        )}
+        <sub style={{ marginLeft: "3px" }}>/ {book?.totalPages}</sub>
+
+        {showError && (
+          <div
+            style={{
+              position: "absolute",
+              top: "100%",
+              left: "50%",
+              transform: "translateX(-50%)",
+              color: "red",
+              fontSize: "12px",
+              marginTop: "4px",
+              backgroundColor: "rgba(255, 0, 0, 0.1)",
+              padding: "4px 8px",
+              borderRadius: "4px",
+              whiteSpace: "nowrap",
+              animation: "fadeIn 0.3s",
+            }}
+          >
+            Please enter a valid page number (0-{book?.totalPages})
+          </div>
+        )}
+
+        <style>
+          {`
+            @keyframes shine {
+              0% { background-position: 0% 50%; }
+              50% { background-position: 100% 50%; }
+              100% { background-position: 50% 50%; }
+            }
+            
+            @keyframes fadeInOut {
+              0%, 100% { opacity: 0; }
+              50% { opacity: 1; }
+            }
+            
+            @keyframes fadeIn {
+              from { opacity: 0; transform: translateX(-50%) translateY(-10px); }
+              to { opacity: 1; transform: translateX(-50%) translateY(0); }
+            }
+            
+            span:hover > div {
+              opacity: 1;
+            }
+          `}
+        </style>
+      </div>
     );
   };
 
@@ -238,7 +384,7 @@ const Book = () => {
             </span>
 
             {/* Floating Button */}
-            {!book?.completedReading && (
+            {/* {!book?.completedReading && (
               <span
                 style={{
                   position: "absolute",
@@ -267,7 +413,7 @@ const Book = () => {
                   }}
                 />
               </span>
-            )}
+            )} */}
             <span
               style={{
                 position: "absolute",
@@ -282,33 +428,20 @@ const Book = () => {
                 transition: "all 0.3s ease-in-out",
               }}
             >
-              <span>
-                p.
-                <span
-                  style={{
-                    fontSize: "27px",
-                    marginLeft: "5px",
-                    fontWeight: "bold",
-                    background: `linear-gradient(90deg, ${priColor}, white, ${priColor})`,
-                    backgroundSize: "200% 200%",
-                    WebkitBackgroundClip: "text",
-                    color: "transparent",
-                    animation: "shine 1s infinite linear",
-                  }}
-                >
-                  {book?.pagesRead}
-                </span>
-                <style>
-                  {`
-  @keyframes shine {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 50% 50%; }
-  }
-`}
-                </style>{" "}
-                <sub>/ {book?.totalPages}</sub>
-              </span>
+              <PageProgress
+                onUpdatePages={async (pageNumber) => {
+                  setBook({
+                    ...book,
+                    pagesRead: pageNumber,
+                  });
+                  await updateBookById(
+                    {
+                      pagesRead: pageNumber,
+                    },
+                    book.id
+                  );
+                }}
+              />
             </span>
           </div>
         </div>
@@ -394,7 +527,70 @@ const Book = () => {
             {/* Quick Note Mode */}
             {mode === "note" && (
               <div>
-                <TipTapEditor />
+                <TipTapEditor
+                  setContent={(html) => {
+                    setNote({
+                      ...note,
+                      description: html,
+                    });
+                  }}
+                  resetContentFlag={editorContentResetFlag}
+                />
+                <div
+                  style={{
+                    marginTop: "10px",
+                    display: "flex",
+                    justifyContent: "flex-start",
+                    alignItems: "center",
+                  }}
+                >
+                  Choose a tags:&nbsp; &nbsp;
+                  <Tag
+                    color={
+                      note?.tags?.includes("p." + book?.pagesRead)
+                        ? priColor
+                        : "silver"
+                    }
+                    onClick={() => {
+                      note?.tags?.includes("p." + book?.pagesRead)
+                        ? setNote({
+                            ...note,
+                            tags: note.tags.filter(
+                              (tag) => tag !== "p." + book?.pagesRead
+                            ),
+                          })
+                        : setNote({
+                            ...note,
+                            tags: [...note.tags, "p." + book?.pagesRead],
+                          });
+                      setEditorContentResetFlag(!editorContentResetFlag);
+                    }}
+                    style={{ cursor: "pointer" }}
+                  >
+                    {" "}
+                    p. {book?.pagesRead}
+                  </Tag>
+                  <Tag
+                    color={
+                      note?.tags?.includes("important") ? priColor : "silver"
+                    }
+                    onClick={() => {
+                      note?.tags?.includes("important")
+                        ? setNote({
+                            ...note,
+                            tags: note.tags.filter(
+                              (tag) => tag !== "important"
+                            ),
+                          })
+                        : setNote({
+                            ...note,
+                            tags: note.tags.concat("important"),
+                          });
+                    }}
+                  >
+                    ! Important
+                  </Tag>
+                </div>
                 {/* <TextArea
                   required
                   rows={4}

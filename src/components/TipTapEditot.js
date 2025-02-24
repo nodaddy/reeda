@@ -11,7 +11,7 @@ import TextStyle from "@tiptap/extension-text-style"; // Add this
 import Color from "@tiptap/extension-color"; // Add this
 import { Bold as BoldIcon, Heading1, List } from "lucide-react"; // Premium-looking icons
 
-export default function TipTapEditor() {
+export default function TipTapEditor({ setContent, resetContentFlag }) {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -25,11 +25,27 @@ export default function TipTapEditor() {
       Heading,
       BulletList,
       OrderedList,
-      TextStyle, // Required for color
-      Color, // Enables text color
+      TextStyle,
+      Color,
     ],
-    content: "<p></p>",
+    content: "",
+    onUpdate: ({ editor }) => {
+      setContent(editor.getHTML()); // Calls setContent with updated content
+    },
   });
+
+  useEffect(() => {
+    if (editor) {
+      editor.commands.focus(); // Auto-focus the editor
+    }
+  }, [editor]);
+
+  useEffect(() => {
+    if (editor) {
+      editor.commands.setContent(""); // Clear content
+      editor.commands.focus(); // Keep cursor active after reset
+    }
+  }, [resetContentFlag]);
 
   if (!mounted || !editor) return null; // Prevent hydration issues
 
@@ -50,7 +66,6 @@ const styles = {
     boxShadow: "0 4px 12px rgba(0, 0, 0, 0.05)",
   },
   editorContent: {
-    minHeight: "180px",
     padding: "0px 10px",
     border: "1px solid #ddd",
     borderRadius: "8px",
@@ -92,8 +107,10 @@ function Toolbar({ editor }) {
           editor.chain().focus().setColor(event.target.value).run()
         }
         style={{
-          height: "40px",
+          height: "45px",
+          width: "45px",
           marginLeft: "8px",
+          borderRadius: "7px",
           cursor: "pointer",
           border: "none",
           background: "transparent",
