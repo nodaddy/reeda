@@ -233,8 +233,8 @@ const ContinueReadingCard = ({ book }) => {
         style={{
           position: "absolute",
           alignItems: "center",
-          height: "57px",
-          width: "47px",
+          height: "53px",
+          width: "53px",
           borderRadius: "50%",
           justifyContent: "center",
           backgroundColor: priColor,
@@ -266,7 +266,7 @@ const ContinueReadingCard = ({ book }) => {
 
         <Link href={`/updateBook/${book?.id}`}>
           <NotebookPen
-            size={23}
+            size={20}
             color={"white"}
             style={{
               margin: "0px 0px",

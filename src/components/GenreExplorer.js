@@ -530,6 +530,15 @@ const GenreExplorer = () => {
                   history.back();
                 }}
               />
+              <h2
+                style={{
+                  fontWeight: "500",
+                  margin: "0",
+                  fontFamily: "Poppins",
+                }}
+              >
+                Genres
+              </h2>
             </div>
           </div>
           <br />
