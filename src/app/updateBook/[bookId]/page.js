@@ -459,6 +459,7 @@ const Book = () => {
             style={{
               borderRadius: "12px",
               padding: "10px",
+              backgroundColor: "transparent",
               border: "0px",
             }}
           >
@@ -474,6 +475,7 @@ const Book = () => {
                 size="large"
                 style={{
                   border: "0px",
+                  backgroundColor: "transparent",
                   boxShadow: "0px 4px 10px rgba(0,0,0,0)",
                   padding: "0px",
                   margin: "0px",
@@ -565,7 +567,7 @@ const Book = () => {
                     disabled={savingData || !note.description}
                     style={{
                       padding: "25px 0px",
-                      backgroundColor: "white",
+                      backgroundColor: "transparent",
                       boxShadow: "0px 0px 0px transparent",
                       color: priColor,
                       border: "0px",

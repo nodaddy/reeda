@@ -66,16 +66,15 @@ const ProfilePage = () => {
     <div
       style={{
         height: "350px",
-        backgroundColor: priColor,
         position: "relative",
         borderRadius: "0 0 190px 60px",
       }}
     >
       <div />
+      <br />
 
       <div style={{ padding: "24px 32px" }}>
         <MoveLeft
-          color="white"
           style={{ cursor: "pointer" }}
           onClick={() => history.back()}
         />
@@ -85,7 +84,6 @@ const ProfilePage = () => {
 
         <h1
           style={{
-            color: "white",
             fontFamily: "'Inter', sans-serif",
             fontWeight: "400",
           }}

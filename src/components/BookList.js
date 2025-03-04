@@ -122,8 +122,8 @@ const BookList = () => {
     setBooks,
     isAddBookModalVisible,
     setIsAddBookModalVisible,
-    setSlideIn,
-    setSlideInContent,
+    profile,
+    setProfile,
   } = useAppContext();
 
   const router = useRouter();
@@ -239,15 +239,17 @@ const BookList = () => {
         if (newBook.inWishlist) {
           createbook(newBook).then(() =>
             getBooks().then(async (res) => {
-              const profile = await getProfile(
-                JSON.parse(storage.getItem("user")).email
-              );
-
               // add coins to the profile
               await updateProfile(profile?.userId, {
                 ...profile,
                 coins: (profile?.coins || 0) + addCoinsPerNewBookAdded,
               });
+
+              // fetch and set profile again
+              const nProfile = await getProfile(
+                JSON.parse(storage.getItem("user")).email
+              );
+              setProfile(nProfile);
 
               setBooks(res);
               setFilteredBooks(res.filter((book) => !book.inWishlist));

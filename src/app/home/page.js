@@ -93,159 +93,90 @@ const Home = () => {
     fetchProfile();
   }, []);
 
-  // Modern geometric background style with gradient effect
-  const modernBackground = {
-    position: "relative",
-    overflow: "scroll",
-    backgroundColor: "#f8f9fa", // Light clean background
-    background:
-      "linear-gradient(165deg, rgba(255,255,255,1) 0%, rgba(248,249,250,1) 45%, rgba(248,249,250,1) 55%, rgba(255,255,255,1) 100%)",
-  };
-
-  // Subtle geometric pattern overlay with more pronounced fading mask
-  const geometricPattern = {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundImage: `
-      linear-gradient(135deg, rgba(0, 0, 0, 0.03) 25%, transparent 25%, transparent 50%, rgba(0, 0, 0, 0.03) 50%, rgba(0, 0, 0, 0.03) 75%, transparent 75%, transparent),
-      linear-gradient(45deg, rgba(0, 0, 0, 0.02) 25%, transparent 25%, transparent 50%, rgba(0, 0, 0, 0.02) 50%, rgba(0, 0, 0, 0.02) 75%, transparent 75%, transparent)
-    `,
-    backgroundSize: "80px 80px, 60px 60px",
-    backgroundAttachment: "fixed",
-    opacity: 0.55,
-    zIndex: 0,
-    pointerEvents: "none", // Makes the overlay non-interactive
-    maskImage:
-      "radial-gradient(ellipse at 60% 40%, black 15%, rgba(0,0,0,0.3) 40%, transparent 65%)",
-    WebkitMaskImage:
-      "radial-gradient(ellipse at 60% 40%, black 15%, rgba(0,0,0,0.3) 40%, transparent 65%)",
-  };
-
-  // Faint grid overlay with more pronounced non-centered gradient mask
-  const gridOverlay = {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundImage: `
-      linear-gradient(to right, rgba(0, 0, 0, 0.02) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(0, 0, 0, 0.02) 1px, transparent 1px)
-    `,
-    backgroundSize: "40px 40px",
-    backgroundAttachment: "fixed",
-    opacity: 0.6,
-    zIndex: 0,
-    pointerEvents: "none", // Makes the overlay non-interactive
-    maskImage:
-      "radial-gradient(ellipse at 45% 55%, black 20%, rgba(0,0,0,0.4) 40%, transparent 70%)",
-    WebkitMaskImage:
-      "radial-gradient(ellipse at 45% 55%, black 20%, rgba(0,0,0,0.4) 40%, transparent 70%)",
-  };
-
-  // Content container to ensure content is above background elements
-  const contentContainer = {
-    position: "relative",
-    zIndex: 1,
-  };
-
   return (
     !loading && (
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.6, ease: "easeOut" }}
-        style={modernBackground}
       >
-        {/* Geometric pattern overlay */}
-        <div style={geometricPattern}></div>
+        {books?.length >= 0 && (
+          <StreakCard
+            streak={profile?.streak}
+            isActive={
+              lastPageScanDifference < streakMaintenanceIntervalInSeconds * 2
+            }
+          />
+        )}
 
-        {/* Grid overlay */}
-        <div style={gridOverlay}></div>
-
-        {/* Content container */}
-        <div style={contentContainer}>
-          {books?.length >= 0 && (
-            <StreakCard
-              streak={profile?.streak}
-              isActive={
-                lastPageScanDifference < streakMaintenanceIntervalInSeconds * 2
-              }
-            />
-          )}
-
-          {books?.filter((book) => book.inProgress).length == 0 ? (
-            <div
-              style={{
-                width: "100%",
-                marginBottom: "60px",
-              }}
-            >
-              <br />
-              <br />
-              <Empty
-                style={{
-                  color: "black",
-                }}
-                image={Empty.PRESENTED_IMAGE_SIMPLE}
-                description={
-                  <div style={{ marginTop: "14px" }}>No open books</div>
-                }
-              />
-            </div>
-          ) : (
-            <>
-              <br />
-            </>
-          )}
-          {books?.filter((book) => book.inProgress).length > 0 && (
-            <div
-              id="continue-reading-div"
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "30px",
-                padding: "10px",
-                margin: "25px 0px 30px 0px",
-                overflowX: "scroll",
-              }}
-            >
-              {books
-                ?.filter((book) => book.inProgress)
-                .map((book) => (
-                  <ContinueReadingCard key={book.id} book={book} />
-                ))}
-            </div>
-          )}
-
+        {books?.filter((book) => book.inProgress).length == 0 ? (
           <div
             style={{
-              padding: "0px 0px 0px 24px",
+              width: "100%",
+              marginBottom: "60px",
             }}
           >
             <br />
-
-            <BookList />
             <br />
-
-            <FloatingWords />
-
-            {/* {books && books.length > 0 && <NextBooksToRead />} */}
-            {/* <BottomNav /> */}
-            <Link href={"/scan/" + bookTitleForAdHocAISession}>
-              <FloatButton
-                shape="square"
-                type="primary"
-                style={{
-                  insetInlineEnd: 40,
-                }}
-                icon={<>AI</>}
-              />
-            </Link>
+            <Empty
+              style={{
+                color: "black",
+              }}
+              image={Empty.PRESENTED_IMAGE_SIMPLE}
+              description={
+                <div style={{ marginTop: "14px" }}>No open books</div>
+              }
+            />
           </div>
+        ) : (
+          <>
+            <br />
+          </>
+        )}
+        {books?.filter((book) => book.inProgress).length > 0 && (
+          <div
+            id="continue-reading-div"
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "30px",
+              padding: "10px",
+              margin: "25px 0px 30px 0px",
+              overflowX: "scroll",
+            }}
+          >
+            {books
+              ?.filter((book) => book.inProgress)
+              .map((book) => (
+                <ContinueReadingCard key={book.id} book={book} />
+              ))}
+          </div>
+        )}
+
+        <div
+          style={{
+            padding: "0px 0px 0px 24px",
+          }}
+        >
+          <br />
+
+          <BookList />
+          <br />
+
+          <FloatingWords />
+
+          {/* {books && books.length > 0 && <NextBooksToRead />} */}
+          {/* <BottomNav /> */}
+          <Link href={"/scan/" + bookTitleForAdHocAISession}>
+            <FloatButton
+              shape="square"
+              type="primary"
+              style={{
+                insetInlineEnd: 40,
+              }}
+              icon={<>AI</>}
+            />
+          </Link>
         </div>
       </motion.div>
     )

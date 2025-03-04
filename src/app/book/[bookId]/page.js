@@ -71,6 +71,8 @@ const Book = () => {
   const [messageApi, contextHolder] = message.useMessage();
 
   const [lastDoc, setLastDoc] = useState(null);
+  const [noteRefs, setNoteRefs] = useState({});
+
   const fetchNotes = async () => {
     const { notesData, lastVisible } = await getNotesByBookId(bookId, lastDoc);
     setNotes((prevNotes) => [...prevNotes, ...notesData]);
@@ -122,6 +124,11 @@ const Book = () => {
     }
   }, [reloadCount]);
 
+  // Reset refs when notes change
+  useEffect(() => {
+    setNoteRefs({});
+  }, [notes]);
+
   // Toggle note expansion
   const toggleExpand = (id) => {
     setNotes((prevNotes) =>
@@ -129,6 +136,23 @@ const Book = () => {
         note.id === id ? { ...note, expanded: !note.expanded } : note
       )
     );
+  };
+
+  // Function to check if content is overflowing
+  const checkOverflow = (id) => {
+    if (noteRefs[id]) {
+      const element = noteRefs[id];
+      // Primary method: check if content is overflowing
+      const isOverflowing = element.scrollHeight > element.clientHeight;
+
+      // Fallback method: check if the text content is long enough
+      // This helps when WebkitLineClamp makes scrollHeight calculation unreliable
+      const textLength = element.textContent.trim().length;
+      const hasLongText = textLength > 150;
+
+      return isOverflowing || hasLongText;
+    }
+    return false;
   };
 
   const handleUpdateNote = async (values) => {
@@ -406,6 +430,7 @@ const Book = () => {
                     marginBottom: "14px",
                     borderRadius: "8px",
                     border: "0px",
+                    backgroundColor: "transparent",
                     boxShadow: "0px 4px 8px rgba(0,0,0,0)",
                     transition: "transform 0.2s ease-in-out",
                     cursor: "pointer",
@@ -426,8 +451,13 @@ const Book = () => {
                       <br />
                       <span style={{ fontSize: "16px" }}>{note.title}</span>
                       <p
+                        ref={(el) => {
+                          if (el && !noteRefs[note.id]) {
+                            setNoteRefs((prev) => ({ ...prev, [note.id]: el }));
+                          }
+                        }}
                         style={{
-                          fontSize: "14px",
+                          fontSize: "15px",
                           color: "#555",
                           marginTop: "5px",
                           marginBottom: "3px",
@@ -439,20 +469,19 @@ const Book = () => {
                         dangerouslySetInnerHTML={{ __html: note.description }}
                       ></p>
 
-                      {note.description.split(" ").length > 15 &&
-                        !note.expanded && (
-                          <Button
-                            type="link"
-                            style={{
-                              padding: 0,
-                              fontSize: "14px",
-                              marginLeft: "-2px",
-                            }}
-                            onClick={() => toggleExpand(note.id)}
-                          >
-                            Read More
-                          </Button>
-                        )}
+                      {!note.expanded && checkOverflow(note.id) && (
+                        <Button
+                          type="link"
+                          style={{
+                            padding: 0,
+                            fontSize: "14px",
+                            marginLeft: "-2px",
+                          }}
+                          onClick={() => toggleExpand(note.id)}
+                        >
+                          Read More
+                        </Button>
+                      )}
                       {note.expanded && (
                         <Button
                           type="link"
@@ -550,100 +579,6 @@ const Book = () => {
               Load More
             </Button>
           )}
-
-          {notesOrSessions === "sessions"
-            ? studySessions.map((session) => (
-                <Card
-                  key={session.id}
-                  style={{
-                    marginBottom: "14px",
-                    borderRadius: "8px",
-                    boxShadow: "0px 4px 8px rgba(0,0,0,0.1)",
-                    transition: "transform 0.2s ease-in-out",
-                    cursor: "pointer",
-                  }}
-                  hoverable
-                  bodyStyle={{ padding: "15px" }}
-                >
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                    }}
-                  >
-                    <div>
-                      <small style={{ color: "#888" }}>
-                        {new Date(session.createdAt).toDateString()}
-                      </small>
-                      <br />
-                      <span
-                        style={{
-                          fontSize: "16px",
-                        }}
-                      >
-                        {session.pagesCovered}
-                        <br />
-                        <span
-                          style={{
-                            color: secTextColor,
-                            display: "flex",
-                            alignItems: "center",
-                            gap: "5px",
-                          }}
-                        >
-                          <Timer size={18} /> {session.duration}
-                        </span>
-                      </span>
-                      <p
-                        style={{
-                          fontSize: "14px",
-                          color: "#555",
-                          marginTop: "5px",
-                          marginBottom: "3px",
-                          display: "-webkit-box",
-                          WebkitLineClamp: session.expanded ? "unset" : 2,
-                          WebkitBoxOrient: "vertical",
-                          overflow: "hidden",
-                        }}
-                      >
-                        {session.summary}
-                      </p>
-
-                      {session.summary.split(" ").length > 15 &&
-                        !session.expanded && (
-                          <Button
-                            type="link"
-                            style={{
-                              padding: 0,
-                              fontSize: "14px",
-                              paddingTop: "0",
-                            }}
-                            onClick={() => toggleExpand(session.id)}
-                          >
-                            Read More
-                          </Button>
-                        )}
-                      {session.expanded && (
-                        <Button
-                          type="link"
-                          style={{
-                            padding: 0,
-                            fontSize: "14px",
-                            marginLeft: "5px",
-                          }}
-                          onClick={() => toggleExpand(session.id)}
-                        >
-                          Show Less
-                        </Button>
-                      )}
-                    </div>
-                    <div style={{ display: "flex", gap: "10px" }}>
-                      <MoreVertical size={20} style={{ cursor: "pointer" }} />
-                    </div>
-                  </div>
-                </Card>
-              ))
-            : null}
         </div>
 
         {/* Edit Note Modal */}
