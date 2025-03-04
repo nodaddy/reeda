@@ -25,14 +25,14 @@ import { useRouter } from "next/navigation";
 import { logo } from "@/assets";
 import Image from "next/image";
 
-const StreakCard = ({ streak, isActive, isPremium = true }) => {
+const StreakCard = ({ streak, isActive }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [loading, setLoading] = useState(true);
   const [timeLeft, setTimeLeft] = useState({ hours: 0, minutes: 0 });
 
   const [menuOpen, setMenuOpen] = useState(null);
 
-  const { setProfile } = useAppContext();
+  const { setProfile, isPremium } = useAppContext();
 
   const router = useRouter();
 
