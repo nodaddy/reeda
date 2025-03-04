@@ -54,6 +54,7 @@ import {
   scanPageRatio,
   scanPageRation,
   streakMaintenanceIntervalInSeconds,
+  freeAIscans,
 } from "@/configs/variables";
 import {
   getPageSummaryFromImage,
@@ -70,6 +71,8 @@ import { priColor, priTextColor, secColor } from "@/configs/cssValues";
 import { uploadImages } from "@/assets";
 import NextImage from "next/image";
 import StackedImages from "./StackedImages";
+import { storage } from "@/app/utility";
+import PremiumSlideIn from "./PremiumSlideIn";
 
 const backgroundColor = "#F0F0F8";
 const accentColor = "#4A4AFF";
@@ -94,14 +97,16 @@ export default function ScanResults({ setBook, scans, setDataOut }) {
   const [uploadingImage, setUploadingImage] = useState(false);
 
   const {
-    profile,
-    setProfile,
     nightModeOn,
     summaryOrFullText,
     setSummaryOrFullText,
     selectedSessionNumberOfPages,
     setSelectedSessionNumberOfPages,
     setShowingSummaryOrFullText,
+    profile,
+    isPremium,
+    setSlideIn,
+    setSlideInContent,
   } = useAppContext();
 
   const [images, setImages] = useState([]);
@@ -169,31 +174,6 @@ export default function ScanResults({ setBook, scans, setDataOut }) {
     reader.readAsDataURL(file);
   };
 
-  // const getCroppedImage = (imageSrc, crop) => {
-  //   return new Promise((resolve) => {
-  //     const image = new Image();
-  //     image.src = imageSrc;
-  //     image.onload = () => {
-  //       const canvas = document.createElement('canvas');
-  //       canvas.width = crop.width;
-  //       canvas.height = crop.height;
-  //       const ctx = canvas.getContext('2d');
-  //       ctx.drawImage(
-  //         image,
-  //         crop.x,
-  //         crop.y,
-  //         crop.width,
-  //         crop.height,
-  //         0,
-  //         0,
-  //         crop.width,
-  //         crop.height
-  //       );
-  //       canvas.toBlob((blob) => resolve(blob), 'image/jpeg');
-  //     };
-  //   });
-  // };
-
   useEffect(() => {
     if (images.length == selectedSessionNumberOfPages) {
       setTimeout(() => {
@@ -205,12 +185,42 @@ export default function ScanResults({ setBook, scans, setDataOut }) {
   const handleUpload = async () => {
     setUploadingImage(true);
 
+    // Check if user has reached free scan limit
+    const userId = JSON.parse(storage.getItem("user"))?.email;
+
+    // Get current number of AI scans used
+    const numberOfAIScansUsed = profile?.numberOfAIScansUsed || 0;
+
+    // Check if user has reached free scan limit and is not premium
+    if (numberOfAIScansUsed >= freeAIscans && !isPremium) {
+      setUploadingImage(false);
+      // Show premium slide-in instead of redirecting
+      setSlideInContent(<PremiumSlideIn />);
+      setSlideIn(true);
+      return;
+    }
+
     for (const image of images) {
       const croppedFile = await getBlob(image);
 
       if (!croppedFile) {
         console.error("Failed to create blob for image:", image);
         continue; // Skip this iteration if blob creation fails
+      }
+
+      // Update user's profile to increment the number of AI scans used
+      if (userId) {
+        try {
+          // Get current profile data
+          const updatedData = {
+            numberOfAIScansUsed: (profile?.numberOfAIScansUsed || 0) + 1,
+          };
+
+          // Update profile with incremented scan count
+          await updateProfile(userId, updatedData);
+        } catch (error) {
+          console.error("Error updating profile with scan count:", error);
+        }
       }
 
       if (summaryOrFullText == "summary") {

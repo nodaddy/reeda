@@ -84,16 +84,16 @@ const ContinueReadingCard = ({ book }) => {
       style={{
         width: "210px",
         boxShadow: "0px 3px 8px rgba(0,0,0,0.17)",
-        borderRadius: "11px 11px 50px 11px",
+        borderRadius: "50px 11px 50px 50px",
         flex: "0 0 auto",
-        padding: "20px 30px 45px 30px",
+        padding: "20px 30px 37px 30px",
         margin: "60px auto 20px auto",
         color: priTextColor,
         transition: "all 0.3s ease-in-out",
         backgroundColor: "white",
         fontFamily: "'Inter', sans-serif",
         position: "relative",
-        borderTop: "4px solid " + bookmarkColour,
+        borderTop: "8px solid " + "white",
       }}
     >
       {(JSON.parse(storage.getItem(bookSessionStorageKey) || null)?.id ==
@@ -136,8 +136,8 @@ const ContinueReadingCard = ({ book }) => {
         fill={bookmarkColour}
         style={{
           position: "absolute",
-          top: "-5px",
-          right: "24px",
+          top: "-11px",
+          right: "32px",
         }}
       />
       <Typography.Title
@@ -170,11 +170,11 @@ const ContinueReadingCard = ({ book }) => {
         src={book.cover}
         alt={book.title}
         style={{
-          width: "65px",
-          height: "65px",
-          objectFit: "none",
-          border: "5px solid " + bookmarkColour,
+          width: "69px",
+          height: "69px",
           position: "absolute",
+          boxShadow: "0px 3px 10px rgba(0,0,0,0.27)",
+          border: "2px solid #e0e0e0",
           // boxShadow: "0px 3px 10px " + bookmarkColour,
           top: "65px",
           left: "29px",
@@ -216,10 +216,9 @@ const ContinueReadingCard = ({ book }) => {
             marginTop: "10px",
             textDecoration: "none",
             display: "inline-block",
-            border: "1px solid " + defaultBorderColor,
+
             color: bookmarkColour,
-            padding: "3px 9px",
-            borderRadius: "999px",
+            padding: "4px 0px",
             fontSize: "12px",
             fontWeight: "500",
           }}
@@ -234,11 +233,12 @@ const ContinueReadingCard = ({ book }) => {
         style={{
           position: "absolute",
           alignItems: "center",
-          height: "50px",
-          width: "50px",
+          height: "60px",
+          width: "60px",
           borderRadius: "50%",
           justifyContent: "center",
-          backgroundColor: bookmarkColour,
+          backgroundColor: priColor,
+          boxShadow: "0px 3px 6px rgba(0,0,0,0.2)",
           display: "flex",
           bottom: "-16px",
           right: "11%",
@@ -263,50 +263,10 @@ const ContinueReadingCard = ({ book }) => {
     }
   `}
         </style>
-        {/* {JSON.parse(storage.getItem(bookSessionStorageKey) || null)?.id ==
-          book?.id || currentSessionBook?.id == book?.id ? (
-          <CircleStop
-            size={21}
-            color={"red"}
-            style={{
-              paddingRight: "12px",
-              borderRight: "1px solid " + "silver",
-            }}
-            onClick={() => {
-              storage.removeItem(bookSessionStorageKey);
-              setCurrentSessionBook(null);
-              setElapsedTime(0);
-            }}
-          />
-        ) : (
-          <Popconfirm
-            icon={<></>}
-            onCancel={() => {
-              storage.setItem(
-                bookSessionStorageKey,
-                JSON.stringify({ ...book, timestamp: Date.now() })
-              );
-              setCurrentSessionBook({ ...book, timestamp: Date.now() });
-            }}
-            onConfirm={() => {
-              // open session logging panel
-            }}
-            okText="Log session"
-            cancelText="Start timer"
-          >
-            <Timer
-              size={21}
-              color={"white"}
-              style={{
-                paddingRight: "9px",
-                borderRight: "1px solid " + "silver",
-              }}
-            />
-          </Popconfirm>
-        )} */}
+
         <Link href={`/updateBook/${book?.id}`}>
           <NotebookPen
-            size={20}
+            size={25}
             color={"white"}
             style={{
               margin: "0px 0px",

@@ -111,10 +111,10 @@ const FloatingWords = () => {
           }}
         >
           <span style={{ display: "flex", alignItems: "center" }}>
-            <BookHeart />
-            &nbsp;Interests & Wishlist &nbsp;&nbsp;
+            {/* <BookHeart /> */}
+            &nbsp; &nbsp;&nbsp;
           </span>
-          <MoveRight />
+          {/* <MoveRight /> */}
         </span>
 
         {shuffleArray(wordList).map((word) => {

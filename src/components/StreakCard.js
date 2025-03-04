@@ -22,6 +22,8 @@ import { logGAEvent } from "@/firebase/googleAnalytics";
 import Link from "next/link";
 import { useAppContext } from "@/context/AppContext";
 import { useRouter } from "next/navigation";
+import { logo } from "@/assets";
+import Image from "next/image";
 
 const StreakCard = ({ streak, isActive, isPremium = true }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -150,15 +152,6 @@ const StreakCard = ({ streak, isActive, isPremium = true }) => {
               </Link>
             </li>
           )}
-          {/* <li style={{ borderBottom: "1px solid #ddd", padding: '18px 0px' }}>
-            <Link onClick={() => setMenuOpen(false)} href="/store" style={{ color: "#333", textDecoration: "none" }}>
-              The Reeda Store
-              
-            </Link>
-          </li> */}
-          {/* <li style={{ borderBottom: "1px solid #ddd", padding: '18px 0px' }}>
-            <Link onClick={() => setMenuOpen(false)} href="/settings" style={{ color: "#333", textDecoration: "none" }}>Settings</Link>
-          </li> */}
           <li style={{ borderBottom: "1px solid #ddd", padding: "18px 0px" }}>
             <Link
               onClick={() => setMenuOpen(false)}
@@ -202,30 +195,18 @@ const StreakCard = ({ streak, isActive, isPremium = true }) => {
 
       <Card
         bodyStyle={{
-          // padding: "18px 24px 20px 28px",
-          // margin: "10px",
           padding: "18px 24px 190px 24px",
-          backgroundColor: priColor,
-          background:
-            "linear-gradient(135deg,rgb(0, 80, 200) 0%, rgb(0, 112, 243) 40%, rgb(50, 140, 255) 70%, rgb(100, 170, 255) 100%)",
+
           width: "100vw",
           position: "absolute",
-          borderRadius: "0px 0px 177px 87px",
-          // borderRadius: "10px",
-          //  background: isPremium ? 'linear-gradient(135deg, #B08D01, goldenrod, gold,  whitesmoke)' : "linear-gradient(155deg,  silver,  whitesmoke)", // Gold, platinum, and light metallic gradient
         }}
         style={{
-          // boxShadow: '0 0px 8px rgba(0, 0, 0, 0.06)',
-
-          // background: 'linear-gradient(11deg, silver, whitesmoke, whitesmoke) 0% 0% / 200% 200%',
           width: "100%",
           margin: "auto",
 
           border: "0px",
           backgroundColor: "transparent",
           backgroundSize: "200% 200%",
-          //  animation: 'shine 3s ease-in-out infinite', // Shine animation for glaring effect
-          //  boxShadow: '0 4px 15px rgba(0, 0, 0, 0.2)', // Stronger shadow for depth
         }}
       >
         <div
@@ -253,39 +234,22 @@ const StreakCard = ({ streak, isActive, isPremium = true }) => {
                   }}
                 >
                   <span>
-                    {/* <Icon size={23} style={{ marginRight: '10px' }} /> */}
                     <sub
                       style={{
                         display: "flex",
                         alignItems: "center",
                         fontWeight: "300",
                       }}
-                    >
-                      {/* <Icon size={23} style={{ marginRight: '10px' }} />  
-    {greeting} */}
-                    </sub>
+                    ></sub>
                     <div
                       style={{
                         marginTop: "0px",
                         fontSize: "23px",
                         fontWeight: "300",
-                        color: "white",
                       }}
                     >
-                      {/* <Icon size={23} style={{ marginRight: '10px', opacity: '0' }} /> */}
-                      {/* Hi,{" "}
-                      {
-                        JSON.parse(storage.getItem("user"))
-                          ?.displayName.split(" ")
-                          .slice(0, 2)
-                          .join(" ")
-                          .split(" ")[0]
-                      } */}
-                      Reeda
+                      <Image src={logo} width={55} height={55} alt="logo" />
                     </div>
-                    {/* <sup style={{ color: "white" }}>
-                      Let's sync your reading progress.
-                    </sup> */}
                   </span>
                 </div>
               </div>
@@ -293,12 +257,11 @@ const StreakCard = ({ streak, isActive, isPremium = true }) => {
           }
 
           <List
-            color={"white"}
+            color={"black"}
             size={26}
             onClick={() => setMenuOpen(!menuOpen)}
             style={{
               marginRight: "-3px",
-              zIndex: "9999999",
             }}
           />
 
@@ -355,13 +318,6 @@ const StreakCard = ({ streak, isActive, isPremium = true }) => {
                 </>
               )}
             </h4>
-            {/* <div align="center">
-            <p style={{ margin: 0, fontSize: '13px', fontWeight: 'bold', color: 'grey' }}>
-              <span style={{ display: 'flex', fontWeight: '400', justifyContent: 'flex-end', alignItems: 'center', fontSize: '13px' }}>
-                {`Your longest streak - ${streak?.longestStreak} ${streak?.longestStreak > 1 ? 'Days' : 'Day'}`}
-              </span>
-            </p>
-          </div> */}
           </div>
         </div>
       </Card>

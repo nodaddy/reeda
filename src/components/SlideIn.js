@@ -6,7 +6,6 @@ const SlideIn = () => {
   return (
     <div
       style={{
-        padding: "20px",
         position: "fixed",
         left: slideIn ? "0px" : "100vw",
         backgroundColor: "white",
@@ -17,22 +16,6 @@ const SlideIn = () => {
         transition: "left 0.3s ease-in-out",
       }}
     >
-      <div
-        onClick={() => {
-          setSlideIn(false);
-        }}
-        style={{
-          display: "flex",
-          alignItems: "center",
-        }}
-      >
-        <MoveLeft />
-        &nbsp; Back
-      </div>
-
-      <br />
-      <br />
-
       <div
         style={{
           width: "100vw",

@@ -14,6 +14,10 @@ import {
   Alert,
   message,
   Divider,
+  Popover,
+  Modal,
+  Form,
+  Input,
 } from "antd";
 import Title from "antd/es/typography/Title";
 import {
@@ -28,6 +32,7 @@ import {
   PlaySquare,
   MoreVertical,
   PlusCircle,
+  Delete,
 } from "lucide-react";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -39,7 +44,11 @@ import {
   getCurrentTimestampInMilliseconds,
 } from "@/app/utility";
 import Link from "next/link";
-import { getNotesByBookId } from "@/firebase/services/notesService";
+import {
+  getNotesByBookId,
+  updateNote,
+  deleteNote,
+} from "@/firebase/services/notesService";
 import { getStudySessionsByBookId } from "@/firebase/services/studySessionService";
 import { loadingGif } from "@/configs/variables";
 
@@ -50,6 +59,10 @@ const Book = () => {
   const history = useRouter();
 
   const [notes, setNotes] = useState([]);
+  const [activePopover, setActivePopover] = useState(null);
+  const [editNoteModalVisible, setEditNoteModalVisible] = useState(false);
+  const [currentNote, setCurrentNote] = useState(null);
+  const [editNoteForm] = Form.useForm();
 
   const [studySessions, setStudySessions] = useState([]);
 
@@ -118,6 +131,45 @@ const Book = () => {
     );
   };
 
+  const handleUpdateNote = async (values) => {
+    try {
+      await updateNote(currentNote.id, {
+        title: values.title,
+        description: values.description,
+      });
+
+      // Update the note in the local state
+      setNotes((prevNotes) =>
+        prevNotes.map((note) =>
+          note.id === currentNote.id
+            ? { ...note, title: values.title, description: values.description }
+            : note
+        )
+      );
+
+      messageApi.success("Note updated successfully!");
+      setEditNoteModalVisible(false);
+    } catch (error) {
+      console.error("Error updating note:", error);
+      messageApi.error("Failed to update note.");
+    }
+  };
+
+  const handleDeleteNote = async (noteId) => {
+    try {
+      await deleteNote(noteId);
+
+      // Remove the note from the local state
+      setNotes((prevNotes) => prevNotes.filter((note) => note.id !== noteId));
+
+      messageApi.success("Note deleted successfully!");
+      setActivePopover(null);
+    } catch (error) {
+      console.error("Error deleting note:", error);
+      messageApi.error("Failed to delete note.");
+    }
+  };
+
   return (
     !loading && (
       <motion.div
@@ -182,7 +234,8 @@ const Book = () => {
               src={book?.cover}
               style={{
                 height: "160px",
-                borderRadius: "5px",
+                border: "3px solid white",
+                borderRadius: "7px",
                 boxShadow: "0px 3px 6px rgba(0,0,0,0.2)",
                 filter: book?.inWishlist ? "grayscale(100%)" : "none",
               }}
@@ -415,7 +468,71 @@ const Book = () => {
                       )}
                     </div>
                     <div style={{ display: "flex", gap: "10px" }}>
-                      <MoreVertical size={20} style={{ cursor: "pointer" }} />
+                      <Popover
+                        open={activePopover === note.id}
+                        onOpenChange={(open) =>
+                          setActivePopover(open ? note.id : null)
+                        }
+                        content={
+                          <div
+                            style={{
+                              display: "flex",
+                              flexDirection: "column",
+                              gap: "10px",
+                            }}
+                          >
+                            <div
+                              style={{
+                                display: "flex",
+                                alignItems: "center",
+                                gap: "10px",
+                                cursor: "pointer",
+                              }}
+                              onClick={() => {
+                                setCurrentNote(note);
+                                editNoteForm.setFieldsValue({
+                                  title: note.title,
+                                  description: note.description,
+                                });
+                                setEditNoteModalVisible(true);
+                                setActivePopover(null);
+                              }}
+                            >
+                              <Edit size={16} />
+                              <span>Edit Note</span>
+                            </div>
+                            <Popconfirm
+                              title="Are you sure you want to delete this note?"
+                              onConfirm={() => handleDeleteNote(note.id)}
+                              okText="Yes"
+                              cancelText="No"
+                              placement="left"
+                            >
+                              <div
+                                style={{
+                                  display: "flex",
+                                  alignItems: "center",
+                                  gap: "10px",
+                                  cursor: "pointer",
+                                }}
+                              >
+                                <Delete size={16} />
+                                <span>Delete Note</span>
+                              </div>
+                            </Popconfirm>
+                          </div>
+                        }
+                        trigger="click"
+                        placement="left"
+                      >
+                        <MoreVertical
+                          size={20}
+                          style={{ cursor: "pointer" }}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                          }}
+                        />
+                      </Popover>
                     </div>
                   </div>
                 </Card>
@@ -528,6 +645,49 @@ const Book = () => {
               ))
             : null}
         </div>
+
+        {/* Edit Note Modal */}
+        <Modal
+          title="Edit Note"
+          open={editNoteModalVisible}
+          onCancel={() => setEditNoteModalVisible(false)}
+          footer={null}
+        >
+          <Form
+            form={editNoteForm}
+            layout="vertical"
+            onFinish={handleUpdateNote}
+          >
+            <Form.Item
+              name="title"
+              label="Title"
+              rules={[{ required: true, message: "Please enter a title" }]}
+            >
+              <Input placeholder="Enter note title" />
+            </Form.Item>
+            <Form.Item
+              name="description"
+              label="Description"
+              rules={[
+                { required: true, message: "Please enter a description" },
+              ]}
+            >
+              <Input.TextArea rows={6} placeholder="Enter note description" />
+            </Form.Item>
+            <Form.Item>
+              <Button
+                type="primary"
+                htmlType="submit"
+                style={{ marginRight: 8 }}
+              >
+                Update
+              </Button>
+              <Button onClick={() => setEditNoteModalVisible(false)}>
+                Cancel
+              </Button>
+            </Form.Item>
+          </Form>
+        </Modal>
       </motion.div>
     )
   );

@@ -34,14 +34,14 @@ const Home = () => {
             className="hero-section"
             style={{ fontFamily: "'Inter', sans-serif" }}
           >
+            <AnimatedSlogan />
+
             <br />
             <br />
             <br />
             <SignInWithGoogle router={router} />
             <br />
             <br />
-            <br />
-            <AnimatedSlogan />
           </div>
           <br />
           <br />

@@ -20,7 +20,7 @@ export const AppProvider = ({ children }) => {
   );
 
   const [nightModeOn, setNightModeOn] = useState(false);
-  const [isPremium, setIsPremium] = useState(false);
+  const [isPremium, setIsPremium] = useState(null);
   const [summaryOrFullText, setSummaryOrFullText] = useState("summary");
   const [isAddBookModalVisible, setIsAddBookModalVisible] = useState(false);
   const [wishlistBooks, setWishlistBooks] = useState([]);

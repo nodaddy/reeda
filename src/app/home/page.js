@@ -98,7 +98,7 @@ const Home = () => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.6, ease: "easeOut" }}
-        style={{ overflow: "scroll" }}
+        style={{ overflow: "scroll", backgroundColor: "white" }}
       >
         {books?.length >= 0 && (
           <StreakCard
@@ -109,37 +109,16 @@ const Home = () => {
             }
           />
         )}
-        {
-          // <span
-          //   style={{
-          //     fontWeight: "500",
-          //     margin: "0px",
-          //     fontSize: "16px",
-          //     marginLeft: "42px",
-          //     padding: "5px 0px",
-          //     display: "flex",
-          //     alignItems: "center",
-          //     color: secTextColor,
-          //     borderRadius: "6px",
-          //     fontFamily: "'Inter', sans-serif",
-          //   }}
-          // >
-          //   {" "}
-          //   <BookOpen size={17} />
-          //   &nbsp; Continue reading
-          // </span>
-        }
 
-        {books?.filter((book) => book.inProgress).length == 0 && (
+        {books?.filter((book) => book.inProgress).length == 0 ? (
           <div
             style={{
               position: "absolute",
               width: "100%",
-              top: "20px",
+              top: "60px",
               left: "0px",
             }}
           >
-            <br />
             <br />
             <br />
             <Empty
@@ -148,12 +127,14 @@ const Home = () => {
               }}
               image={Empty.PRESENTED_IMAGE_SIMPLE}
               description={
-                <div style={{ color: "white", marginTop: "14px" }}>
-                  No open books
-                </div>
+                <div style={{ marginTop: "14px" }}>No open books</div>
               }
             />
           </div>
+        ) : (
+          <>
+            <br />
+          </>
         )}
         <div
           id="continue-reading-div"
@@ -182,6 +163,8 @@ const Home = () => {
                 : "0px",
           }}
         >
+          <br />
+
           <BookList />
           <br />
 

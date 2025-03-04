@@ -35,7 +35,6 @@ import { useEffect, useState, useRef } from "react";
 import { motion } from "framer-motion"; // Import Framer Motion
 import { useRouter } from "next/navigation";
 import { generateRandomColourForString } from "@/app/utility";
-import PagePicker from "@/components/PagePicker";
 import { createNote } from "@/firebase/services/notesService";
 import { createStudySession } from "@/firebase/services/studySessionService";
 import FinalReviewModal from "@/components/FinalReviewModal";
@@ -375,45 +374,14 @@ const Book = () => {
               src={book?.cover}
               style={{
                 height: "160px",
-                borderRadius: "5px",
+                borderRadius: "7px",
+                border: "3px solid white",
                 boxShadow: "0px 3px 6px rgba(0,0,0,0.2)",
               }}
             />
             <span>
               by <i>{book?.author}</i>
             </span>
-
-            {/* Floating Button */}
-            {/* {!book?.completedReading && (
-              <span
-                style={{
-                  position: "absolute",
-                  bottom: "-20px",
-                  right: "16%",
-                  borderRadius: "999px",
-                }}
-              >
-                <PagePicker
-                  totalPages={book?.totalPages}
-                  currentPage={book?.pagesRead}
-                  onPageSelect={async (pageNumber) => {
-                    await updateBookById(
-                      {
-                        pagesRead: pageNumber,
-                      },
-                      book.id
-                    );
-                    setBook({
-                      ...book,
-                      pagesRead: pageNumber,
-                    });
-                    messageApi.success(
-                      `Yay! On page ${pageNumber}. Good Job!!`
-                    );
-                  }}
-                />
-              </span>
-            )} */}
             <span
               style={{
                 position: "absolute",
@@ -563,7 +531,6 @@ const Book = () => {
                             ...note,
                             tags: [...note.tags, "p." + book?.pagesRead],
                           });
-                      setEditorContentResetFlag(!editorContentResetFlag);
                     }}
                     style={{ cursor: "pointer" }}
                   >
@@ -591,20 +558,7 @@ const Book = () => {
                     ! Important
                   </Tag>
                 </div>
-                {/* <TextArea
-                  required
-                  rows={4}
-                  placeholder="Write your note..."
-                  value={note.description}
-                  onChange={(e) =>
-                    setNote({ ...note, description: e.target.value })
-                  }
-                  style={{
-                    marginBottom: "10px",
-                    borderRadius: "8px",
-                    padding: "10px",
-                  }}
-                /> */}
+
                 <div align="right">
                   <Button
                     type="primary"

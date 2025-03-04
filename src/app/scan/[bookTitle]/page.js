@@ -94,7 +94,7 @@ export default function ScanWithBookTitle() {
             // background: `#555555`,
             borderRadius: "7px",
             position: "relative",
-            zIndex: "99999",
+            zIndex: "99",
             width: "90%",
             marginTop: "8px",
             margin: "auto",
@@ -163,14 +163,16 @@ export default function ScanWithBookTitle() {
         <br />
         <br />
         <br />
-        <h1
-          align="center"
-          style={{
-            color: secTextColor,
-          }}
-        >
-          AI Scans Session
-        </h1>
+        {dataOut?.summary == null && dataOut?.simpleLang == null && (
+          <h1
+            align="center"
+            style={{
+              color: secTextColor,
+            }}
+          >
+            AI Scans Session
+          </h1>
+        )}
         <Modal
           open={isModalOpen}
           onCancel={() => {
