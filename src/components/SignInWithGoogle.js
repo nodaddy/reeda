@@ -51,7 +51,9 @@ const SignInWithGoogle = ({ router }) => {
     }
   };
 
-  return (
+  return loading ? (
+    <div></div>
+  ) : (
     <Button
       type="ghost"
       icon={

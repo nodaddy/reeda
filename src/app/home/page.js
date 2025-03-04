@@ -21,6 +21,7 @@ import { BookOpen, Info, Sparkle, Sparkles, Wand, Wand2 } from "lucide-react";
 import { Empty, FloatButton, Popconfirm } from "antd";
 import Link from "next/link";
 import FloatingWords from "@/components/FloatingWords";
+import GenreExplorer from "@/components/GenreExplorer";
 
 const Home = () => {
   const [loading, setLoading] = useState(true);
@@ -99,6 +100,10 @@ const Home = () => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.6, ease: "easeOut" }}
+        style={{
+          minHeight: "100vh",
+          overflowY: "scroll",
+        }}
       >
         {books?.length >= 0 && (
           <StreakCard
@@ -141,7 +146,7 @@ const Home = () => {
               alignItems: "center",
               gap: "30px",
               padding: "10px",
-              margin: "25px 0px 30px 0px",
+              margin: "25px 0px 30px 48px",
               overflowX: "scroll",
             }}
           >
@@ -162,8 +167,94 @@ const Home = () => {
 
           <BookList />
           <br />
+          <br />
+          <br />
 
-          <FloatingWords />
+          {/* Premium Genres Explorer Card */}
+          {!loading && books?.length > -1 && (
+            <div
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              style={{
+                background: "linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%)",
+                borderRadius: "16px",
+                padding: "24px",
+                marginRight: "24px",
+                marginBottom: "32px",
+                boxShadow: "0 10px 25px rgba(99, 102, 241, 0.3)",
+                color: "white",
+                position: "relative",
+                overflow: "hidden",
+                cursor: "pointer",
+              }}
+              onClick={() => (window.location.href = "/genres")}
+            >
+              <div
+                style={{
+                  position: "absolute",
+                  top: "-20px",
+                  right: "-20px",
+                  opacity: 0.1,
+                }}
+              >
+                <Sparkles size={120} />
+              </div>
+
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  marginBottom: "16px",
+                }}
+              >
+                <div
+                  style={{
+                    background: "rgba(255, 255, 255, 0.2)",
+                    borderRadius: "12px",
+                    padding: "10px",
+                    marginRight: "16px",
+                  }}
+                >
+                  <Sparkle size={24} color="white" />
+                </div>
+                <h3
+                  style={{
+                    fontSize: "20px",
+                    fontWeight: "600",
+                    margin: 0,
+                    textShadow: "0 2px 4px rgba(0,0,0,0.1)",
+                  }}
+                >
+                  Explore Collections
+                </h3>
+              </div>
+
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  fontSize: "14px",
+                  fontWeight: "500",
+                }}
+              >
+                <span>Explore Now</span>
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="white"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  style={{ marginLeft: "8px" }}
+                >
+                  <path d="M5 12h14"></path>
+                  <path d="m12 5 7 7-7 7"></path>
+                </svg>
+              </div>
+            </div>
+          )}
 
           {/* {books && books.length > 0 && <NextBooksToRead />} */}
           {/* <BottomNav /> */}

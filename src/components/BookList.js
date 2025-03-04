@@ -44,6 +44,7 @@ import {
   Text,
   Trash2,
   UploadIcon,
+  Compass,
 } from "lucide-react";
 import {
   defaultBorderColor,
@@ -362,8 +363,6 @@ const BookList = () => {
       }}>
           Collection of your physical books </sup> */}
             </div>
-
-            <div></div>
           </div>
           {/* <h5 style={{ fontSize: '20px', display: 'flex', alignItems: 'center', fontWeight: '400', color: '#555555', marginBottom: '15px', paddingBottom: '10px' }}>
                 My Bookshelf &nbsp;

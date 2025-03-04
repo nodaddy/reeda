@@ -63,7 +63,6 @@ const Home = () => {
           .landing-container {
             min-height: 100vh;
             position: relative;
-            overflow: hidden;
             display: flex;
             justify-content: center;
             flex-direction: column;
