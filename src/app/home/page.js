@@ -101,7 +101,7 @@ const Home = () => {
         animate={{ opacity: 1 }}
         transition={{ duration: 0.6, ease: "easeOut" }}
         style={{
-          minHeight: "100vh",
+          maxHeight: "100vh",
           overflowY: "scroll",
         }}
       >
@@ -204,7 +204,6 @@ const Home = () => {
                 style={{
                   display: "flex",
                   alignItems: "center",
-                  marginBottom: "16px",
                 }}
               >
                 <div
@@ -227,31 +226,6 @@ const Home = () => {
                 >
                   Explore Collections
                 </h3>
-              </div>
-
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  fontSize: "14px",
-                  fontWeight: "500",
-                }}
-              >
-                <span>Explore Now</span>
-                <svg
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="white"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  style={{ marginLeft: "8px" }}
-                >
-                  <path d="M5 12h14"></path>
-                  <path d="m12 5 7 7-7 7"></path>
-                </svg>
               </div>
             </div>
           )}
