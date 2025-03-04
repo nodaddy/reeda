@@ -238,7 +238,8 @@ const Home = () => {
               shape="square"
               type="primary"
               style={{
-                insetInlineEnd: 40,
+                insetInlineEnd: 25,
+                bottom: 20,
               }}
               icon={<>AI</>}
             />
