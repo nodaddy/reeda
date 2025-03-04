@@ -102,6 +102,7 @@ const Home = () => {
         transition={{ duration: 0.6, ease: "easeOut" }}
         style={{
           maxHeight: "100vh",
+          minHeight: "100vh",
           overflowY: "scroll",
         }}
       >
