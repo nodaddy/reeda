@@ -15,6 +15,7 @@ import {
   X,
   MessageCircleCodeIcon,
   BookMarked,
+  Coins,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Sun, Moon } from "lucide-react";
@@ -32,7 +33,7 @@ const StreakCard = ({ streak, isActive }) => {
 
   const [menuOpen, setMenuOpen] = useState(null);
 
-  const { setProfile, isPremium } = useAppContext();
+  const { setProfile, isPremium, profile } = useAppContext();
 
   const router = useRouter();
 
@@ -255,15 +256,41 @@ const StreakCard = ({ streak, isActive }) => {
               </div>
             </div>
           }
+          <div style={{ display: "flex", alignItems: "center" }}>
+            {/* Premium Coins Display */}
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                marginRight: "18px",
+                background: "linear-gradient(135deg, #FFD700, #FFA500)",
+                padding: "1px 13px",
+                borderRadius: "20px",
+                boxShadow: "0 2px 8px rgba(255, 165, 0, 0.5)",
+              }}
+            >
+              <Coins size={18} color="#ffffff" style={{ marginRight: "6px" }} />
+              <span
+                style={{
+                  fontWeight: "600",
+                  color: "#ffffff",
+                  fontSize: "15px",
+                  textShadow: "0px 1px 2px rgba(0,0,0,0.2)",
+                }}
+              >
+                {profile?.coins || 0}
+              </span>
+            </div>
 
-          <List
-            color={"black"}
-            size={26}
-            onClick={() => setMenuOpen(!menuOpen)}
-            style={{
-              marginRight: "-3px",
-            }}
-          />
+            <List
+              color={"black"}
+              size={26}
+              onClick={() => setMenuOpen(!menuOpen)}
+              style={{
+                marginRight: "-3px",
+              }}
+            />
+          </div>
 
           <div
             align="right"

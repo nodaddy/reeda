@@ -45,6 +45,7 @@ const Home = () => {
 
   useEffect(() => {
     if (profile?.streak?.lastPageScanTimestamp) {
+      console.log(profile);
       const now = Date.now();
       const lastPageScanTimestamp = profile?.streak.lastPageScanTimestamp;
       const difference = Math.ceil((now - lastPageScanTimestamp) / 1000);
