@@ -87,7 +87,7 @@ const ContinueReadingCard = ({ book }) => {
         borderRadius: "50px 11px 50px 50px",
         flex: "0 0 auto",
         padding: "20px 30px 37px 30px",
-        margin: "60px auto 20px auto",
+        margin: "0px auto 20px auto",
         color: priTextColor,
         transition: "all 0.3s ease-in-out",
         backgroundColor: "white",

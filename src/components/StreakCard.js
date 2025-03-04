@@ -196,10 +196,9 @@ const StreakCard = ({ streak, isActive }) => {
 
       <Card
         bodyStyle={{
-          padding: "18px 24px 190px 24px",
+          padding: "18px 24px 0px 24px",
 
           width: "100vw",
-          position: "absolute",
         }}
         style={{
           width: "100%",

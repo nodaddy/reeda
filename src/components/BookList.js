@@ -300,7 +300,6 @@ const BookList = () => {
   return (
     !loading && (
       <div
-        ref={ref}
         style={{
           margin: "auto",
           position: "relative",
