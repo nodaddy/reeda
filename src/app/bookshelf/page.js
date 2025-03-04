@@ -266,58 +266,57 @@ const Bookshelf = () => {
 
                 {/* Front Side */}
                 <Link href={`/book/${item.id}`} style={{ display: "block" }}>
-                  <Tooltip title={item.title} placement="bottom">
-                    <Card
+                  <Card
+                    style={{
+                      backfaceVisibility: "hidden",
+                      margin: "0px auto 20px auto",
+                      width: "fit-content",
+                      border: "0px",
+                      boxShadow: "none",
+                      background: "transparent",
+                    }}
+                    bodyStyle={{
+                      padding: "0px",
+                      width: "fit-content",
+                    }}
+                  >
+                    <div
                       style={{
-                        backfaceVisibility: "hidden",
-                        margin: "0px auto 20px auto",
-                        width: "fit-content",
-                        border: "0px",
-                        boxShadow: "none",
-                        background: "transparent",
-                      }}
-                      bodyStyle={{
-                        padding: "0px",
-                        width: "fit-content",
+                        position: "relative",
+                        width: "17.6vw",
+                        maxWidth: "160px",
                       }}
                     >
-                      <div
-                        style={{
-                          position: "relative",
-                          width: "17.6vw",
-                          maxWidth: "160px",
-                        }}
-                      >
-                        {item.inProgress && (
-                          <Bookmark
-                            size={25}
-                            color={"white"}
-                            fill={priColor}
-                            style={{
-                              position: "absolute",
-                              top: "-2px",
-                              right: "7px",
-                              zIndex: "99",
-                              filter:
-                                "drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.3))",
-                            }}
-                          />
-                        )}
-                        {item.completedReading && (
-                          <div
-                            style={{
-                              position: "absolute",
-                              top: "0",
-                              left: "0",
-                              width: "100%",
-                              height: "100%",
-                              backgroundColor: "rgba(0, 0, 0, 0.4)",
-                              borderRadius: "10px",
-                              zIndex: "98",
-                            }}
-                          ></div>
-                        )}
-                        {/* {item.completedReading && (
+                      {item.inProgress && (
+                        <Bookmark
+                          size={25}
+                          color={"white"}
+                          fill={priColor}
+                          style={{
+                            position: "absolute",
+                            top: "-2px",
+                            right: "7px",
+                            zIndex: "99",
+                            filter:
+                              "drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.3))",
+                          }}
+                        />
+                      )}
+                      {item.completedReading && (
+                        <div
+                          style={{
+                            position: "absolute",
+                            top: "0",
+                            left: "0",
+                            width: "100%",
+                            height: "100%",
+                            backgroundColor: "rgba(0, 0, 0, 0.4)",
+                            borderRadius: "10px",
+                            zIndex: "98",
+                          }}
+                        ></div>
+                      )}
+                      {/* {item.completedReading && (
                           <CheckCircle
                             size={38}
                             fill={"green"}
@@ -333,70 +332,69 @@ const Bookshelf = () => {
                             }}
                           />
                         )} */}
-                        <img
-                          src={item.cover}
-                          style={{
-                            width: "17vw",
-                            maxWidth: "160px",
-                            height: "26vw",
-                            maxHeight: "240px",
-                            border: "1px solid #e0e0e0",
-                            objectFit: "cover",
-                            flex: "0 0 auto",
-                            borderRadius: "5px",
-                            boxShadow: "0px 8px 16px rgba(0, 0, 0, 0.25)",
-                            transition: "all 0.3s ease-in-out",
-                          }}
-                        />
+                      <img
+                        src={item.cover}
+                        style={{
+                          width: "17vw",
+                          maxWidth: "160px",
+                          height: "26vw",
+                          maxHeight: "240px",
+                          border: "1px solid #e0e0e0",
+                          objectFit: "cover",
+                          flex: "0 0 auto",
+                          borderRadius: "5px",
+                          boxShadow: "0px 8px 16px rgba(0, 0, 0, 0.25)",
+                          transition: "all 0.3s ease-in-out",
+                        }}
+                      />
 
-                        {/* Book spine effect */}
+                      {/* Book spine effect */}
+                      <div
+                        style={{
+                          position: "absolute",
+                          top: "0",
+                          left: "0",
+                          height: "100%",
+                          width: "8px",
+                          background:
+                            "linear-gradient(to right, rgba(0,0,0,0.4), transparent)",
+                          borderTopLeftRadius: "10px",
+                          borderBottomLeftRadius: "10px",
+                        }}
+                      ></div>
+
+                      {/* Bottom title label for quick identification */}
+                      {item.title && (
                         <div
                           style={{
                             position: "absolute",
-                            top: "0",
+                            bottom: "0",
                             left: "0",
-                            height: "100%",
-                            width: "8px",
+                            width: "100%",
+                            padding: "30px 8px 8px 8px",
                             background:
-                              "linear-gradient(to right, rgba(0,0,0,0.4), transparent)",
-                            borderTopLeftRadius: "10px",
+                              "linear-gradient(to top, black, rgba(0,0,0,0) 100%)",
                             borderBottomLeftRadius: "10px",
+                            borderBottomRightRadius: "10px",
+                            overflow: "hidden",
+                            textOverflow: "ellipsis",
+                            whiteSpace: "nowrap",
                           }}
-                        ></div>
-
-                        {/* Bottom title label for quick identification */}
-                        {item.title && (
-                          <div
+                        >
+                          <span
                             style={{
-                              position: "absolute",
-                              bottom: "0",
-                              left: "0",
-                              width: "100%",
-                              padding: "30px 8px 8px 8px",
-                              background:
-                                "linear-gradient(to top, black, rgba(0,0,0,0) 100%)",
-                              borderBottomLeftRadius: "10px",
-                              borderBottomRightRadius: "10px",
-                              overflow: "hidden",
-                              textOverflow: "ellipsis",
-                              whiteSpace: "nowrap",
+                              color: "white",
+                              fontSize: "0.8rem",
+                              fontWeight: "500",
+                              textShadow: "0 1px 2px rgba(0,0,0,0.8)",
                             }}
                           >
-                            <span
-                              style={{
-                                color: "white",
-                                fontSize: "0.8rem",
-                                fontWeight: "500",
-                                textShadow: "0 1px 2px rgba(0,0,0,0.8)",
-                              }}
-                            >
-                              {item.title}
-                            </span>
-                          </div>
-                        )}
-                      </div>
-                    </Card>
-                  </Tooltip>
+                            {item.title}
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                  </Card>
                 </Link>
               </motion.div>
             ))}
