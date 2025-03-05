@@ -73,19 +73,7 @@ const SignInWithGoogle = ({ router }) => {
       }}
       onClick={handleSignIn}
     >
-      {loading ? (
-        <Spin
-          indicator={
-            <Loading3QuartersOutlined
-              style={{ fontSize: "19px", marginRight: "4px" }}
-              spin
-            />
-          }
-          size="small"
-        />
-      ) : (
-        <>Sign In</>
-      )}
+      <>Sign In</>
     </Button>
   );
 };

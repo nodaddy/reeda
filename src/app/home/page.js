@@ -21,6 +21,7 @@ import {
   BookOpen,
   BookPlus,
   Info,
+  MoveRight,
   Sparkle,
   Sparkles,
   Wand,
@@ -131,7 +132,7 @@ const Home = () => {
             style={{
               background: "linear-gradient(135deg,rgb(0, 0, 0) 0%, gray 100%)",
               borderRadius: "16px",
-              padding: "16px 20px",
+              padding: "14px 18px",
               marginLeft: "24px",
               marginRight: "24px",
               marginBottom: "20px",
@@ -171,17 +172,33 @@ const Home = () => {
               >
                 <Sparkle size={17} color="white" />
               </div>
+
               <h3
                 style={{
                   fontSize: "17px",
                   fontWeight: "600",
                   margin: 0,
                   textShadow: "0 2px 4px rgba(0,0,0,0.1)",
+                  display: "flex",
+                  alignItems: "center",
                 }}
               >
-                AI Scans
+                AI Scans &nbsp;&nbsp;
+                <MoveRight size={19} />
               </h3>
             </div>
+            <p
+              style={{
+                fontSize: "12px",
+                color: "silver",
+                borderRadius: "10px",
+                backgroundColor: "rgba(255, 255, 255, 0.1)",
+                padding: "10px",
+              }}
+            >
+              Scan pages, get a summary in seconds with a text integrated
+              dictionary
+            </p>
           </div>
         )}
 

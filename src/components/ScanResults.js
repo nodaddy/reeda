@@ -30,15 +30,6 @@ import {
   PackagePlus,
   Plane,
   Plus,
-  PlusCircle,
-  PlusIcon,
-  PlusSquare,
-  Pointer,
-  RefreshCcw,
-  Rocket,
-  Settings,
-  Sparkles,
-  WholeWord,
 } from "lucide-react";
 import { getProfile, updateProfile } from "@/firebase/services/profileService";
 import {
@@ -256,19 +247,19 @@ export default function ScanResults({ setBook, scans, setDataOut }) {
       {true && (
         <div
           style={{
-            padding: "0px 11px",
+            padding: "20px",
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
             overflow: "scroll",
-            width: "95%",
+            width: "calc(100% - 40px)",
             margin: "auto",
             marginTop: "17px",
             borderTop: "0px",
             borderRadius: "10px",
             // border: '1px solid silver',
-            backgroundColor: nightModeOn ? "black" : "white",
-            height: "calc(100vh - 249px)", // This can be used if you want to explicitly set height too
+            backgroundColor: nightModeOn ? "black" : "transparent",
+            height: "calc(100vh - 92px)", // This can be used if you want to explicitly set height too
             // padding: "25px",
             // display: "flex",
             // flexDirection: "column",
@@ -472,14 +463,6 @@ export default function ScanResults({ setBook, scans, setDataOut }) {
                   </div>
 
                   <div style={{ marginTop: "23px" }}>
-                    {/* <span style={{
-          display: 'block',
-          fontSize: '15px',
-          fontWeight: '500',
-          color: textColor,
-          marginBottom: '12px'
-        }}>Result Format</span> */}
-
                     <div
                       style={{
                         display: "flex",
@@ -612,7 +595,7 @@ export default function ScanResults({ setBook, scans, setDataOut }) {
                   position: "absolute",
                   left: "50%",
                   transform: "translateX(-50%)",
-                  bottom: "100px",
+                  bottom: "235px",
                   width: "80px",
                   borderRadius: "8px",
                   display: "flex",

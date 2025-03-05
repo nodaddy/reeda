@@ -87,6 +87,7 @@ export default function ScanWithBookTitle() {
     <div>
       <>
         <br />
+        <br />
         <div
           style={{
             textAlign: "center",
@@ -144,34 +145,27 @@ export default function ScanWithBookTitle() {
             </Button>
           )}
 
-          {/* <p style={{
-        fontSize: '14px',
-        fontWeight: '500',
-        color: priTextColor,
-        margin: 0,
-        display: 'inline-block',
-        padding: '4px 12px'
-      }}>
-        <span>&nbsp;&nbsp; {title.toUpperCase()}</span>
-      </p> */}
           {showingSummaryOrFullText && (
             <Tag>
               {showingSummaryOrFullText != "summary" ? "Full Text" : "Summary"}
             </Tag>
           )}
         </div>
-        <br />
-        <br />
-        <br />
+
         {dataOut?.summary == null && dataOut?.simpleLang == null && (
-          <h1
-            align="center"
-            style={{
-              color: secTextColor,
-            }}
-          >
-            AI Scans Session
-          </h1>
+          <>
+            <br />
+            <br />
+            <br />
+            <h1
+              align="center"
+              style={{
+                color: secTextColor,
+              }}
+            >
+              AI Scans Session
+            </h1>
+          </>
         )}
         <Modal
           open={isModalOpen}
@@ -205,6 +199,7 @@ export default function ScanWithBookTitle() {
               justifyContent: "center",
               alignItems: "center",
               width: "100%",
+              minHeight: "100vh",
             }}
           >
             <div>
