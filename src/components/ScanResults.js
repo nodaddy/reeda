@@ -64,6 +64,7 @@ import NextImage from "next/image";
 import StackedImages from "./StackedImages";
 import { storage } from "@/app/utility";
 import PremiumSlideIn from "./PremiumSlideIn";
+import { isUserPremium } from "@/payments/playstoreBilling";
 
 const backgroundColor = "#F0F0F8";
 const accentColor = "#4A4AFF";
@@ -183,7 +184,7 @@ export default function ScanResults({ setBook, scans, setDataOut }) {
     const numberOfAIScansUsed = profile?.numberOfAIScansUsed || 0;
 
     // Check if user has reached free scan limit and is not premium
-    if (numberOfAIScansUsed >= freeAIscans && !isPremium) {
+    if (numberOfAIScansUsed >= freeAIscans && !isUserPremium()) {
       setUploadingImage(false);
       // Show premium slide-in instead of redirecting
       setSlideInContent(<PremiumSlideIn />);
@@ -689,7 +690,7 @@ export default function ScanResults({ setBook, scans, setDataOut }) {
               justifyContent: "space-around",
               position: "absolute",
               width: "94%",
-              bottom: "15px",
+              bottom: "30px",
               padding: "0px 0px",
             }}
           >
