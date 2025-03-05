@@ -233,8 +233,8 @@ const Home = () => {
               display: "flex",
               alignItems: "center",
               gap: "30px",
-              padding: "10px",
-              margin: "25px 0px 30px 48px",
+              padding: "10px 10px 10px 43px",
+              margin: "25px 0px 30px 0px",
               overflowX: "scroll",
             }}
           >
