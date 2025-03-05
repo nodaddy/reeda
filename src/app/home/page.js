@@ -28,9 +28,6 @@ import {
   Wand2,
 } from "lucide-react";
 import { Empty, FloatButton, Popconfirm } from "antd";
-import Link from "next/link";
-import FloatingWords from "@/components/FloatingWords";
-import GenreExplorer from "@/components/GenreExplorer";
 
 const Home = () => {
   const [loading, setLoading] = useState(true);
@@ -39,8 +36,6 @@ const Home = () => {
   const { profile, setProfile, books, setIsPremium } = useAppContext();
 
   useEffect(() => {
-    searchByTitle("harry potter").then((res) => console.log(res));
-
     if (typeof navigator !== "undefined" && "serviceWorker" in navigator) {
       navigator.serviceWorker
         .register("/firebase-messaging-sw.js")
@@ -85,6 +80,10 @@ const Home = () => {
   }, []);
 
   useEffect(() => {
+    if (profile) {
+      setLoading(false);
+      return;
+    }
     const fetchProfile = async () => {
       setLoading(true);
       try {
