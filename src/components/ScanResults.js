@@ -257,7 +257,7 @@ export default function ScanResults({ setBook, scans, setDataOut }) {
             margin: "auto",
             marginTop: "17px",
             borderTop: "0px",
-            borderRadius: "10px",
+            borderRadius: "10px 10px 0px 0px",
             // border: '1px solid silver',
             backgroundColor: nightModeOn ? "black" : "transparent",
             height: "calc(100vh - 126px)", // This can be used if you want to explicitly set height too

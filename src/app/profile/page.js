@@ -177,7 +177,7 @@ const ProfilePage = () => {
                     </span>
                   </div>
                   <span style={{ fontSize: "16px", color: "#1a1a1a" }}>
-                    {new Date(profile?.createdAt).toLocaleDateString("en-US", {
+                    {new Date(Date.now()).toLocaleDateString("en-US", {
                       month: "long",
                       day: "numeric",
                       year: "numeric",
