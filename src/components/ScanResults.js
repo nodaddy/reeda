@@ -260,7 +260,7 @@ export default function ScanResults({ setBook, scans, setDataOut }) {
             borderRadius: "10px",
             // border: '1px solid silver',
             backgroundColor: nightModeOn ? "black" : "transparent",
-            height: "calc(100vh - 92px)", // This can be used if you want to explicitly set height too
+            height: "calc(100vh - 126px)", // This can be used if you want to explicitly set height too
             // padding: "25px",
             // display: "flex",
             // flexDirection: "column",
@@ -690,7 +690,7 @@ export default function ScanResults({ setBook, scans, setDataOut }) {
               justifyContent: "space-around",
               position: "absolute",
               width: "94%",
-              bottom: "30px",
+              bottom: "15px",
               padding: "0px 0px",
             }}
           >
