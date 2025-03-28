@@ -307,6 +307,10 @@ const Book = () => {
       <motion.div
         initial={{ opacity: 0 }} // Start off-screen (right)
         animate={{ opacity: 1 }} // Slide in
+        style={{
+          height: "100vh",
+          overflow: "auto",
+        }}
         exit={{ x: "100%", opacity: 0 }} // Animate out when component unmounts
         transition={{ type: "spring", stiffness: 100, damping: 15 }}
       >
