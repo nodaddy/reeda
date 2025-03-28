@@ -1,13 +1,25 @@
-'use client'
-import { getPagesReadToday, storage, updatePagesRead } from '@/app/utility';
+"use client";
+import { getPagesReadToday, storage, updatePagesRead } from "@/app/utility";
 // services/scanService.js
-import { db } from '../../firebase';
-import { collection, addDoc, doc, updateDoc, deleteDoc, query, where, getDocs, orderBy, getCountFromServer, limit  } from "firebase/firestore";
+import { db } from "../../firebase";
+import {
+  collection,
+  addDoc,
+  doc,
+  updateDoc,
+  deleteDoc,
+  query,
+  where,
+  getDocs,
+  orderBy,
+  getCountFromServer,
+  limit,
+} from "firebase/firestore";
 const scanCollection = collection(db, "scans");
 
 // Create a new scan
 export const createScan = async (scanData) => {
-  const userId = JSON.parse(storage.getItem('user')).email;
+  const userId = JSON.parse(storage.getItem("user")).email;
 
   try {
     // Ensure that scanData is not empty and contains valid fields
@@ -20,80 +32,78 @@ export const createScan = async (scanData) => {
     // Adding scan document to Firestore
     const docRef = await addDoc(scanCollection, {
       ...scanData,
-      userId,  // Ensure userId is included in the scan data
+      userId, // Ensure userId is included in the scan data
       createdAt: Date.now(), // Optionally add a creation timestamp
     });
     updatePagesRead(1);
     console.log("Scan created with ID: ", docRef.id);
-    return docRef.id;  // Return the document ID
+    return docRef.id; // Return the document ID
   } catch (error) {
     console.error("Error adding scan: ", error);
-    throw error;  // Re-throw the error to be handled by the calling function
+    throw error; // Re-throw the error to be handled by the calling function
   }
 };
 
 // Read the latest scan by userId and bookTitle
 export const getLatestScan = async () => {
-    const userId = JSON.parse(storage.getItem('user')).email;
-  
-    try {
-      // Create a query to find scans by both userId and bookTitle, ordered by 'createdAt' in descending order
-      const q = query(
-        scanCollection,
-        where("userId", "==", userId),
-        orderBy("createdAt", "desc")  // Order by creation date (descending to get the latest scan)
-      );
-  
-      // Get the query snapshot
-      const querySnapshot = await getDocs(q);
-  
-      // Check if we found any matching scans
-      if (!querySnapshot.empty) {
-        const latestScanDoc = querySnapshot.docs[0]; // Get the first (most recent) scan
-        return { id: latestScanDoc.id, ...latestScanDoc.data() };
-      } else {
-        return null; // Return null if no scan was found
-      }
-    } catch (error) {
-      console.error("Error getting latest scan: ", error);
-      throw error; // Re-throw the error to be handled by the calling function
+  const userId = JSON.parse(storage.getItem("user")).email;
+
+  try {
+    // Create a query to find scans by both userId and bookTitle, ordered by 'createdAt' in descending order
+    const q = query(
+      scanCollection,
+      where("userId", "==", userId),
+      orderBy("createdAt", "desc") // Order by creation date (descending to get the latest scan)
+    );
+
+    // Get the query snapshot
+    const querySnapshot = await getDocs(q);
+
+    // Check if we found any matching scans
+    if (!querySnapshot.empty) {
+      const latestScanDoc = querySnapshot.docs[0]; // Get the first (most recent) scan
+      return { id: latestScanDoc.id, ...latestScanDoc.data() };
+    } else {
+      return null; // Return null if no scan was found
     }
-  };
-  
+  } catch (error) {
+    console.error("Error getting latest scan: ", error);
+    throw error; // Re-throw the error to be handled by the calling function
+  }
+};
 
 // Read the latest scan by userId and bookTitle
 export const getLatestScanByBookTitleAndUserId = async (bookTitle) => {
-    const userId = JSON.parse(storage.getItem('user')).email;
-  
-    try {
-      // Create a query to find scans by both userId and bookTitle, ordered by 'createdAt' in descending order
-      const q = query(
-        scanCollection,
-        where("userId", "==", userId),
-        where("bookTitle", "==", bookTitle),
-        orderBy("createdAt", "desc")  // Order by creation date (descending to get the latest scan)
-      );
-  
-      // Get the query snapshot
-      const querySnapshot = await getDocs(q);
-  
-      // Check if we found any matching scans
-      if (!querySnapshot.empty) {
-        const latestScanDoc = querySnapshot.docs[0]; // Get the first (most recent) scan
-        return { id: latestScanDoc.id, ...latestScanDoc.data() };
-      } else {
-        return null; // Return null if no scan was found
-      }
-    } catch (error) {
-      console.error("Error getting latest scan: ", error);
-      throw error; // Re-throw the error to be handled by the calling function
+  const userId = JSON.parse(storage.getItem("user")).email;
+
+  try {
+    // Create a query to find scans by both userId and bookTitle, ordered by 'createdAt' in descending order
+    const q = query(
+      scanCollection,
+      where("userId", "==", userId),
+      where("bookTitle", "==", bookTitle),
+      orderBy("createdAt", "desc") // Order by creation date (descending to get the latest scan)
+    );
+
+    // Get the query snapshot
+    const querySnapshot = await getDocs(q);
+
+    // Check if we found any matching scans
+    if (!querySnapshot.empty) {
+      const latestScanDoc = querySnapshot.docs[0]; // Get the first (most recent) scan
+      return { id: latestScanDoc.id, ...latestScanDoc.data() };
+    } else {
+      return null; // Return null if no scan was found
     }
-  };
-  
+  } catch (error) {
+    console.error("Error getting latest scan: ", error);
+    throw error; // Re-throw the error to be handled by the calling function
+  }
+};
 
 // Read scans by userId and bookTitle
 export const getScanByBookTitleAndUserId = async (bookTitle) => {
-  const userId = JSON.parse(storage.getItem('user')).email;
+  const userId = JSON.parse(storage.getItem("user")).email;
 
   try {
     // Create a query to find scans by both userId and bookTitle
@@ -120,63 +130,61 @@ export const getScanByBookTitleAndUserId = async (bookTitle) => {
 };
 
 export const getScanCount = async () => {
-    const userId = JSON.parse(storage.getItem('user')).email;
-  
-    try {
-      console.log('Getting scan count');
-  
-      // Create a query to find scans by userId
-      const q = query(scanCollection, where("userId", "==", userId));
-  
-      // Get the count directly from Firestore (no need to download full documents)
-      const snapshot = await getCountFromServer(q);
-  
-      // Return the count of the documents
-      return snapshot.data().count; // The count value is available under `.data().count`
-    } catch (error) {
-      console.error("Error getting scan count: ", error);
-      throw error; // Re-throw the error to be handled by the calling function
-    }
-  };
+  const userId = JSON.parse(storage.getItem("user")).email;
 
-  // Read latest X scans by userId, ordered by createdAt
-  export const getLatestScansbyBookTitle = async (bookTitle, maxScans = 5) => {
-    const userId = JSON.parse(storage.getItem('user')).email;
-  
-    try {
-      console.log('Getting latest scans');
-  
-      // Create a query to find scans by userId, ordered by createdAt, and limited to X results
-      const q = query(
-        scanCollection,
-        where("userId", "==", userId),
-        where("bookTitle", "==", bookTitle),
-        orderBy("createdAt", "desc"), // Order by latest createdAt timestamps
-        limit(maxScans) // Fetch only the latest X scans
-      );
-  
-      // Get the query snapshot
-      const querySnapshot = await getDocs(q);
-  
-      // Convert Firestore documents to array
-      return querySnapshot.docs.map((scanDoc) => ({
-        id: scanDoc.id,
-        ...scanDoc.data(),
-      }));
-  
-    } catch (error) {
-      console.error("Error getting latest scans: ", error);
-      throw error; // Re-throw the error to be handled by the calling function
-    }
-  };
-  
+  try {
+    console.log("Getting scan count");
+
+    // Create a query to find scans by userId
+    const q = query(scanCollection, where("userId", "==", userId));
+
+    // Get the count directly from Firestore (no need to download full documents)
+    const snapshot = await getCountFromServer(q);
+
+    // Return the count of the documents
+    return snapshot.data().count; // The count value is available under `.data().count`
+  } catch (error) {
+    console.error("Error getting scan count: ", error);
+    throw error; // Re-throw the error to be handled by the calling function
+  }
+};
+
+// Read latest X scans by userId, ordered by createdAt
+export const getLatestScansbyBookTitle = async (bookTitle, maxScans = 5) => {
+  const userId = JSON.parse(storage.getItem("user")).email;
+
+  try {
+    console.log("Getting latest scans");
+
+    // Create a query to find scans by userId, ordered by createdAt, and limited to X results
+    const q = query(
+      scanCollection,
+      where("userId", "==", userId),
+      where("bookTitle", "==", bookTitle),
+      orderBy("createdAt", "desc"), // Order by latest createdAt timestamps
+      limit(maxScans) // Fetch only the latest X scans
+    );
+
+    // Get the query snapshot
+    const querySnapshot = await getDocs(q);
+
+    // Convert Firestore documents to array
+    return querySnapshot.docs.map((scanDoc) => ({
+      id: scanDoc.id,
+      ...scanDoc.data(),
+    }));
+  } catch (error) {
+    console.error("Error getting latest scans: ", error);
+    throw error; // Re-throw the error to be handled by the calling function
+  }
+};
 
 // Read all scans by userId (stored inside the document)
 export const getScans = async () => {
-  const userId = JSON.parse(storage.getItem('user')).email;
+  const userId = JSON.parse(storage.getItem("user")).email;
 
   try {
-    console.log('Getting scans');
+    console.log("Getting scans");
 
     // Create a query to find scans by userId
     const q = query(scanCollection, where("userId", "==", userId));
@@ -200,8 +208,11 @@ export const getScans = async () => {
 };
 
 // Update a scan by userId and bookTitle
-export const updateScanByUserIdAndBookTitle = async (updatedData, bookTitle) => {
-  const userId = JSON.parse(storage.getItem('user')).email;
+export const updateScanByUserIdAndBookTitle = async (
+  updatedData,
+  bookTitle
+) => {
+  const userId = JSON.parse(storage.getItem("user")).email;
 
   try {
     // Create a query to find the scan where both userId and bookTitle match

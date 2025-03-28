@@ -81,6 +81,17 @@ import PremiumSlideIn from "./PremiumSlideIn";
 const BookList = () => {
   const [filteredBooks, setFilteredBooks] = useState([]);
   const [form] = Form.useForm();
+  const {
+    setSlideIn,
+    setSlideInContent,
+    isPremium,
+    books,
+    setBooks,
+    profile,
+    setProfile,
+    isAddBookModalVisible,
+    setIsAddBookModalVisible,
+  } = useAppContext();
 
   const [searchQueryGoogleBooks, setSearchQueryGoogleBooks] = useState("");
   const [searchResultsGoogleBooks, setSearchResultsGoogleBooks] = useState([]);
@@ -117,16 +128,6 @@ const BookList = () => {
 
   const [summaryTillNow, setSummaryTillNow] = useState(null);
 
-  const {
-    isPremium,
-    books,
-    setBooks,
-    isAddBookModalVisible,
-    setIsAddBookModalVisible,
-    profile,
-    setProfile,
-  } = useAppContext();
-
   const router = useRouter();
 
   const ref = useRef(null);
@@ -134,6 +135,9 @@ const BookList = () => {
   const [imageBase64, setImageBase64] = useState(null);
   const [showManuallyAddBookModal, setShowManuallyAddBookModal] =
     useState(false);
+
+  const [addingToBookshelf, setAddingToBookshelf] = useState({});
+  const [addingToWishlist, setAddingToWishlist] = useState({});
 
   const handleImageUpload = (file) => {
     setProcessingImageUplaod(true);
@@ -220,7 +224,7 @@ const BookList = () => {
     setUploadingBook(true);
     if (books?.length == freeBooks && !isPremium) {
       // Show premium slide-in instead of redirecting
-      const { setSlideIn, setSlideInContent } = useAppContext();
+      console.log("inside");
       setSlideInContent(<PremiumSlideIn />);
       setSlideIn(true);
     } else {
@@ -300,6 +304,15 @@ const BookList = () => {
       .catch(() => messageApi.error("Failed to delete the book."));
   };
 
+  // Sort books to show those with thumbnails first
+  const sortedSearchResults = [...searchResultsGoogleBooks].sort((a, b) => {
+    const aHasThumbnail = a.volumeInfo.imageLinks?.thumbnail;
+    const bHasThumbnail = b.volumeInfo.imageLinks?.thumbnail;
+    if (aHasThumbnail && !bHasThumbnail) return -1;
+    if (!aHasThumbnail && bHasThumbnail) return 1;
+    return 0;
+  });
+
   return (
     !loading && (
       <div
@@ -358,8 +371,8 @@ const BookList = () => {
 
               {/* </BadgeAnt> */}
               <div style={{ height: "5px" }}></div>
-              {/* <sup style={{fontFamily: "'Inter', sans-serif", fontSize: '14px', color: secTextColor, paddingLeft: '2px', 
-        
+              {/* <sup style={{fontFamily: "'Inter', sans-serif", fontSize: '14px', color: secTextColor, paddingLeft: '2px',
+
       }}>
           Collection of your physical books </sup> */}
             </div>
@@ -771,6 +784,9 @@ const BookList = () => {
                 style={{
                   padding: "10px 13px",
                   borderRadius: "999px",
+                  backgroundColor: priColor,
+                  color: "white",
+                  boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.28)",
                   marginLeft: "15px",
                 }}
                 onClick={() => handleSearchGoogleBooks()}
@@ -804,12 +820,12 @@ const BookList = () => {
                 locale={{
                   emptyText: (
                     <div style={{ textAlign: "center" }}>
-                      <p> Add to your digital bookshelf </p>
+                      <p> Build your bookshelf </p>
                     </div>
                   ),
                 }}
                 itemLayout="horizontal"
-                dataSource={searchResultsGoogleBooks}
+                dataSource={sortedSearchResults}
                 renderItem={(item) => (
                   <List.Item
                     style={{
@@ -817,22 +833,6 @@ const BookList = () => {
                     }}
                   >
                     <List.Item.Meta
-                      // avatar={
-                      //   <Avatar
-                      //     onClick={() => {
-                      //       handleAddBook({
-                      //         title: item.volumeInfo.title,
-                      //         author: item.volumeInfo.authors?.join(", "),
-                      //         totalPages: item.volumeInfo.pageCount || 243,
-                      //         cover:
-                      //           item.volumeInfo.imageLinks?.thumbnail || "",
-                      //         description: item.volumeInfo.description || "",
-                      //       });
-                      //     }}
-                      //     shape="square"
-                      //     src={item.volumeInfo.imageLinks?.thumbnail}
-                      //   />
-                      // }
                       description={
                         <div
                           style={{
@@ -886,16 +886,19 @@ const BookList = () => {
                               <br />
                               <Button
                                 size="small"
-                                type="primary"
+                                type="ghost"
+                                disabled={addingToBookshelf[item.id]}
                                 style={{
                                   gap: "3px",
-                                  borderRadius: "999px",
-                                  padding: "6px 3px",
-                                  boxShadow: "0px 4px 10px rgba(0, 0, 0, 0)",
-                                  color: priColor,
-                                  backgroundColor: "transparent",
+                                  color: addingToBookshelf[item.id]
+                                    ? "silver"
+                                    : priColor,
                                 }}
                                 onClick={() => {
+                                  setAddingToBookshelf((prev) => ({
+                                    ...prev,
+                                    [item.id]: true,
+                                  }));
                                   handleAddBook({
                                     title: item.volumeInfo.title,
                                     author:
@@ -905,6 +908,11 @@ const BookList = () => {
                                     cover:
                                       item.volumeInfo.imageLinks?.thumbnail ||
                                       "",
+                                  }).finally(() => {
+                                    setAddingToBookshelf((prev) => ({
+                                      ...prev,
+                                      [item.id]: false,
+                                    }));
                                   });
                                 }}
                               >
@@ -914,8 +922,18 @@ const BookList = () => {
                               <Button
                                 size="small"
                                 type="ghost"
-                                style={{ gap: "3px" }}
+                                disabled={addingToWishlist[item.id]}
+                                style={{
+                                  gap: "3px",
+                                  color: addingToWishlist[item.id]
+                                    ? "silver"
+                                    : "",
+                                }}
                                 onClick={() => {
+                                  setAddingToWishlist((prev) => ({
+                                    ...prev,
+                                    [item.id]: true,
+                                  }));
                                   handleAddBook({
                                     title: item.volumeInfo.title,
                                     author:
@@ -926,6 +944,11 @@ const BookList = () => {
                                       item.volumeInfo.imageLinks?.thumbnail ||
                                       "",
                                     inWishlist: true,
+                                  }).finally(() => {
+                                    setAddingToWishlist((prev) => ({
+                                      ...prev,
+                                      [item.id]: false,
+                                    }));
                                   });
                                 }}
                               >

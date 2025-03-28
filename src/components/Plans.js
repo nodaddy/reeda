@@ -28,10 +28,12 @@ import { useRouter } from "next/navigation";
 import { logGAEvent } from "@/firebase/googleAnalytics";
 import { logo } from "@/assets";
 import Image from "next/image";
-
+import { useAppContext } from "@/context/AppContext";
 const Plans = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState(null);
+
+  const { setSlideIn } = useAppContext();
 
   const colors = {
     primary: "#4A90E2",
@@ -80,10 +82,13 @@ const Plans = () => {
 
   const features = [
     <>
-      <BookPlus size={20} /> &nbsp;&nbsp;Add unlimited books
+      <BookPlus size={20} /> &nbsp;&nbsp;Add Unlimited Books
     </>,
     <>
-      <Camera size={20} /> &nbsp;&nbsp;No limit on AI scans
+      <Camera size={20} /> &nbsp;&nbsp;No Ads
+    </>,
+    <>
+      <Camera size={20} /> &nbsp;&nbsp;Priority Support
     </>,
     // <>
     //   <Coins size={20} /> &nbsp;&nbsp;1.5x coin earnings
@@ -348,7 +353,7 @@ const Plans = () => {
           <div
             onClick={() => {
               logGAEvent("click_i_will_do_it_later_plans_page");
-              router.back();
+              setSlideIn(false);
             }}
             style={{
               fontFamily: "'Inter', sans-serif",
@@ -365,8 +370,8 @@ const Plans = () => {
               transition: "all 0.2s ease",
             }}
           >
-            <MoveLeft size={17} style={{ marginRight: "8px" }} /> I'll decide
-            later
+            <MoveLeft size={17} style={{ marginRight: "8px" }} />
+            I'll decide later
           </div>
         </div>
 

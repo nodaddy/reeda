@@ -28,6 +28,7 @@ import {
   Wand2,
 } from "lucide-react";
 import { Empty, FloatButton, Popconfirm } from "antd";
+import WishlistSection from "@/components/WishlistSection";
 
 const Home = () => {
   const [loading, setLoading] = useState(true);
@@ -124,7 +125,7 @@ const Home = () => {
         )}
         <br />
         {/* Premium Genres Explorer Card */}
-        {!loading && books?.length > -1 && (
+        {!loading && books?.length > -1 && false && (
           <div
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
@@ -253,6 +254,29 @@ const Home = () => {
           <br />
 
           <BookList />
+          <WishlistSection />
+          {books?.length === 0 && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                gap: "8px",
+                marginTop: "20px",
+                color: "#666",
+                fontSize: "14px",
+                fontStyle: "italic",
+              }}
+            >
+              <Sparkles size={16} />
+              <span>
+                Tip: Click the + button to add your first book to your bookshelf
+                and start tracking
+              </span>
+            </motion.div>
+          )}
           <br />
           <br />
           <br />

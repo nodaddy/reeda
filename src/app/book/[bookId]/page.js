@@ -436,7 +436,7 @@ const Book = () => {
                     cursor: "pointer",
                   }}
                   hoverable
-                  bodyStyle={{ padding: "15px" }}
+                  bodyStyle={{ padding: "0px 15px" }}
                 >
                   <div
                     style={{
@@ -510,7 +510,7 @@ const Book = () => {
                               gap: "10px",
                             }}
                           >
-                            <div
+                            {/* <div
                               style={{
                                 display: "flex",
                                 alignItems: "center",
@@ -529,9 +529,9 @@ const Book = () => {
                             >
                               <Edit size={16} />
                               <span>Edit Note</span>
-                            </div>
+                            </div> */}
                             <Popconfirm
-                              title="Are you sure you want to delete this note?"
+                              title="Are you sure?"
                               onConfirm={() => handleDeleteNote(note.id)}
                               okText="Yes"
                               cancelText="No"

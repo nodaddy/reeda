@@ -20,9 +20,9 @@ export default function ClientLayout({ children, font }) {
   // Modern geometric background style with gradient effect
   const modernBackground = {
     position: "relative",
-    backgroundColor: "#f8f9fa", // Light clean background
+    backgroundColor: "#ffffff",
     background:
-      "linear-gradient(165deg, rgba(255,255,255,1) 0%, rgba(248,249,250,1) 45%, rgba(248,249,250,1) 55%, rgba(255,255,255,1) 100%)",
+      "linear-gradient(135deg, #ffffff 0%, #f8f9fa 50%, #f0f4f8 100%)",
   };
 
   // Subtle geometric pattern overlay with more pronounced fading mask
@@ -33,21 +33,23 @@ export default function ClientLayout({ children, font }) {
     right: 0,
     bottom: 0,
     backgroundImage: `
-      linear-gradient(135deg, rgba(0, 0, 0, 0.03) 25%, transparent 25%, transparent 50%, rgba(0, 0, 0, 0.03) 50%, rgba(0, 0, 0, 0.03) 75%, transparent 75%, transparent),
-      linear-gradient(45deg, rgba(0, 0, 0, 0.02) 25%, transparent 25%, transparent 50%, rgba(0, 0, 0, 0.02) 50%, rgba(0, 0, 0, 0.02) 75%, transparent 75%, transparent)
+      radial-gradient(circle at 10% 20%, rgba(0, 112, 243, 0.015) 0%, transparent 40%),
+      radial-gradient(circle at 90% 80%, rgba(77, 155, 255, 0.015) 0%, transparent 40%),
+      radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.8) 0%, transparent 60%),
+      linear-gradient(45deg, rgba(0, 112, 243, 0.008) 25%, transparent 25%, transparent 50%, rgba(0, 112, 243, 0.008) 50%, rgba(0, 112, 243, 0.008) 75%, transparent 75%, transparent)
     `,
-    backgroundSize: "80px 80px, 60px 60px",
+    backgroundSize: "100% 100%, 100% 100%, 100% 100%, 80px 80px",
     backgroundAttachment: "fixed",
-    opacity: 0.55,
+    opacity: 0.9,
     zIndex: 0,
-    pointerEvents: "none", // Makes the overlay non-interactive
+    pointerEvents: "none",
     maskImage:
-      "radial-gradient(ellipse at 60% 40%, black 15%, rgba(0,0,0,0.3) 40%, transparent 65%)",
+      "radial-gradient(ellipse at 50% 50%, black 25%, rgba(0,0,0,0.2) 45%, transparent 70%)",
     WebkitMaskImage:
-      "radial-gradient(ellipse at 60% 40%, black 15%, rgba(0,0,0,0.3) 40%, transparent 65%)",
+      "radial-gradient(ellipse at 50% 50%, black 25%, rgba(0,0,0,0.2) 45%, transparent 70%)",
   };
 
-  // Faint grid overlay with more pronounced non-centered gradient mask
+  // Modern grid overlay with subtle gradient mask
   const gridOverlay = {
     position: "absolute",
     top: 0,
@@ -55,18 +57,18 @@ export default function ClientLayout({ children, font }) {
     right: 0,
     bottom: 0,
     backgroundImage: `
-      linear-gradient(to right, rgba(0, 0, 0, 0.02) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(0, 0, 0, 0.02) 1px, transparent 1px)
+      linear-gradient(to right, rgba(0, 112, 243, 0.015) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(0, 112, 243, 0.015) 1px, transparent 1px)
     `,
     backgroundSize: "40px 40px",
     backgroundAttachment: "fixed",
-    opacity: 0.6,
+    opacity: 0.3,
     zIndex: 0,
-    pointerEvents: "none", // Makes the overlay non-interactive
+    pointerEvents: "none",
     maskImage:
-      "radial-gradient(ellipse at 45% 55%, black 20%, rgba(0,0,0,0.4) 40%, transparent 70%)",
+      "radial-gradient(ellipse at 50% 50%, black 15%, rgba(0,0,0,0.15) 35%, transparent 60%)",
     WebkitMaskImage:
-      "radial-gradient(ellipse at 45% 55%, black 20%, rgba(0,0,0,0.4) 40%, transparent 70%)",
+      "radial-gradient(ellipse at 50% 50%, black 15%, rgba(0,0,0,0.15) 35%, transparent 60%)",
   };
 
   // Content container to ensure content is above background elements
@@ -94,12 +96,6 @@ export default function ClientLayout({ children, font }) {
           <ReadingInterests />
         ) : (
           <div style={modernBackground}>
-            {/* Geometric pattern overlay */}
-            <div style={geometricPattern}></div>
-
-            {/* Grid overlay */}
-            <div style={gridOverlay}></div>
-
             {/* Content container */}
             <div style={contentContainer}>{children}</div>
           </div>

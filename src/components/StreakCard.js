@@ -16,6 +16,7 @@ import {
   MessageCircleCodeIcon,
   BookMarked,
   Coins,
+  Crown,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Sun, Moon } from "lucide-react";
@@ -25,6 +26,7 @@ import { useAppContext } from "@/context/AppContext";
 import { useRouter } from "next/navigation";
 import { logo } from "@/assets";
 import Image from "next/image";
+import { getAuth } from "firebase/auth";
 
 const StreakCard = ({ streak, isActive }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -196,17 +198,19 @@ const StreakCard = ({ streak, isActive }) => {
 
       <Card
         bodyStyle={{
-          padding: "18px 24px 0px 24px",
-
+          padding: "18px 24px",
           width: "100vw",
         }}
         style={{
           width: "100%",
           margin: "auto",
-
           border: "0px",
-          backgroundColor: "transparent",
-          backgroundSize: "200% 200%",
+          backgroundColor: "rgba(255, 255, 255, 0.8)",
+          backdropFilter: "blur(10px)",
+          boxShadow: "0 4px 20px rgba(0, 0, 0, 0.05)",
+          background:
+            "linear-gradient(to right, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.85))",
+          borderBottom: "1px solid rgba(0, 0, 0, 0.05)",
         }}
       >
         <div
@@ -216,56 +220,109 @@ const StreakCard = ({ streak, isActive }) => {
             justifyContent: "space-between",
           }}
         >
-          {
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "flex-start",
-              }}
-            >
-              <div style={{ textAlign: "left" }}>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "flex-start",
+              gap: "12px",
+            }}
+          >
+            <div style={{ textAlign: "left" }}>
+              <div
+                style={{
+                  fontSize: "18px",
+                  color: isPremium ? "#1a1a1a" : priTextColor,
+                  display: "flex",
+                  alignItems: "flex-start",
+                  fontWeight: "500",
+                  textShadow: "0 1px 2px rgba(0, 0, 0, 0.05)",
+                }}
+              >
+                <span>
+                  <div
+                    style={{
+                      marginTop: "0px",
+                      position: "relative",
+                    }}
+                  >
+                    <Image
+                      src={logo}
+                      width={40}
+                      height={40}
+                      style={{
+                        borderRadius: "7px",
+                        backgroundColor: "black",
+                        boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
+                        border: "2px solid rgba(255, 255, 255, 0.1)",
+                      }}
+                      alt="logo"
+                    />
+                    {isPremium && (
+                      <>
+                        <div
+                          style={{
+                            position: "absolute",
+                            top: "-4px",
+                            right: "-4px",
+                            background:
+                              "linear-gradient(135deg, #FFD700, #FFA500)",
+                            padding: "4px",
+                            borderRadius: "50%",
+                            boxShadow: "0 2px 8px rgba(255, 165, 0, 0.4)",
+                          }}
+                        >
+                          <Crown size={12} color="#ffffff" />
+                        </div>
+                      </>
+                    )}
+                  </div>
+                </span>
                 <div
                   style={{
-                    fontSize: "18px",
-                    color: isPremium ? "whitesmoke" : priTextColor,
+                    marginLeft: "12px",
                     display: "flex",
-                    alignItems: "flex-start",
+                    gap: "0px",
+                    flexDirection: "column",
                   }}
                 >
-                  <span>
-                    <sub
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        fontWeight: "300",
-                      }}
-                    ></sub>
-                    <div
-                      style={{
-                        marginTop: "0px",
-                        fontSize: "23px",
-                        fontWeight: "300",
-                      }}
-                    >
-                      <Image src={logo} width={55} height={55} alt="logo" />
-                    </div>
+                  <span
+                    style={{
+                      fontSize: "17px",
+                      color: "#666",
+                      fontFamily: "cursive",
+                      fontStyle: "italic",
+                    }}
+                  >
+                    {greeting}
+                  </span>
+                  <span
+                    style={{
+                      fontSize: "12px",
+                      fontWeight: "500",
+                      color: "gray",
+                    }}
+                  >
+                    {getAuth().currentUser?.displayName.split(" ")[0] ||
+                      "Reader"}
                   </span>
                 </div>
               </div>
             </div>
-          }
-          <div style={{ display: "flex", alignItems: "center" }}>
+          </div>
+
+          <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
             {/* Premium Coins Display */}
-            <div
+            {/* <div
               style={{
                 display: "flex",
                 alignItems: "center",
                 marginRight: "18px",
                 background: "linear-gradient(135deg, #FFD700, #FFA500)",
-                padding: "1px 13px",
+                padding: "6px 16px",
                 borderRadius: "20px",
-                boxShadow: "0 2px 8px rgba(255, 165, 0, 0.5)",
+                boxShadow: "0 4px 12px rgba(255, 165, 0, 0.2)",
+                border: "1px solid rgba(255, 255, 255, 0.2)",
               }}
             >
               <Coins size={18} color="#ffffff" style={{ marginRight: "6px" }} />
@@ -279,71 +336,24 @@ const StreakCard = ({ streak, isActive }) => {
               >
                 {profile?.coins || 0}
               </span>
-            </div>
+            </div> */}
 
             <List
-              color={"black"}
+              color={"#333"}
               size={26}
               onClick={() => setMenuOpen(!menuOpen)}
               style={{
                 marginRight: "-3px",
+                cursor: "pointer",
+                transition: "transform 0.2s ease",
               }}
-            />
-          </div>
-
-          <div
-            align="right"
-            style={{
-              display: "none",
-              backgroundColor: "white",
-              /* border: 1px solid silver; */
-            }}
-          >
-            <Flame color={isActive ? "#fa541c" : "#bfbfbf"} size={35} />
-            <Popover
-              placement="bottomLeft"
-              content={
-                <div
-                  style={{ fontSize: "13px", fontWeight: "400", color: "grey" }}
-                >
-                  {/* {`Your longest streak - ${streak?.longestStreak} ${streak?.longestStreak > 1 ? 'Days' : 'Day'}`} */}
-                  Update at least one book daily to build streak. <br />
-                  Click on <Bookmark color={priColor} /> to update progress.
-                </div>
+              onMouseEnter={(e) =>
+                (e.currentTarget.style.transform = "scale(1.1)")
               }
-            >
-              <HelpCircle
-                style={{
-                  color: priTextColor,
-                }}
-                size={13}
-              />
-            </Popover>
-
-            <h4
-              style={{
-                margin: 0,
-                color: isActive ? "#fa541c" : "#8c8c8c",
-                fontWeight: "400",
-                fontSize: "15px",
-              }}
-            >
-              {isActive ? (
-                <>
-                  On Streak <br />
-                  {`${isActive ? streak?.days : 0} ${
-                    streak?.days > 1 ? "Days" : "Day"
-                  }`}
-                </>
-              ) : (
-                <>
-                  Streak Inactive <br />
-                  {`${isActive ? streak?.longestStreak : 0} ${
-                    streak?.longestStreak > 1 ? "Days" : "Day"
-                  }`}
-                </>
-              )}
-            </h4>
+              onMouseLeave={(e) =>
+                (e.currentTarget.style.transform = "scale(1)")
+              }
+            />
           </div>
         </div>
       </Card>
