@@ -141,7 +141,7 @@ const StreakCard = ({ streak, isActive }) => {
               My Profile
             </Link>
           </li>
-          {!isPremium && (
+          {/* {!isPremium && (
             <li style={{ borderBottom: "1px solid #ddd", padding: "18px 0px" }}>
               <Link
                 onClick={() => {
@@ -154,7 +154,7 @@ const StreakCard = ({ streak, isActive }) => {
                 Upgrade to premium
               </Link>
             </li>
-          )}
+          )} */}
           <li style={{ borderBottom: "1px solid #ddd", padding: "18px 0px" }}>
             <Link
               onClick={() => setMenuOpen(false)}
