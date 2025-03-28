@@ -224,7 +224,7 @@ const BookList = () => {
     setUploadingBook(true);
     if (books?.length == freeBooks && !isPremium) {
       // Show premium slide-in instead of redirecting
-      console.log("inside");
+
       setSlideInContent(<PremiumSlideIn />);
       setSlideIn(true);
     } else {

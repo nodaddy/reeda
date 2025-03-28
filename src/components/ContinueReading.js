@@ -84,7 +84,7 @@ const ContinueReadingCard = ({ book }) => {
       style={{
         width: "210px",
         boxShadow: "0px 3px 8px rgba(0,0,0,0.17)",
-        borderRadius: "50px 11px 50px 50px",
+        borderRadius: "20px",
         flex: "0 0 auto",
         padding: "20px 30px 37px 30px",
         margin: "0px auto 20px auto",
@@ -237,7 +237,7 @@ const ContinueReadingCard = ({ book }) => {
           width: "53px",
           borderRadius: "50%",
           justifyContent: "center",
-          backgroundColor: priColor,
+          backgroundColor: "white",
           boxShadow: "0px 3px 6px rgba(0,0,0,0.2)",
           display: "flex",
           bottom: "-16px",
@@ -267,7 +267,7 @@ const ContinueReadingCard = ({ book }) => {
         <Link href={`/updateBook/${book?.id}`}>
           <NotebookPen
             size={20}
-            color={"white"}
+            color={priColor}
             style={{
               margin: "0px 0px",
             }}

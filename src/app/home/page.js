@@ -261,20 +261,62 @@ const Home = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
               style={{
+                background:
+                  "linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%)",
+                borderRadius: "16px",
+                padding: "16px 20px",
+                margin: "auto",
+                marginRight: "15px",
+                border: "1px solid rgba(99, 102, 241, 0.2)",
+                boxShadow: "0 4px 20px rgba(99, 102, 241, 0.1)",
                 display: "flex",
-                justifyContent: "center",
-                gap: "8px",
-                marginTop: "20px",
-                color: "#666",
-                fontSize: "14px",
-                fontStyle: "italic",
+                alignItems: "flex-start",
+                gap: "12px",
+                position: "relative",
+                overflow: "hidden",
               }}
             >
-              <Sparkles size={16} />
-              <span>
-                Tip: Click the + button to add your first book to your bookshelf
-                and start tracking
-              </span>
+              <div
+                style={{
+                  position: "absolute",
+                  top: "-20px",
+                  right: "-20px",
+                  opacity: 0.1,
+                }}
+              >
+                <Sparkles size={60} />
+              </div>
+              <div
+                style={{
+                  background: "rgba(99, 102, 241, 0.1)",
+                  borderRadius: "12px",
+                  padding: "8px",
+                }}
+              >
+                <Sparkles size={30} color="#6366F1" />
+              </div>
+              <div>
+                <div
+                  style={{
+                    color: "#6366F1",
+                    fontSize: "14px",
+                    fontWeight: "600",
+                    marginBottom: "4px",
+                  }}
+                >
+                  Get Started
+                </div>
+                <div
+                  style={{
+                    color: "#4B5563",
+                    fontSize: "14px",
+                    lineHeight: "1.5",
+                  }}
+                >
+                  Click the + button to add your first book to your bookshelf
+                  and start tracking your reading journies
+                </div>
+              </div>
             </motion.div>
           )}
           <br />
