@@ -92,14 +92,13 @@ export default function ClientLayout({ children, font }) {
       <body style={{ overflowY: "scroll" }} className={`${font.className}`}>
         {/* <Navbar /> */}
 
-        {profile && !profile?.onboarded ? (
+        {/* {profile && !profile?.onboarded ? (
           <ReadingInterests />
         ) : (
-          <div style={modernBackground}>
-            {/* Content container */}
+          <div style={modernBackground}> 
             <div style={contentContainer}>{children}</div>
           </div>
-        )}
+        )} */}
 
         <SlideIn />
       </body>
